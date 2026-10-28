@@ -5,6 +5,7 @@ export * from './content/careers';
 export * from './content/theme';
 export * from './logic/stats';
 export * from './logic/poll';
+export * from './logic/birthday';
 export * from './logic/difficulty';
 export * from './logic/ranking';
 export * from './logic/xp';

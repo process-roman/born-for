@@ -7,7 +7,7 @@ Zodiac + RPG self-discovery app. See `BORN-FOR PRODUCT_BLUEPRINT.md`, `BORN-FOR 
 Pure TypeScript, no UI yet. The Expo app will import from `src/`.
 
 - `src/content/`: attributes and poll statements, all 12 signs, onboarding questions, design tokens, the six pilot careers (quests, constellations, real next steps)
-- `src/logic/`: poll scoring and "Your sign called X of 8", ranking and reasons, difficulty, XP and levels, constellation unlocks, titles, character state
+- `src/logic/`: sign from birthday (with cusp detection), poll scoring and "Your sign called X of 8", ranking and reasons, difficulty, XP and levels, constellation unlocks, titles, character state
 - `tests/`: the five pilot personas plus edge cases
 
 ```bash

@@ -28,9 +28,14 @@ export interface LitStar {
 
 export interface Character {
   sign: SignId;
+  /** Both signs when the birthday fell on a cusp, so the choice can be changed in settings. */
+  cuspSigns: [SignId, SignId] | null;
   intent: IntentId | null;
   enjoy: PreferenceId[];
   workStyle: WorkStyleId;
+  /** Answers from the first poll and the latest one, kept so a sign change can recompute stats. */
+  dayOneAnswers: PollAnswers;
+  answers: PollAnswers;
   /** Confirmed stats from the first poll, kept for "Then vs now". */
   dayOne: Stats;
   /** Confirmed base; recalibration replaces this only. */
@@ -45,19 +50,49 @@ export interface Character {
 export interface OnboardingInput {
   intent?: IntentId;
   sign: SignId;
+  cuspSigns?: [SignId, SignId];
   answers: PollAnswers;
   enjoy: PreferenceId[];
   workStyle: WorkStyleId;
 }
 
-export function createCharacter({ intent, sign, answers, enjoy, workStyle }: OnboardingInput): Character {
+export function createCharacter({ intent, sign, cuspSigns, answers, enjoy, workStyle }: OnboardingInput): Character {
+  if (cuspSigns && !cuspSigns.includes(sign)) throw new Error(`${sign} is not one of the cusp signs`);
   const confirmed = confirmStats(sign, answers);
-  return { sign, intent: intent ?? null, enjoy, workStyle, dayOne: confirmed, confirmed, earned: zeroStats(), totalXp: 0, stars: {}, feedback: {} };
+  return {
+    sign,
+    cuspSigns: cuspSigns ?? null,
+    intent: intent ?? null,
+    enjoy,
+    workStyle,
+    dayOneAnswers: answers,
+    answers,
+    dayOne: confirmed,
+    confirmed,
+    earned: zeroStats(),
+    totalXp: 0,
+    stars: {},
+    feedback: {},
+  };
 }
 
 /** Reruns the poll: updates the confirmed base, keeps earned XP. */
 export function recalibrate(character: Character, answers: PollAnswers): Character {
-  return { ...character, confirmed: confirmStats(character.sign, answers) };
+  return { ...character, answers, confirmed: confirmStats(character.sign, answers) };
+}
+
+/**
+ * Switches to the other cusp sign (settings). Stats are recomputed from the same poll answers
+ * with the new sign's profile; earned XP, stars and progress are kept, and titles follow the new sign.
+ */
+export function changeCuspSign(character: Character, sign: SignId): Character {
+  if (!character.cuspSigns?.includes(sign)) throw new Error(`${sign} is not one of this character's cusp signs`);
+  return {
+    ...character,
+    sign,
+    dayOne: confirmStats(sign, character.dayOneAnswers),
+    confirmed: confirmStats(sign, character.answers),
+  };
 }
 
 export function statsOf(character: Character): Stats {
