@@ -2,7 +2,7 @@
 
 import { ATTRIBUTE_IDS, zeroStats, type AttributeId, type Stats } from '../content/attributes';
 import { getQuest, type CareerId, type StarNumber } from '../content/careers';
-import type { PreferenceId, WorkStyleId } from '../content/preferences';
+import type { IntentId, PreferenceId, WorkStyleId } from '../content/preferences';
 import type { SignId } from '../content/signs';
 import { isConstellationComplete, isStarAvailable } from './constellation';
 import { rankCareers, type FeedbackMap, type PathInterest, type Ranking } from './ranking';
@@ -28,6 +28,7 @@ export interface LitStar {
 
 export interface Character {
   sign: SignId;
+  intent: IntentId | null;
   enjoy: PreferenceId[];
   workStyle: WorkStyleId;
   /** Confirmed stats from the first poll, kept for "Then vs now". */
@@ -42,15 +43,16 @@ export interface Character {
 }
 
 export interface OnboardingInput {
+  intent?: IntentId;
   sign: SignId;
   answers: PollAnswers;
   enjoy: PreferenceId[];
   workStyle: WorkStyleId;
 }
 
-export function createCharacter({ sign, answers, enjoy, workStyle }: OnboardingInput): Character {
+export function createCharacter({ intent, sign, answers, enjoy, workStyle }: OnboardingInput): Character {
   const confirmed = confirmStats(sign, answers);
-  return { sign, enjoy, workStyle, dayOne: confirmed, confirmed, earned: zeroStats(), totalXp: 0, stars: {}, feedback: {} };
+  return { sign, intent: intent ?? null, enjoy, workStyle, dayOne: confirmed, confirmed, earned: zeroStats(), totalXp: 0, stars: {}, feedback: {} };
 }
 
 /** Reruns the poll: updates the confirmed base, keeps earned XP. */

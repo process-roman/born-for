@@ -2,12 +2,21 @@ import { describe, expect, it } from 'vitest';
 import { ATTRIBUTE_IDS, SIGN_STAT_BUDGET } from '../src/content/attributes';
 import { CAREER_IDS, CAREERS } from '../src/content/careers';
 import { PREFERENCE_IDS } from '../src/content/preferences';
-import { SIGN_STATS } from '../src/content/signs';
+import { SIGN_IDS, SIGN_STAT_MAX, SIGN_STAT_MIN, SIGNS } from '../src/content/signs';
 
 describe('sign profiles', () => {
-  it.each(Object.entries(SIGN_STATS))('%s totals the 480-point budget', (_, stats) => {
-    const total = ATTRIBUTE_IDS.reduce((sum, a) => sum + stats![a], 0);
-    expect(total).toBe(SIGN_STAT_BUDGET);
+  it.each(SIGN_IDS)('%s totals 480 points, each between 35 and 85', (id) => {
+    const { stats } = SIGNS[id];
+    expect(ATTRIBUTE_IDS.reduce((sum, a) => sum + stats[a], 0)).toBe(SIGN_STAT_BUDGET);
+    for (const a of ATTRIBUTE_IDS) {
+      expect(stats[a]).toBeGreaterThanOrEqual(SIGN_STAT_MIN);
+      expect(stats[a]).toBeLessThanOrEqual(SIGN_STAT_MAX);
+    }
+  });
+
+  it('archetypes and adjectives are unique', () => {
+    expect(new Set(SIGN_IDS.map((id) => SIGNS[id].archetype)).size).toBe(12);
+    expect(new Set(SIGN_IDS.map((id) => SIGNS[id].adjective)).size).toBe(12);
   });
 });
 

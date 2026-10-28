@@ -159,7 +159,7 @@ describe('reasons', () => {
     expect(p.reasons).toEqual([
       'You enjoy planning and organizing',
       'Your Persistence is Solid',
-      'Fits how you like to work: lots of people',
+      'Fits how you like to work: with lots of different people',
     ]);
   });
 
