@@ -73,8 +73,8 @@ describe('quest loop (paid)', () => {
   });
 
   it('mixed feelings suggest a related path', () => {
-    const r = play(paid, 'ux_design', 1, { enjoyment: 3, wouldDoMore: 'maybe', feltNatural: ['empathy'], feltHard: [] });
-    expect(r.game.suggestion).toMatchObject({ careerId: 'teaching', kind: 'related_path' });
+    const r = play(paid, 'ux_design', 1, { enjoyment: 3, wouldDoMore: 'maybe', feltNatural: ['hands_on'], feltHard: [] });
+    expect(r.game.suggestion).toMatchObject({ careerId: 'chef', kind: 'related_path' });
   });
 
   it('Not now keeps the quest but snoozes it', () => {

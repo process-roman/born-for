@@ -1,24 +1,37 @@
-# Pilot Content & Formulas v0.1
-**Companion to:** PRODUCT_BLUEPRINT.md v0.3 and SIGNS_AND_ONBOARDING_SPEC.md | **Date:** October 27, 2026
-**Covers milestone M0:** six pilot careers, 30 quests, constellations, real next steps, all formulas, five tested personas.
+# Pilot Content & Formulas v0.2
+**Companion to:** PRODUCT_BLUEPRINT.md v0.3 and SIGNS_AND_ONBOARDING_SPEC.md v0.2 | **Date:** October 28, 2026
+
+**What changed from v0.1:**
+- Six careers became **24 careers in 12 career worlds**, so an 18-year-old who doesn't know what they want can browse the whole job market, not just desk jobs.
+- Every career uses the same **beginner-first quest template**: no quest assumes you already work in the field.
+- Requirements use the 16 traits from the signs spec.
+- Full career entries now live in **CAREERS.md**, generated from `src/content/careers.ts` (`npm run docs:careers`), so the doc and the app can't drift apart.
 
 ---
 
-## 1. Pilot careers
-Six careers chosen so every "What do you enjoy?" option leads somewhere, and every attribute matters to at least one path.
+## 1. Career worlds
+Broad worlds an 18-year-old can browse, loosely based on how career guidance groups the job market (Holland interest types, government career clusters). A career can sit in more than one world: someone who loves flowers reaches **Florist** through Create & Design and **Landscape gardener** through Nature.
 
-| Career | Class | Constellation | Primary attributes |
-|---|---|---|---|
-| UX/product design | Shaper | The Lens | Creativity, Empathy, Communication |
-| Software development | Codesmith | The Anvil | Analytical, Persistence, Curiosity |
-| Marketing | Herald | The Horn | Communication, Creativity, Curiosity |
-| Teaching | Mentor | The Lantern | Communication, Empathy, Persistence |
-| Data analysis | Oracle | The Eye | Analytical, Curiosity, Organization |
-| Project coordination | Quartermaster | The Key | Organization, Communication, Persistence |
+| World | Pilot careers | More later |
+|---|---|---|
+| 🎨 Create & Design | UX/product design, Florist | Graphic designer, fashion designer, interior designer |
+| 💻 Tech & Digital | Software development, Data analysis | IT support, game developer, cybersecurity |
+| 📈 Business & Money | Marketing, Project coordination | Sales, accountant, entrepreneur |
+| 🤝 People & Care | Teaching, Social work | Counsellor, childcare worker |
+| 🩺 Health | Nursing, Physiotherapy | Paramedic, nutritionist, pharmacist |
+| ⚽ Sport & Movement | Professional athlete, Personal trainer | Coach, PE teacher, sports analyst |
+| 🌍 Nature, Animals & Outdoors | Vet nurse, Landscape gardener | Farmer, park ranger, horticulturist |
+| 🔧 Build, Fix & Make | Electrician, Carpenter | Mechanic, plumber, engineering technician |
+| 🍳 Food & Hospitality | Chef, Event planner | Baker, hotel manager |
+| 🎭 Arts, Media & Performance | Musician, Writer | Actor, photographer, content creator |
+| 🔬 Science & Research | Lab scientist, Environmental scientist | Biologist, chemist |
+| 🛡️ Public Service & Law | Firefighter, Law | Police officer, city planner |
 
-**Added after the pilot:** Writing/content (Scribe), Entrepreneurship (Founder), Healthcare (Healer), Community support (Keeper). Healthcare needs the most careful copy because of credential requirements.
+Cross-listed: Florist (Create, Nature), UX (Create, Tech), Data analysis (Tech, Business), Marketing (Business, Create), Physiotherapy (Health, Sport), Personal trainer (Sport, Health), Vet nurse (Nature, Health), Landscape gardener (Nature, Build), Carpenter (Build, Create), Chef (Food, Create), Event planner (Food, Business), Environmental scientist (Science, Nature), Firefighter (Public service, Health), Law (Public service, Business), Nursing (Health, People).
 
-### Preference IDs (from Q2)
+**Long shots stay open, honestly.** Careers like Professional athlete and Musician carry a "reality check" on their card: the path stays selectable ("no closed doors"), and the card says plainly how narrow it is and points to the realistic jobs around it.
+
+### Preference IDs (Q2)
 | ID | Label |
 |---|---|
 | `making` | Making and designing things |
@@ -29,291 +42,72 @@ Six careers chosen so every "What do you enjoy?" option leads somewhere, and eve
 | `learning` | Learning and exploring ideas |
 | `tech` | Working with tech |
 | `performing` | Performing and presenting |
+| `active` | Being active and playing sport |
+| `nature` | Nature, plants and animals |
+| `building` | Building and fixing things |
+| `food` | Food and cooking |
 
-### Work style IDs (from Q3)
+### Work style IDs (Q3)
 `solo` · `small_team` · `many` · `unsure`
 
 ---
 
-## 2. Career entries
+## 2. The 24 pilot careers
+Key traits are the three primary traits with the level each career asks for. Full entries (day-to-day, downsides, education, quests, next steps) are in CAREERS.md.
 
-### 2.1 UX/product design · Shaper · The Lens
-**One-liner:** Design how apps and websites work so they're easy and pleasant to use.
-
-**Day-to-day:**
-- Talking to users and watching them use products to find what confuses them
-- Sketching layouts and flows, then building screens in tools like Figma
-- Turning designs into clickable prototypes and testing them
-- Working with developers and product managers to get designs built
-- Presenting and defending design decisions to the team
-
-**Downsides:**
-- Lots of feedback and revisions; your favorite idea often gets changed
-- Entry-level jobs are competitive; a strong portfolio matters more than credentials
-- Many meetings and compromises with business and technical constraints
-
-**Education & training:** No specific degree is required. Many designers come from design, psychology, computer science or human-computer interaction, and others switch through certificates or bootcamps. A portfolio of 2–3 real case studies is the main thing employers look at.
-
-**Attributes:**
-| Attribute | Required | Weight |
-|---|---|---|
-| Creativity | 70 | 0.40 |
-| Empathy | 60 | 0.30 |
-| Communication | 60 | 0.30 |
-
-**Interest tags:** `making` 1.0 · `tech` 0.5 · `puzzles` 0.5
-**Work style:** `small_team`
-
-**Quests:**
-| # | Tier | Quest | Instructions | Time | Attributes |
+| Career | Class | Constellation | Key traits (required) | Interest tags | Work style |
 |---|---|---|---|---|---|
-| 1 | Taste | Fix a frustrating screen | Pick a screen in an app you use that annoys you. Sketch a clearer version on paper. | 20 min | Creativity, Empathy |
-| 2 | Taste | Onboarding detective | Open three apps you like and go through their first-time setup. Write one line per app on what makes it easy. | 20 min | Curiosity, Empathy |
-| 3 | Try | Redesign in Figma | Recreate your sketch from Quest 1 as a clean screen in Figma (free plan). | 1–2 h | Creativity, Persistence |
-| 4 | Try | Make it clickable | Link 2–3 screens into a simple clickable prototype in Figma. | 1–2 h | Organization, Creativity |
-| 5 | Test | Real user test | Ask two people to complete one task on your prototype while thinking out loud. Note where they get stuck. | Real world | Empathy, Communication |
+| UX/product design | Shaper | The Lens | Creativity 70, Empathy 60, Communication 60 | making 1, tech .5, puzzles .5 | small team |
+| Florist | Bloomweaver | The Bouquet | Aesthetic eye 70, Hands-on 65, Creativity 60 | making 1, nature 1, helping .5 | solo, small team |
+| Software development | Codesmith | The Anvil | Analytical 75, Persistence 70, Curiosity 60 | tech 1, puzzles 1, making .5 | solo, small team |
+| Data analysis | Oracle | The Eye | Analytical 75, Curiosity 65, Detail 60 | puzzles 1, tech .5, learning .5 | solo, small team |
+| Marketing | Herald | The Horn | Communication 75, Creativity 65, Curiosity 55 | leading 1, making .5, performing .5 | small team, many |
+| Project coordination | Quartermaster | The Key | Organization 75, Communication 65, Leadership 55 | organizing 1, leading .5, helping .5 | many, small team |
+| Teaching | Mentor | The Lantern | Communication 75, Empathy 75, Persistence 60 | helping 1, performing 1, learning .5 | many |
+| Social work | Keeper | The Hearth | Empathy 80, Calm 65, Communication 65 | helping 1, organizing .5 | many, small team |
+| Nursing | Healer | The Chalice | Empathy 75, Calm 70, Detail 65 | helping 1, learning .5, active .5 | many |
+| Physiotherapy | Mender | The Spine | Analytical 70, Hands-on 65, Empathy 65 | helping 1, active 1, learning .5 | small team |
+| Professional athlete | Contender | The Laurel | Physical energy 85, Persistence 80, Calm 65 | active 1, performing .5 | small team, many |
+| Personal trainer | Drillmaster | The Kettlebell | Physical energy 70, Communication 65, Leadership 60 | active 1, helping 1, leading .5 | solo, small team |
+| Vet nurse | Beastwarden | The Paw | Empathy 70, Calm 70, Hands-on 60 | nature 1, helping 1 | small team |
+| Landscape gardener | Druid | The Oak | Hands-on 70, Aesthetic eye 60, Physical energy 65 | nature 1, building 1, making .5 | solo, small team |
+| Electrician | Sparkwright | The Bolt | Hands-on 70, Analytical 65, Detail 65 | building 1, puzzles .5, tech .5 | solo, small team |
+| Carpenter | Artisan | The Square | Hands-on 75, Detail 65, Physical energy 60 | building 1, making 1 | solo, small team |
+| Chef | Hearthmaster | The Flame | Hands-on 70, Calm 70, Creativity 60 | food 1, making 1 | small team, many |
+| Event planner | Steward | The Banner | Organization 75, Communication 65, Calm 60 | organizing 1, leading .5, food .5 | many |
+| Musician | Bard | The Lyre | Creativity 75, Persistence 75, Aesthetic eye 65 | performing 1, making 1 | solo, small team |
+| Writer | Scribe | The Quill | Creativity 70, Communication 70, Independence 60 | making 1, learning 1 | solo |
+| Lab scientist | Alchemist | The Flask | Analytical 75, Detail 75, Curiosity 65 | learning 1, puzzles 1 | solo, small team |
+| Environmental scientist | Ranger | The Fern | Analytical 70, Curiosity 70, Physical energy 55 | nature 1, learning 1, puzzles .5 | small team |
+| Firefighter | Sentinel | The Shield | Physical energy 80, Courage 70, Teamwork 65 | active 1, helping 1 | many |
+| Law | Arbiter | The Scales | Analytical 75, Communication 75, Detail 65 | puzzles 1, leading 1, learning .5 | small team, many |
 
-**Real next steps:**
-- **Learn:** Google UX Design Professional Certificate (Coursera; paid, financial aid available) · Figma's free learning resources
-- **Community:** ADPList (free mentorship from working designers) · r/UXDesign · local UX meetups
-- **Entry roles:** Junior UX designer · UI designer · UX research assistant · Product design intern
-- **Search for:** "junior UX designer", "UX intern", "entry level UI designer"
+Every preference reaches at least one career, and every one of the 16 traits matters to at least one career (as a key trait or a quest trait).
 
 ---
 
-### 2.2 Software development · Codesmith · The Anvil
-**One-liner:** Write the code that makes apps, websites and tools actually work.
+## 3. The quest template
+Every career uses the same five stars. **No quest assumes you already work in the field**: the first two are about discovering the job, the middle two are a beginner version with a free tool or tutorial, and the last one meets the real world. Each quest has a one-line **"What you'll learn"**.
 
-**Day-to-day:**
-- Writing and reviewing code
-- Debugging: figuring out why something breaks
-- Breaking big features into small technical tasks
-- Reading documentation and learning new tools constantly
-- Short team check-ins and code reviews
+| Star | Tier | Step | What it asks | Time |
+|---|---|---|---|---|
+| 1 | Taste | **Discover** | Learn the job's one big idea in about 2 minutes, then spot it in everyday life | ~20 min |
+| 2 | Taste | **Day in the life** | Watch or read a real person doing the job; note 3 tasks you'd enjoy and 1 you wouldn't | ~20 min |
+| 3 | Try | **Beginner version** | Do a small, guided version with a free tool, kit or tutorial | 1–2 h |
+| 4 | Try | **Make it yours** | Do it again your own way, or take it one step further | 1–2 h |
+| 5 | Test | **Real world** | Show real people, volunteer, or ask someone who does the job | Real world |
 
-**Downsides:**
-- Long stretches of focused screen time, often alone
-- Debugging can be frustrating for hours before it clicks
-- The entry-level job market is competitive; projects and practice matter a lot
+Examples across worlds:
 
-**Education & training:** A computer science degree is common but not required. Many developers are self-taught or come from bootcamps. Employers mostly look at projects you've built and how you solve problems in interviews.
+| Star | Marketing | Florist | Professional athlete | Electrician |
+|---|---|---|---|---|
+| 1 Discover | Who, what, where, did it work? The four questions every marketer asks, applied to one ad | Flowers by season: name five at a market and whether they're in season | Watch like a coach: positioning, decisions, effort off the ball | Follow the power: street → meter → panel → circuits (look, don't open) |
+| 2 Day in the life | A day as a marketer | A day as a florist | A day as a pro | A day as an electrician |
+| 3 Beginner | Meet the customer: read 10 reviews, describe who the customers are | Your first arrangement from supermarket flowers | Train one skill three times, track it | Light a bulb with a battery kit (battery power only) |
+| 4 Make it yours | One post for them in a free Canva template | A second arrangement for a specific person | Plan and follow a balanced training week | Add a switch or a second bulb, draw the diagram |
+| 5 Real world | Would you click? Show 2 people in the audience | Give it away, ask a florist one question | Join a local club session | Ask an electrician about apprenticeships |
 
-**Attributes:**
-| Attribute | Required | Weight |
-|---|---|---|
-| Analytical thinking | 75 | 0.40 |
-| Persistence | 70 | 0.35 |
-| Curiosity | 60 | 0.25 |
-
-**Interest tags:** `tech` 1.0 · `puzzles` 1.0 · `making` 0.5
-**Work style:** `solo`, `small_team`
-
-**Quests:**
-| # | Tier | Quest | Instructions | Time | Attributes |
-|---|---|---|---|---|---|
-| 1 | Taste | Your first page | In a free online editor like CodePen, make a simple HTML page about yourself: a heading, a paragraph and a list. | 20 min | Curiosity, Analytical |
-| 2 | Taste | Puzzle solver | Solve three beginner coding exercises on a free site like freeCodeCamp. | 20 min | Analytical, Persistence |
-| 3 | Try | Build a tiny tool | Follow a beginner tutorial to build a tip calculator or random quote page with HTML, CSS and JavaScript. | 1–2 h | Persistence, Analytical |
-| 4 | Try | Make it yours | Add one feature to your tool that the tutorial didn't include. | 1–2 h | Independence, Creativity |
-| 5 | Test | Ship it | Publish your tool online for free (e.g. GitHub Pages or a CodePen link), share it with two people, ask for one improvement and build it. | Real world | Communication, Persistence |
-
-**Real next steps:**
-- **Learn:** freeCodeCamp · The Odin Project · Harvard's CS50 (free online)
-- **Community:** GitHub · r/learnprogramming · local hackathons and coding meetups
-- **Entry roles:** Junior developer · Web developer · QA tester · Software developer intern
-- **Search for:** "junior developer", "junior web developer", "QA tester entry level"
-
----
-
-### 2.3 Marketing · Herald · The Horn
-**One-liner:** Help people discover products and ideas, and get them excited about them.
-
-**Day-to-day:**
-- Writing posts, emails, ads and website copy
-- Planning campaigns: who to reach, what to say and where
-- Creating or briefing visuals and videos
-- Checking results (views, clicks, sign-ups) and adjusting
-- Working with sales, design and product teams
-
-**Downsides:**
-- Results are measured constantly, and many ideas don't work
-- Trends and platforms change fast, so you're always catching up
-- Deadlines can be tight, especially around launches
-
-**Education & training:** A degree in marketing, communications or business is common but not always required. Free certifications and a portfolio of real campaigns or social accounts you've grown can open doors.
-
-**Attributes:**
-| Attribute | Required | Weight |
-|---|---|---|
-| Communication | 75 | 0.40 |
-| Creativity | 65 | 0.35 |
-| Curiosity | 55 | 0.25 |
-
-**Interest tags:** `leading` 1.0 · `making` 0.5 · `performing` 0.5
-**Work style:** `small_team`, `many`
-
-**Quests:**
-| # | Tier | Quest | Instructions | Time | Attributes |
-|---|---|---|---|---|---|
-| 1 | Taste | Ad breakdown | Pick three ads you remember. For each, write who it's for and why it worked on you. | 20 min | Curiosity, Empathy |
-| 2 | Taste | Rewrite the pitch | Pick a local business or app and write three new one-line taglines for it. | 20 min | Creativity, Communication |
-| 3 | Try | Make a post | Create one social post (image or short video plus caption) promoting something you like: a book, a café, a friend's project. | 1–2 h | Creativity, Communication |
-| 4 | Try | Mini campaign | Plan three posts over one week for the same thing: who it's for, the message and where to post. | 1–2 h | Organization, Analytical |
-| 5 | Test | Go live | Publish your post (or share it with a group), check reactions after 48 hours and note what you'd change. | Real world | Communication, Analytical |
-
-**Real next steps:**
-- **Learn:** HubSpot Academy (free certifications) · Google Skillshop (free Google Ads and Analytics training) · Meta Blueprint (free courses)
-- **Community:** r/marketing · local marketing meetups · marketing groups on LinkedIn
-- **Entry roles:** Marketing coordinator · Social media coordinator · Content marketing assistant · Marketing intern
-- **Search for:** "marketing coordinator", "social media coordinator", "marketing intern"
-
----
-
-### 2.4 Teaching · Mentor · The Lantern
-**One-liner:** Help people learn and grow, whether in a classroom, a tutoring session or a workshop.
-
-**Day-to-day:**
-- Planning lessons and activities
-- Explaining ideas in different ways until they click
-- Supporting learners who are struggling or bored
-- Marking work and giving feedback
-- Talking with parents, colleagues and administrators (in schools)
-
-**Downsides:**
-- Emotionally demanding; you're "on" for most of the day
-- Planning and marking often happen outside class hours
-- Classroom management can be hard, especially early on
-
-**Education & training:** In most of Canada and the US, teaching in public K–12 schools requires a bachelor's degree, a teacher education program (e.g. a B.Ed. in Canada) and provincial or state certification. Other routes need less: tutoring, ESL teaching (with a TESL/TESOL certificate), corporate training and coaching.
-
-**Attributes:**
-| Attribute | Required | Weight |
-|---|---|---|
-| Communication | 75 | 0.35 |
-| Empathy | 75 | 0.35 |
-| Persistence | 60 | 0.30 |
-
-**Interest tags:** `helping` 1.0 · `performing` 1.0 · `learning` 0.5
-**Work style:** `many`
-
-**Quests:**
-| # | Tier | Quest | Instructions | Time | Attributes |
-|---|---|---|---|---|---|
-| 1 | Taste | Explain it simply | Pick something you know well. Write or record a two-minute explanation a 12-year-old would understand. | 20 min | Communication, Empathy |
-| 2 | Taste | Your best teacher | Think of the best teacher or coach you've had. List three things they did that you'd copy. | 20 min | Empathy, Curiosity |
-| 3 | Try | Teach a friend | Teach a friend or family member a small skill in 20–30 minutes: a recipe, a card trick, an app feature. | 1–2 h | Communication, Empathy |
-| 4 | Try | Plan a mini lesson | Write a 30-minute lesson plan: one goal, one activity and one quick check that people learned it. | 1–2 h | Organization, Creativity |
-| 5 | Test | Volunteer session | Run one real session: volunteer tutoring, a library homework club, a coding club or helping a classmate study. Ask for feedback afterwards. | Real world | Persistence, Communication |
-
-**Real next steps:**
-- **Learn:** Info sessions from teacher education programs near you · TESL/TESOL certificate programs (for language teaching)
-- **Community:** r/Teachers · local tutoring and volunteer programs
-- **Entry roles:** Tutor · Teaching or educational assistant · Camp counselor · ESL instructor
-- **Search for:** "tutor", "educational assistant", "ESL instructor", "volunteer tutor"
-
----
-
-### 2.5 Data analysis · Oracle · The Eye
-**One-liner:** Find the story hidden in numbers and help people make better decisions.
-
-**Day-to-day:**
-- Collecting and cleaning messy data
-- Using spreadsheets, SQL or Python to answer questions
-- Building charts and dashboards
-- Explaining findings to people who aren't data experts
-- Checking your work carefully for mistakes
-
-**Downsides:**
-- A lot of time goes into cleaning data, not discovering insights
-- Repetitive reporting tasks are common in junior roles
-- Small mistakes can lead to wrong decisions, so attention to detail is essential
-
-**Education & training:** Degrees in statistics, economics, math, computer science or business are common. Many analysts switch in with certificates. Strong spreadsheet and SQL skills plus 2–3 portfolio projects are what employers look for.
-
-**Attributes:**
-| Attribute | Required | Weight |
-|---|---|---|
-| Analytical thinking | 75 | 0.45 |
-| Curiosity | 65 | 0.30 |
-| Organization | 60 | 0.25 |
-
-**Interest tags:** `puzzles` 1.0 · `tech` 0.5 · `learning` 0.5
-**Work style:** `solo`, `small_team`
-
-**Quests:**
-| # | Tier | Quest | Instructions | Time | Attributes |
-|---|---|---|---|---|---|
-| 1 | Taste | Read the chart | Find a chart on a topic you care about (e.g. on Our World in Data). Write three things it shows and one question it raises. | 20 min | Curiosity, Analytical |
-| 2 | Taste | Your own data | Put your last 20 purchases (or a week of screen time) in a spreadsheet. Sort it and find your top three categories. | 20 min | Analytical, Organization |
-| 3 | Try | Answer a question | Pick a question and a free dataset (e.g. from Kaggle). Use spreadsheet formulas or a pivot table to answer it. | 1–2 h | Analytical, Persistence |
-| 4 | Try | Make the chart | Create two clear charts that answer your question, each with a one-sentence takeaway. | 1–2 h | Communication, Creativity |
-| 5 | Test | Present findings | Present your charts to someone in three minutes and ask what was unclear. | Real world | Communication, Analytical |
-
-**Real next steps:**
-- **Learn:** Kaggle Learn (free micro-courses) · SQLBolt (free interactive SQL) · Google Data Analytics Professional Certificate (Coursera; paid, financial aid available)
-- **Community:** Kaggle · r/dataanalysis · local data meetups
-- **Entry roles:** Junior data analyst · Reporting analyst · Business or operations analyst
-- **Search for:** "junior data analyst", "reporting analyst", "data analyst intern"
-
----
-
-### 2.6 Project coordination · Quartermaster · The Key
-**One-liner:** Keep projects on track so the right things happen at the right time.
-
-**Day-to-day:**
-- Tracking tasks, deadlines and who's doing what
-- Running meetings and writing up next steps
-- Following up with people when things slip
-- Spotting risks early and finding workarounds
-- Keeping everyone informed with updates
-
-**Downsides:**
-- You're responsible for deadlines you don't fully control
-- Lots of follow-ups, reminders and meetings
-- When things go wrong, you're often the one who has to tell people
-
-**Education & training:** No specific degree is required, though business degrees are common. Experience organizing events, clubs or group projects counts. Entry-level certificates like the Google Project Management Certificate or PMI's CAPM can help.
-
-**Attributes:**
-| Attribute | Required | Weight |
-|---|---|---|
-| Organization | 75 | 0.45 |
-| Communication | 65 | 0.30 |
-| Persistence | 60 | 0.25 |
-
-**Interest tags:** `organizing` 1.0 · `leading` 0.5 · `helping` 0.5
-**Work style:** `many`, `small_team`
-
-**Quests:**
-| # | Tier | Quest | Instructions | Time | Attributes |
-|---|---|---|---|---|---|
-| 1 | Taste | Plan your week | List everything due this week on a free board like Trello. Set priorities and deadlines. | 20 min | Organization, Analytical |
-| 2 | Taste | Break it down | Pick a big goal (a trip, a move, a party) and break it into at least 10 tasks in the right order. | 20 min | Organization, Persistence |
-| 3 | Try | Plan an event | Plan a small get-together: date, budget, tasks and who does what, on a shared list or board. | 1–2 h | Organization, Communication |
-| 4 | Try | Risk check | For your plan, list five things that could go wrong and a backup for each. | 1–2 h | Analytical, Organization |
-| 5 | Test | Deliver it | Run the event or a group project, then send everyone a short recap: what went well and what you'd change. | Real world | Communication, Persistence |
-
-**Real next steps:**
-- **Learn:** Google Project Management Professional Certificate (Coursera; paid, financial aid available) · PMI's CAPM certification · free plans of Trello or Asana for practice
-- **Community:** Local PMI chapters · r/projectmanagement
-- **Entry roles:** Project coordinator · Project assistant · Operations coordinator · Administrative coordinator
-- **Search for:** "project coordinator", "project assistant", "operations coordinator"
-
----
-
-## 3. Constellation shapes
-Coordinates on a 0–100 grid (x, y from top-left). Star numbers match quest numbers; star 5 is the Test "boss" star and should render larger.
-
-| Constellation | Stars (1–5) | Lines |
-|---|---|---|
-| The Lens (Shaper) | (30,30) (55,20) (70,45) (50,65) (80,85) | 1–2, 2–3, 3–4, 4–1, 3–5 |
-| The Anvil (Codesmith) | (20,40) (80,40) (65,55) (35,55) (50,85) | 1–2, 2–3, 3–4, 4–1, 4–5, 3–5 |
-| The Horn (Herald) | (15,50) (40,40) (65,30) (85,20) (85,60) | 1–2, 2–3, 3–4, 4–5, 5–3 |
-| The Lantern (Mentor) | (50,10) (30,35) (70,35) (30,75) (70,75) | 1–2, 1–3, 2–3, 2–4, 3–5, 4–5 |
-| The Eye (Oracle) | (10,50) (50,30) (90,50) (50,70) (50,50) | 1–2, 2–3, 3–4, 4–1 (star 5 is the pupil, unconnected) |
-| The Key (Quartermaster) | (20,30) (35,18) (35,42) (60,30) (85,30) | 1–2, 1–3, 2–4, 3–4, 4–5 |
-
-A line draws only when both of its stars are lit.
+**Safety rules for quests:** no quest involves mains electricity, medical procedures on others, dangerous tools without supervision, or contacting strangers alone. Quests that involve other people suggest safe routes (friends, family, open days, organized volunteering).
 
 ---
 
@@ -391,7 +185,7 @@ Only granted when a quest is completed **and** reflected on.
 - Each "felt natural" chip in the reflection: +1 (max 2 chips)
 - "Felt hard" chips: no XP; stored as a signal for future quest suggestions
 
-**Effect check:** Completing all five UX quests adds about +10 Creativity, +10 Empathy and +6 Communication. For Persona 4 (Noah), that moves UX design from ★★★ Challenging to ★ Natural fit, a satisfying payoff for finishing a constellation.
+**Effect check:** see §5 (finishing a constellation visibly moves its difficulty).
 
 ### 4.11 Titles
 - First Try star lit on a path → title unlocks: "The {Archetype adjective} {Class}", e.g. "The Gentle Shaper"
@@ -400,70 +194,76 @@ Only granted when a quest is completed **and** reflected on.
 ---
 
 ## 5. Test personas (computed results)
-These are the expected outputs for unit tests. Scores are shown for testing only.
+These are the expected outputs for unit tests (`tests/ranking.test.ts`), computed with the 16 traits and 24 careers. Scores are shown for testing only.
 
 ### Persona 1: Maya · Cancer · accepts every sign stat
-- **Poll:** all Skip (keeps sign stats)
-- **Enjoys:** helping, organizing · **Work:** many people
-- **Stats:** Creativity 60, Analytical 50, Empathy 85, Communication 60, Organization 65, Independence 40, Curiosity 50, Persistence 70
+- **Poll:** all Skip · no background traits added
+- **Enjoys:** helping, organizing · **Work:** lots of different people
+- **Sign called:** 8 of 8
 
 | Rank | Career | Score | Difficulty |
 |---|---|---|---|
-| 1 | Project coordination | 87.8 | ★ Natural fit |
-| 2 | Teaching | 79.7 | ★★ Some training (Communication) |
-| 3 | Marketing | 42.4 | ★★ Some training |
+| 1 | Project coordination | 89.4 | ★ Natural fit |
+| 2 | Social work | 89.3 | ★ Natural fit |
+| 3 | Teaching | 81.7 | ★ Natural fit |
+| 4 | Event planner | 81.6 | ★ Natural fit |
 
-**Check:** ✅ Her preferences decide the top 2. Teaching shows Communication as the area to train.
+**Check:** ✅ Her preferences decide the top 4, all people-and-planning paths across three worlds. Science paths sit at the bottom (★★★) but stay listed.
 
 ### Persona 2: Liam · Cancer · analytical, not empathetic
-- **Poll:** Empathy = Not really; Analytical, Curiosity, Independence = That's me; rest Skip
+- **Poll:** Empathy = Not really · **Background:** Analytical, Curiosity, Independence added
 - **Enjoys:** puzzles, tech · **Work:** on my own
-- **Stats:** Analytical 74, Curiosity 74, Independence 72, Empathy 43, others as sign
+- **Stats:** Analytical 74, Curiosity 73, Independence 70, Empathy 43, others as sign
+- **Sign called:** 7 of 8 (only Empathy is a Cancer signature trait he changed)
 
 | Rank | Career | Score | Difficulty |
 |---|---|---|---|
 | 1 | Software development | 99.8 | ★ Natural fit |
 | 2 | Data analysis | 91.1 | ★ Natural fit |
-| 3 | UX/product design | 62.9 | ★★ Some training |
+| 3 | Lab scientist | 80.5 | ★ Natural fit |
 
-**Check:** ✅ Same sign as Maya, completely different results. The poll and preferences override the sign. Teaching drops to last (★★★) because he said Not really to Empathy.
+**Check:** ✅ Same sign as Maya, completely different results: background traits let him show strengths Cancer doesn't lead with. Firefighter is last (★★★).
 
 ### Persona 3: Zoe · Leo · performer
 - **Poll:** all Skip
-- **Enjoys:** leading, performing, making · **Work:** many people
+- **Enjoys:** leading, performing, making · **Work:** lots of different people
 
 | Rank | Career | Score | Difficulty |
 |---|---|---|---|
-| 1 | Marketing | 91.3 | ★ Natural fit |
-| 2 | Teaching | 78.7 | ★★ Some training |
-| 3 | UX/product design | 76.6 | ★ Natural fit |
+| 1 | Musician | 93.0 | ★ Natural fit |
+| 2 | Marketing | 89.4 | ★ Natural fit |
+| 3 | Writer | 77.7 | ★ Natural fit |
 
-**Check:** ✅ Leo's Creativity and Communication plus her preferences point to Marketing.
+**Check:** ✅ Leo's Creativity and Communication plus performing put the stage first. Musician's card carries its reality check.
 
-### Persona 4: Noah · Virgo · wants to design
-- **Poll:** Creativity = Sometimes; rest Skip
+### Persona 4: Noah · Virgo · likes making things
+- **Poll:** Creativity = Sometimes (a background trait for Virgo)
 - **Enjoys:** making · **Work:** small team
-- **Stats:** Creativity 52, Communication 45, Empathy 50, Analytical 85, Organization 85
 
 | Rank | Career | Score | Difficulty |
 |---|---|---|---|
-| 1 | UX/product design | 72.9 | ★★★ Challenging but achievable |
-| 2 | Software development | 63.5 | ★ Natural fit |
-| 3 | Marketing | 54.5 | ★★★ Challenging |
+| 1 | Chef | 79.9 | ★ Natural fit |
+| 2 | Carpenter | 77.2 | ★★ Some training (Physical energy) |
+| 3 | UX/product design | 76.1 | ★★ Some training (Creativity) |
+| 4 | Florist | 75.1 | ★★ Some training (Aesthetic eye) |
 
-**Check:** ✅ "No closed doors" works: what he enjoys ranks first even though it's hard for his stats. Software appears as a natural-fit alternative.
+**Check:** ✅ "Making" no longer means only screens: hands-on careers lead, and his Virgo hands-on skill and detail make them natural fits.
 
 ### Persona 5: Ava · Pisces · unsure how she works
-- **Poll:** Organization = Not really, Communication = Sometimes; rest Skip
+- **Poll:** Organization = Not really (background), Communication = Sometimes
 - **Enjoys:** helping, making, learning · **Work:** not sure yet
+- **Sign called:** 7 of 8 (Communication dropped a band)
 
 | Rank | Career | Score | Difficulty |
 |---|---|---|---|
-| 1 | Teaching | 82.9 | ★★ Some training |
-| 2 | UX/product design | 79.3 | ★ Natural fit |
-| 3 | Marketing | 58.5 | ★★ Some training |
+| 1 | Writer | 94.9 | ★★ Some training (Communication) |
+| 2 | Florist | 88.8 | ★ Natural fit |
+| 3 | Physiotherapy | 84.5 | ★★ Some training (Analytical) |
 
-**Check:** ✅ "Not sure" work style gets a neutral half-score and doesn't hurt. Project coordination drops to last because she said Not really to Organization.
+**Check:** ✅ "Not sure" work style gets a neutral half-score. Event planner drops to the bottom because she said Not really to Organization.
+
+### Effect check (16 traits)
+Completing all five UX quests (reflected, no chips) adds +10 Empathy, +8 Creativity, +6 Communication, +4 Curiosity, +4 Detail, +4 Persistence. For Noah that moves UX design from ★★ Some training to ★ Natural fit.
 
 ### Edge cases for unit tests
 - Score never exceeds 100 (Liam's 99.8 is the near-maximum case)
@@ -471,6 +271,7 @@ These are the expected outputs for unit tests. Scores are shown for testing only
 - Tie scores → sorted by P, then A, then name
 - Stats cap at 100 after attribute XP
 - Recalibration changes confirmed base but keeps earned XP
+- Background traits never change "Your sign called X of 8"
 
 ---
 

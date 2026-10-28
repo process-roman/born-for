@@ -12,13 +12,13 @@ describe('confirm poll', () => {
 
   it('blends 30% sign + 70% answer target (Liam)', () => {
     const s = confirmStats(LIAM.sign, LIAM.answers);
-    expect(s).toMatchObject({ analytical: 74, curiosity: 74, independence: 72, empathy: 43 });
-    expect(s.creativity).toBe(60);
+    expect(s).toMatchObject({ analytical: 74, curiosity: 73, independence: 70, empathy: 43 });
+    expect(s.creativity).toBe(65);
   });
 
   it('Noah and Ava match the documented values', () => {
     expect(confirmStats(NOAH.sign, NOAH.answers).creativity).toBe(52);
-    expect(confirmStats(AVA.sign, AVA.answers)).toMatchObject({ organization: 28, communication: 56 });
+    expect(confirmStats(AVA.sign, AVA.answers)).toMatchObject({ organization: 28, communication: 58 });
   });
 
   it('rounds exact halves to even', () => {

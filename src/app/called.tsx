@@ -4,7 +4,7 @@ import { Redirect, router } from 'expo-router';
 import { Share, StyleSheet, Text, View } from 'react-native';
 
 import { SIGNS } from '@/content/signs';
-import { signCalled, topAttributes } from '@/logic/poll';
+import { backgroundTraits, signCalled, signatureTraits, topAttributes } from '@/logic/poll';
 import { useOnboarding } from '@/state/onboarding';
 import { Body, Button, Card, Label, Screen, Step, Title } from '@/ui/components';
 import { StatList } from '@/ui/stats';
@@ -16,6 +16,7 @@ export default function Called() {
   const sign = SIGNS[state.sign];
   const result = signCalled(state.sign, confirmed);
   const notes = Object.fromEntries(result.unique.map((a) => [a, 'Unique to you']));
+  const added = backgroundTraits(state.sign).filter((a) => state.answers[a] === 'yes');
 
   const share = async () => {
     try {
@@ -52,12 +53,26 @@ export default function Called() {
       </View>
       <Card>
         <Label>Your confirmed stats</Label>
-        <StatList stats={confirmed} ghost={sign.stats} element={sign.element} highlights={topAttributes(state.sign)} notes={notes} />
+        <StatList
+          stats={confirmed}
+          ghost={sign.stats}
+          element={sign.element}
+          attributes={signatureTraits(state.sign)}
+          highlights={topAttributes(state.sign)}
+          notes={notes}
+        />
         <View style={styles.legend}>
           <View style={styles.legendGhost} />
           <Text style={styles.legendText}>Dashed outline: what your sign predicted</Text>
         </View>
       </Card>
+      {added.length > 0 ? (
+        <Card>
+          <Label>Also you</Label>
+          <StatList stats={confirmed} ghost={sign.stats} element={sign.element} attributes={added} />
+          <Text style={styles.legendText}>Background traits you added. Your sign didn’t predict them, but you know yourself.</Text>
+        </Card>
+      ) : null}
     </Screen>
   );
 }

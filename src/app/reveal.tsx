@@ -7,7 +7,7 @@ import { Animated, Platform, Pressable, StyleSheet, Text, View } from 'react-nat
 import { SIGNS } from '@/content/signs';
 import { ELEMENT_COLORS } from '@/content/theme';
 import { ZODIAC_CONSTELLATIONS } from '@/content/zodiacConstellations';
-import { topAttributes } from '@/logic/poll';
+import { signatureTraits, topAttributes } from '@/logic/poll';
 import { useOnboarding } from '@/state/onboarding';
 import { Body, Button, Card, Label, Pill, Screen, Step, Title } from '@/ui/components';
 import { Constellation } from '@/ui/Constellation';
@@ -60,8 +60,10 @@ export default function Reveal() {
           <Body muted>{sign.revealLine}</Body>
           <View style={[styles.divider, { backgroundColor: element }]} />
           <Label>Your sign suggests</Label>
-          <StatList stats={sign.stats} element={sign.element} highlights={topAttributes(state.sign)} />
-          <Text style={styles.footnote}>★ Strongest probable attributes. Next, you’ll tell us if your sign got you right.</Text>
+          <StatList stats={sign.stats} element={sign.element} attributes={signatureTraits(state.sign)} highlights={topAttributes(state.sign)} />
+          <Text style={styles.footnote}>
+            ★ Strongest probable traits. + 8 background traits you can unlock. Next, you’ll tell us if your sign got you right.
+          </Text>
         </Card>
       </Animated.View>
     </Screen>

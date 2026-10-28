@@ -19,14 +19,12 @@ function expectTop3(ranked: CareerMatch[], expected: Expected[]) {
 }
 
 describe('persona rankings (Pilot Content §5)', () => {
-  it('Maya: preferences decide the top 2; Teaching flags Communication', () => {
-    const { ranked } = rank(MAYA);
-    expectTop3(ranked, [
-      ['project_coord', 87.8, 1],
-      ['teaching', 79.7, 2],
-      ['marketing', 42.4, 2],
+  it('Maya: helping and organizing lead to coordination, social work and teaching', () => {
+    expectTop3(rank(MAYA).ranked, [
+      ['project_coord', 89.4, 1],
+      ['social_work', 89.3, 1],
+      ['teaching', 81.7, 1],
     ]);
-    expect(ranked[1]!.difficulty.keyGaps.map((g) => g.attribute)).toEqual(['communication']);
   });
 
   it('Liam: same sign as Maya, completely different results', () => {
@@ -34,37 +32,37 @@ describe('persona rankings (Pilot Content §5)', () => {
     expectTop3(ranked, [
       ['software_dev', 99.8, 1],
       ['data_analysis', 91.1, 1],
-      ['ux_design', 62.9, 2],
+      ['lab_scientist', 80.5, 1],
     ]);
     const last = ranked[ranked.length - 1]!;
-    expect(last.careerId).toBe('teaching');
+    expect(last.careerId).toBe('firefighter');
     expect(last.difficulty.level).toBe(3);
   });
 
-  it('Zoe: Leo performer lands on Marketing', () => {
+  it('Zoe: Leo performer lands on stage and in marketing', () => {
     expectTop3(rank(ZOE).ranked, [
-      ['marketing', 91.3, 1],
-      ['teaching', 78.7, 2],
-      ['ux_design', 76.6, 1],
+      ['musician', 93.0, 1],
+      ['marketing', 89.4, 1],
+      ['writer', 77.7, 1],
     ]);
   });
 
-  it('Noah: what he enjoys ranks first even though it is hard', () => {
+  it('Noah: "making" now reaches hands-on careers, not just screens', () => {
     expectTop3(rank(NOAH).ranked, [
-      ['ux_design', 72.9, 3],
-      ['software_dev', 63.5, 1],
-      ['marketing', 54.5, 3],
+      ['chef', 79.9, 1],
+      ['carpenter', 77.2, 2],
+      ['ux_design', 76.1, 2],
     ]);
   });
 
-  it('Ava: unsure work style is neutral; Project coordination drops to last', () => {
+  it('Ava: unsure work style is neutral; Event planning drops near the bottom', () => {
     const { ranked } = rank(AVA);
     expectTop3(ranked, [
-      ['teaching', 82.9, 2],
-      ['ux_design', 79.3, 1],
-      ['marketing', 58.5, 2],
+      ['writer', 94.9, 2],
+      ['florist', 88.8, 1],
+      ['physio', 84.5, 2],
     ]);
-    expect(ranked[ranked.length - 1]!.careerId).toBe('project_coord');
+    expect(ranked.slice(-2).map((m) => m.careerId)).toContain('event_planner');
     expect(ranked.every((m) => m.workStyle === 0.5)).toBe(true);
   });
 });
@@ -94,7 +92,7 @@ describe('ranking edge cases', () => {
     const { ranked } = rank(MAYA);
     const sw = ranked.find((m) => m.careerId === 'software_dev')!;
     expect(sw.preference).toBe(0);
-    expect(ranked).toHaveLength(6);
+    expect(ranked).toHaveLength(24);
   });
 
   it('ties sort by preference, then attribute fit, then name', () => {
@@ -128,7 +126,7 @@ describe('feedback adjustments', () => {
     const { ranked, notForMe } = rankingFor(c);
     expect(ranked.map((m) => m.careerId)).not.toContain('project_coord');
     expect(notForMe.map((m) => m.careerId)).toEqual(['project_coord']);
-    expect(ranked[0]!.careerId).toBe('teaching');
+    expect(ranked[0]!.careerId).toBe('social_work');
   });
 
   it('quest enjoyment: 4–5 adds 5, 1–2 subtracts 10, 3 does nothing', () => {
@@ -145,12 +143,12 @@ describe('feedback adjustments', () => {
 });
 
 describe('reasons', () => {
-  it('Maya / Teaching: preference, strength, growth area', () => {
-    const t = rank(MAYA).ranked.find((m) => m.careerId === 'teaching')!;
+  it('Zoe / Teaching: preference, strength, growth area', () => {
+    const t = rank(ZOE).ranked.find((m) => m.careerId === 'teaching')!;
     expect(t.reasons).toEqual([
-      'You enjoy helping and supporting people',
-      'Your Empathy is Strong',
-      'Communication needs some training',
+      'You enjoy performing and presenting',
+      'Your Communication is Solid',
+      'Empathy needs some training',
     ]);
   });
 
@@ -158,7 +156,7 @@ describe('reasons', () => {
     const p = rank(MAYA).ranked.find((m) => m.careerId === 'project_coord')!;
     expect(p.reasons).toEqual([
       'You enjoy planning and organizing',
-      'Your Persistence is Solid',
+      'Your Organization is Solid',
       'Fits how you like to work: with lots of different people',
     ]);
   });
@@ -166,7 +164,7 @@ describe('reasons', () => {
   it('skips reasons that do not apply', () => {
     const sw = rank(MAYA).ranked.find((m) => m.careerId === 'software_dev')!;
     // No preference match, so the card starts with the strength.
-    expect(sw.reasons).toEqual(['Your Persistence is Solid', 'Analytical thinking needs some training']);
+    expect(sw.reasons).toEqual(['Your Persistence is Strong', 'Analytical thinking needs some training']);
   });
 
   it('every top-3 card has 2–3 reasons', () => {

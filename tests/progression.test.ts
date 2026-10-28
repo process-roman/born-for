@@ -71,9 +71,9 @@ describe('quest XP and levels', () => {
 
 describe('attribute XP', () => {
   it('quest attributes get the tier amount, felt-natural chips +1 (max 2)', () => {
-    const quest = CAREERS.ux_design.quests[2]!; // Try: creativity, persistence
+    const quest = CAREERS.ux_design.quests[2]!; // Try: creativity, detail
     const xp = attributeXpForQuest(quest, ['creativity', 'empathy', 'curiosity']);
-    expect(xp).toMatchObject({ creativity: 5, persistence: 4, empathy: 1, curiosity: 0 });
+    expect(xp).toMatchObject({ creativity: 5, detail: 4, empathy: 1, curiosity: 0 });
   });
 
   it('is granted only when the quest is reflected on', () => {
@@ -83,14 +83,14 @@ describe('attribute XP', () => {
     expect(c.character.feedback.ux_design).toBeUndefined();
   });
 
-  it('finishing UX adds +10 Creativity, +10 Empathy, +6 Communication', () => {
+  it('finishing UX adds +8 Creativity, +10 Empathy, +6 Communication', () => {
     const c = completeAll(createCharacter(NOAH), 'ux_design');
-    expect(c.earned).toMatchObject({ creativity: 10, empathy: 10, communication: 6 });
+    expect(c.earned).toMatchObject({ creativity: 8, empathy: 10, communication: 6, curiosity: 4, detail: 4, persistence: 4 });
   });
 
-  it('Noah: finishing UX moves it from Challenging to Natural fit', () => {
+  it('Noah: finishing UX moves it from Some training to Natural fit', () => {
     const before = createCharacter(NOAH);
-    expect(difficultyFor(CAREERS.ux_design, statsOf(before)).level).toBe(3);
+    expect(difficultyFor(CAREERS.ux_design, statsOf(before)).level).toBe(2);
     const after = completeAll(before, 'ux_design');
     expect(difficultyFor(CAREERS.ux_design, statsOf(after)).level).toBe(1);
   });
@@ -110,9 +110,9 @@ describe('recalibration', () => {
     let c = completeAll(createCharacter(MAYA), 'ux_design');
     const earned = c.earned;
     c = recalibrate(c, { creativity: 'yes' });
-    expect(c.confirmed.creativity).toBe(78);
+    expect(c.confirmed.creativity).toBe(79);
     expect(c.earned).toEqual(earned);
-    expect(statsOf(c).creativity).toBe(88);
+    expect(statsOf(c).creativity).toBe(87);
   });
 
   it('then vs now compares day-one stats to current', () => {
@@ -120,8 +120,8 @@ describe('recalibration', () => {
     c = recalibrate(c, { creativity: 'yes' });
     expect(thenVsNow(c).find((r) => r.attribute === 'creativity')).toEqual({
       attribute: 'creativity',
-      then: 60,
-      now: 88,
+      then: 65,
+      now: 87,
     });
   });
 });

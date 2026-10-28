@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { ATTRIBUTE_IDS, SIGN_STAT_BUDGET } from '../src/content/attributes';
-import { CAREER_IDS, CAREERS } from '../src/content/careers';
+import { ATTRIBUTE_IDS } from '../src/content/attributes';
+import { CAREER_IDS, CAREERS, careersInWorld } from '../src/content/careers';
+import { WORLD_IDS } from '../src/content/worlds';
 import { PREFERENCE_IDS } from '../src/content/preferences';
-import { SIGN_IDS, SIGN_STAT_MAX, SIGN_STAT_MIN, SIGNS } from '../src/content/signs';
+import { SIGN_IDS, SIGN_STAT_BUDGET, SIGN_STAT_MAX, SIGN_STAT_MIN, SIGNS } from '../src/content/signs';
 import { ZODIAC_CONSTELLATIONS } from '../src/content/zodiacConstellations';
 
 describe('sign profiles', () => {
@@ -74,6 +75,54 @@ describe('zodiac constellations', () => {
       expect(stars[a]).toBeDefined();
       expect(stars[b]).toBeDefined();
       expect(a).not.toBe(b);
+    }
+  });
+});
+
+describe('signature and background traits', () => {
+  it.each(SIGN_IDS)('%s ranks all 16 traits exactly once', (id) => {
+    const { signature, background } = SIGNS[id];
+    expect(signature).toHaveLength(8);
+    expect(background).toHaveLength(8);
+    expect(new Set([...signature, ...background]).size).toBe(16);
+  });
+
+  it('every trait is a signature trait for at least one sign', () => {
+    for (const a of ATTRIBUTE_IDS) expect(SIGN_IDS.some((id) => SIGNS[id].signature.includes(a)), a).toBe(true);
+  });
+});
+
+describe('career worlds', () => {
+  it('every world has at least two careers', () => {
+    for (const w of WORLD_IDS) expect(careersInWorld(w).length, w).toBeGreaterThanOrEqual(2);
+  });
+
+  it('every career belongs to a known world', () => {
+    for (const id of CAREER_IDS) {
+      expect(CAREERS[id].worlds.length).toBeGreaterThan(0);
+      for (const w of CAREERS[id].worlds) expect(WORLD_IDS).toContain(w);
+    }
+  });
+
+  it('long shots carry a reality check', () => {
+    expect(CAREERS.athlete.realityCheck).toBeTruthy();
+    expect(CAREERS.musician.realityCheck).toBeTruthy();
+  });
+});
+
+describe('quest template', () => {
+  it.each(CAREER_IDS)('%s follows Discover → Day in the life → Beginner → Make it yours → Real world', (id) => {
+    const quests = CAREERS[id].quests;
+    expect(quests.map((q) => q.step)).toEqual(['discover', 'day', 'beginner', 'own', 'real']);
+    for (const q of quests) {
+      expect(q.learn.length).toBeGreaterThan(0);
+      expect(q.instructions.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('electrician build quests stay on battery power', () => {
+    for (const q of CAREERS.electrician.quests.filter((q) => q.step === 'beginner' || q.step === 'own')) {
+      expect(q.instructions).toMatch(/battery/i);
     }
   });
 });

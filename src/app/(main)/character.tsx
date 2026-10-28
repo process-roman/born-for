@@ -7,12 +7,12 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { CAREER_IDS, CAREERS } from '@/content/careers';
 import { SIGNS } from '@/content/signs';
 import { litStarNumbers, statsOf, titlesOf } from '@/logic/character';
-import { topAttributes } from '@/logic/poll';
+import { backgroundTraits, topAttributes } from '@/logic/poll';
 import { useGame } from '@/state/game';
 import { Body, Button, Card, Label, Screen } from '@/ui/components';
 import { CharacterHeader } from '@/ui/CharacterHeader';
 import { PathConstellation } from '@/ui/PathConstellation';
-import { StatList } from '@/ui/stats';
+import { TraitSheet } from '@/ui/stats';
 import { C, F, S } from '@/ui/theme';
 
 export default function CharacterScreen() {
@@ -23,6 +23,7 @@ export default function CharacterScreen() {
   const sign = SIGNS[character.sign];
   const titles = titlesOf(character);
   const started = CAREER_IDS.filter((id) => litStarNumbers(character, id).length > 0);
+  const dimmed = backgroundTraits(character.sign).filter((a) => character.answers[a] !== 'yes' && character.earned[a] === 0);
 
   return (
     <Screen>
@@ -33,10 +34,10 @@ export default function CharacterScreen() {
 
       <Card>
         <Label>Then vs now</Label>
-        <StatList stats={statsOf(character)} ghost={character.dayOne} element={sign.element} highlights={topAttributes(character.sign)} />
+        <TraitSheet stats={statsOf(character)} ghost={character.dayOne} element={sign.element} highlights={topAttributes(character.sign)} dimmed={dimmed} />
         <View style={styles.legend}>
           <View style={styles.legendGhost} />
-          <Text style={styles.legendText}>Dashed outline: your stats on day one</Text>
+          <Text style={styles.legendText}>Dashed outline: your stats on day one. Faded: background traits you haven’t unlocked yet.</Text>
         </View>
       </Card>
 

@@ -6,7 +6,8 @@ import { completeQuest, litStarNumbers, rankingFor, setPathInterest, type Charac
 import { easierQuest, isStarAvailable, nextQuest } from './constellation';
 import { nextRecommendation, suggestDifferentPath, type NextStep } from './recommend';
 
-export const GAME_VERSION = 1;
+/** Bumped when the saved shape changes; older saves are dropped (v2: 16 traits, 24 careers). */
+export const GAME_VERSION = 2;
 /** An active quest with no action for this long gets a gentle "Still on it?" (Blueprint §4.5). */
 export const STALE_AFTER_DAYS = 14;
 

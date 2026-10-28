@@ -33,6 +33,10 @@ export function QuestCard({
       </View>
       <Text style={styles.name}>{quest.name}</Text>
       <Text style={styles.instructions}>{quest.instructions}</Text>
+      <Text style={styles.learn}>
+        <Text style={{ fontFamily: F.bodyBold }}>What you’ll learn: </Text>
+        {quest.learn}
+      </Text>
       {children}
     </Card>
   );
@@ -46,4 +50,5 @@ const styles = StyleSheet.create({
   time: { fontFamily: F.body, fontSize: 13, color: C.textMuted },
   name: { fontFamily: F.display, fontSize: 20, lineHeight: 26, color: C.text },
   instructions: { fontFamily: F.body, fontSize: 15, lineHeight: 22, color: C.text },
+  learn: { fontFamily: F.body, fontSize: 14, lineHeight: 20, color: C.textMuted },
 });

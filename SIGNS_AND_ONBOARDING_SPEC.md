@@ -1,21 +1,35 @@
-# Signs, Onboarding & Design Spec v0.1
-**Companion to:** PRODUCT_BLUEPRINT.md v0.2 | **Date:** October 27, 2026
+# Signs, Onboarding & Design Spec v0.2
+**Companion to:** PRODUCT_BLUEPRINT.md v0.3 | **Date:** October 28, 2026
+
+**What changed from v0.1:**
+- 8 attributes became **16 traits** in four families. Every sign has **8 signature traits** (predicted strongest, shown at the reveal and confirmed in the poll) and **8 background traits** (still valued by the sign, optional to confirm, trainable through quests). A Cancer who leads can now say so.
+- Sign values come from one shared ladder, so every sign has the same 930-point total.
+- "What do you enjoy?" grew from 8 to 12 options so every career world has a way in.
+- A short optional "Anything else that's you?" step follows the poll.
 
 ---
 
-## 1. The 8 attributes
-Every sign uses the same 8 attributes, with different starting values.
+## 1. The 16 traits
+Every sign uses the same 16 traits, with different starting values. They're grouped into four families of four, which is how the character sheet shows them.
 
-| Attribute | What it means in the app |
-|---|---|
-| Creativity | Coming up with your own ideas and new ways of doing things |
-| Analytical thinking | Figuring out how and why things work |
-| Empathy | Understanding and caring about how others feel |
-| Communication | Expressing ideas and connecting with people |
-| Organization | Planning, structure and follow-through on details |
-| Independence | Working and deciding on your own |
-| Curiosity | Wanting to learn and explore new things |
-| Persistence | Sticking with things when they get hard |
+| Family | Trait | What it means in the app |
+|---|---|---|
+| **Mind** (thinking) | Analytical thinking | Figuring out how and why things work |
+| | Curiosity | Wanting to learn and explore new things |
+| | Attention to detail | Noticing the small things others miss |
+| | Organization | Planning, structure and follow-through |
+| **Spark** (creating) | Creativity | Coming up with your own ideas and new ways of doing things |
+| | Aesthetic eye | Sensing what looks, sounds or feels beautiful |
+| | Courage | Trying new things and taking chances |
+| | Independence | Working and deciding on your own |
+| **Heart** (people) | Empathy | Understanding and caring about how others feel |
+| | Communication | Expressing ideas and connecting with people |
+| | Teamwork | Working well with others toward a shared goal |
+| | Leadership | Taking charge and getting people moving |
+| **Body** (doing) | Hands-on skill | Making, fixing and building with your hands |
+| | Physical energy | Energy, stamina and being in your body |
+| | Persistence | Sticking with things when they get hard |
+| | Calm under pressure | Staying steady when things get tense |
 
 **Bands shown to users:**
 | Score | Band |
@@ -28,28 +42,51 @@ Every sign uses the same 8 attributes, with different starting values.
 ---
 
 ## 2. Sign starting stats
-**Balance rule:** Every sign has the same total of **480 points**, like a stat budget in an RPG. No sign is "better" than another; they're distributed differently. Minimum 35, maximum 85, so every sign has room to grow.
 
-**Bold** = top 3, highlighted at the reveal as "strongest probable attributes".
+### The ladder
+Every sign ranks its 16 traits, and the rank sets the value. The same ladder is used for every sign, so every sign totals **930 points** and none is "better" than another. Minimum 35, maximum 85.
 
-| Sign | Archetype | Element | Creativity | Analytical | Empathy | Communication | Organization | Independence | Curiosity | Persistence |
-|---|---|---|---|---|---|---|---|---|---|---|
-| Aries | The Trailblazer | Fire | 60 | 50 | 50 | **70** | 40 | **85** | **70** | 55 |
-| Taurus | The Builder | Earth | **65** | 55 | 55 | 50 | **70** | 60 | 40 | **85** |
-| Gemini | The Messenger | Air | **65** | 60 | 50 | **85** | 40 | 55 | **85** | 40 |
-| Cancer | The Guardian | Water | 60 | 50 | **85** | 60 | **65** | 40 | 50 | **70** |
-| Leo | The Champion | Fire | **80** | 40 | 55 | **80** | 40 | **65** | 55 | **65** |
-| Virgo | The Analyst | Earth | 45 | **85** | 50 | 45 | **85** | 50 | 50 | **70** |
-| Libra | The Diplomat | Air | **70** | 60 | **75** | **80** | 55 | 35 | 55 | 50 |
-| Scorpio | The Investigator | Water | 45 | **75** | 65 | 40 | 45 | **70** | 55 | **85** |
-| Sagittarius | The Explorer | Fire | 60 | 55 | 50 | **65** | 35 | **80** | **85** | 50 |
-| Capricorn | The Architect | Earth | 45 | **70** | 45 | 45 | **85** | 60 | 45 | **85** |
-| Aquarius | The Inventor | Air | **80** | 65 | 45 | 50 | 35 | **80** | **80** | 45 |
-| Pisces | The Dreamer | Water | **85** | 45 | **85** | 60 | 35 | 55 | **65** | 50 |
+| Rank | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |
+|---|---|---|---|---|---|---|---|---|
+| **Signature** | 85 | 80 | 75 | 70 | 70 | 65 | 65 | 60 |
+| **Background** | 55 | 50 | 50 | 45 | 45 | 40 | 40 | 35 |
 
-*Scorpio updated Oct 28, 2026: Empathy 55 → 65 (consistently described as perceptive and intuitive about people), funded by Creativity 50 → 45 and Organization 50 → 45. Top 3 unchanged.*
+- **Signature traits** (ranks 1–8 of the signature row) are the sign's strongest probable traits. The top 3 are starred at the reveal. All 8 are confirmed in the poll.
+- **Background traits** (the background row) are traits the sign doesn't lead with, but they still have a value and count in career matching. They're never "zero": a Cancer starts with Leadership 45, Developing.
 
-*Leo has a tie for 3rd (Independence and Persistence at 65): highlight both, or pick Independence.*
+### Signature traits (strongest first)
+| Sign | Archetype | Element | Signature traits |
+|---|---|---|---|
+| Aries | The Trailblazer | Fire | **Courage, Leadership, Independence**, Physical energy, Communication, Curiosity, Creativity, Hands-on skill |
+| Taurus | The Builder | Earth | **Persistence, Hands-on skill, Aesthetic eye**, Calm under pressure, Organization, Creativity, Attention to detail, Physical energy |
+| Gemini | The Messenger | Air | **Communication, Curiosity, Creativity**, Analytical thinking, Teamwork, Courage, Independence, Aesthetic eye |
+| Cancer | The Guardian | Water | **Empathy, Persistence, Organization**, Teamwork, Communication, Creativity, Attention to detail, Hands-on skill |
+| Leo | The Champion | Fire | **Leadership, Creativity, Communication**, Courage, Aesthetic eye, Independence, Persistence, Teamwork |
+| Virgo | The Analyst | Earth | **Analytical thinking, Attention to detail, Organization**, Persistence, Hands-on skill, Calm under pressure, Empathy, Curiosity |
+| Libra | The Diplomat | Air | **Communication, Empathy, Aesthetic eye**, Teamwork, Creativity, Analytical thinking, Calm under pressure, Curiosity |
+| Scorpio | The Investigator | Water | **Persistence, Analytical thinking, Independence**, Courage, Calm under pressure, Empathy, Attention to detail, Leadership |
+| Sagittarius | The Explorer | Fire | **Curiosity, Independence, Courage**, Communication, Physical energy, Creativity, Analytical thinking, Leadership |
+| Capricorn | The Architect | Earth | **Organization, Persistence, Leadership**, Analytical thinking, Calm under pressure, Attention to detail, Independence, Hands-on skill |
+| Aquarius | The Inventor | Air | **Creativity, Independence, Curiosity**, Analytical thinking, Courage, Teamwork, Communication, Hands-on skill |
+| Pisces | The Dreamer | Water | **Creativity, Empathy, Aesthetic eye**, Curiosity, Teamwork, Communication, Hands-on skill, Independence |
+
+### Background traits (strongest first)
+| Sign | Background traits |
+|---|---|
+| Aries | Persistence, Teamwork, Calm under pressure, Analytical thinking, Aesthetic eye, Empathy, Organization, Attention to detail |
+| Taurus | Empathy, Teamwork, Analytical thinking, Independence, Communication, Leadership, Courage, Curiosity |
+| Gemini | Empathy, Leadership, Hands-on skill, Physical energy, Calm under pressure, Organization, Attention to detail, Persistence |
+| Cancer | Calm under pressure, Aesthetic eye, Analytical thinking, Leadership, Curiosity, Courage, Physical energy, Independence |
+| Leo | Physical energy, Empathy, Calm under pressure, Curiosity, Hands-on skill, Analytical thinking, Organization, Attention to detail |
+| Virgo | Teamwork, Communication, Independence, Aesthetic eye, Creativity, Leadership, Physical energy, Courage |
+| Libra | Organization, Leadership, Attention to detail, Persistence, Hands-on skill, Physical energy, Courage, Independence |
+| Scorpio | Curiosity, Creativity, Organization, Physical energy, Aesthetic eye, Hands-on skill, Teamwork, Communication |
+| Sagittarius | Teamwork, Empathy, Hands-on skill, Aesthetic eye, Calm under pressure, Persistence, Organization, Attention to detail |
+| Capricorn | Physical energy, Teamwork, Communication, Curiosity, Empathy, Courage, Creativity, Aesthetic eye |
+| Aquarius | Empathy, Leadership, Aesthetic eye, Attention to detail, Physical energy, Calm under pressure, Persistence, Organization |
+| Pisces | Calm under pressure, Analytical thinking, Persistence, Physical energy, Courage, Attention to detail, Leadership, Organization |
+
+*Every trait is a signature trait for at least one sign (Physical energy: Aries, Taurus, Sagittarius; Leadership: Aries, Leo, Scorpio, Sagittarius, Capricorn).*
 
 ### Reveal copy (one line per archetype)
 - **Aries, The Trailblazer:** You go first, act fast and figure it out on the way.
@@ -64,6 +101,8 @@ Every sign uses the same 8 attributes, with different starting values.
 - **Capricorn, The Architect:** You plan the climb and you finish what you start.
 - **Aquarius, The Inventor:** You imagine what doesn't exist yet and go build it.
 - **Pisces, The Dreamer:** You feel deeply and turn imagination into something real.
+
+The reveal shows the 8 signature traits, top 3 starred, with a line: "+ 8 background traits you can unlock."
 
 ---
 
@@ -87,8 +126,12 @@ Three questions, all tap-only, no typing.
 - 🔭 Learning and exploring ideas
 - 💻 Working with tech
 - 🎤 Performing and presenting
+- 🏃 Being active and playing sport
+- 🌿 Nature, plants and animals
+- 🔧 Building and fixing things
+- 🍳 Food and cooking
 
-**Used for:** The preferences part of career ranking (55% weight). Each option maps to career interest tags.
+**Used for:** The preferences part of career ranking. Each option maps to career interest tags, and every career world (PILOT_CONTENT.md §1) is reachable from at least one option.
 
 ### Q3: "How do you like to work?" (single choice)
 - 🧍 Mostly on my own
@@ -100,8 +143,8 @@ Three questions, all tap-only, no typing.
 
 ---
 
-## 4. Confirming attributes: the poll
-Instead of sliders, users answer one card per attribute. Each card shows what the sign predicts and a plain behavioral statement.
+## 4. Confirming traits: the poll
+Instead of sliders, users answer one card per **signature trait** (8 cards, about 30 seconds). Each card shows what the sign predicts and a plain behavioral statement.
 
 ### Card layout
 > **EMPATHY** · Your sign says: **Strong**
@@ -109,21 +152,32 @@ Instead of sliders, users answer one card per attribute. Each card shows what th
 >
 > [ That's me ] [ Sometimes ] [ Not really ]
 
-Swipe right = That's me, swipe left = Not really, tap = Sometimes. "Skip" keeps the sign's value.
+Swipe right = That's me, swipe left = Not really. "Sometimes" is a button. "Skip" keeps the sign's value.
 
-**Order:** Top 3 strongest attributes first (most likely to get a "That's me", which feels good), then the rest. 8 cards takes about 30 seconds.
+**Order:** Top 3 signature traits first (most likely to get a "That's me", which feels good), then the other 5.
+
+### Then: "Anything else that's you?" (optional)
+One screen with the sign's 8 background traits as chips. Tapping a chip counts as "That's me" for that trait; untapped traits keep the sign's value. Continue works with zero taps.
 
 ### Statements
-| Attribute | Statement |
+| Trait | Statement |
 |---|---|
-| Creativity | You often come up with your own ideas instead of doing it the usual way. |
 | Analytical thinking | You enjoy figuring out why something works, or why it doesn't. |
+| Curiosity | You often go down rabbit holes learning about something new. |
+| Attention to detail | You spot small mistakes or details other people don't notice. |
+| Organization | You like having a plan and keeping things in order. |
+| Creativity | You often come up with your own ideas instead of doing it the usual way. |
+| Aesthetic eye | You can tell when colors, shapes or sounds go together, and it matters to you. |
+| Courage | You'll try something new even when you might fail at it. |
+| Independence | You'd rather figure things out yourself than wait for directions. |
 | Empathy | You can tell how someone feels before they say it. |
 | Communication | Explaining things to other people comes easily to you. |
-| Organization | You like having a plan and keeping things in order. |
-| Independence | You'd rather figure things out yourself than wait for directions. |
-| Curiosity | You often go down rabbit holes learning about something new. |
+| Teamwork | You do your best work when you're part of a team. |
+| Leadership | In a group, people often end up looking to you to decide. |
+| Hands-on skill | You'd rather build or fix something with your hands than read about it. |
+| Physical energy | You feel best when you're moving: sport, training, being active. |
 | Persistence | When something gets hard, you usually keep going. |
+| Calm under pressure | When things go wrong, you stay calm and figure out what to do. |
 
 ### Scoring
 Each answer has a target value:
@@ -132,19 +186,22 @@ Each answer has a target value:
 - Not really = **25**
 - Skip = sign value
 
-**Confirmed value = 30% sign value + 70% answer target**, rounded.
+**Confirmed value = 30% sign value + 70% answer target**, rounded (exact halves to even).
 
 Examples for Cancer:
 - Empathy 85 + "That's me" → **85** (Strong)
-- Independence 40 + "That's me" → **72** (Solid)
+- Leadership 45 (background) + tapped on "Anything else" → **73** (Solid)
 - Empathy 85 + "Not really" → **43** (Developing)
 
-The user's answers outweigh the sign, but the sign still shapes the result. Confirmed profiles don't need to total 480.
+The user's answers outweigh the sign, but the sign still shapes the result. Confirmed profiles don't need to total 930.
 
 ### Result screen
-"**Your sign called 6 of 8.**" Show the sign's stats as a ghost outline behind the confirmed bars, so users see where they matched and where they're unique.
-- A match = the answer kept the attribute in the same band.
+"**Your sign called 6 of 8.**" Counted over the 8 signature traits. Show the sign's stats as a ghost outline behind the confirmed bars, so users see where they matched and where they're unique, plus any background traits they added.
+- A match = the answer kept the trait in the same band.
 - This is fun, shareable, and honest about where the user differs from their sign.
+
+### Character sheet
+After onboarding, the Character screen shows all 16 traits by family. Background traits stay dimmer until the user confirms them or earns XP in them.
 
 ---
 

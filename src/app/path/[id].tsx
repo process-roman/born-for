@@ -6,6 +6,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { ATTRIBUTE_LABELS } from '@/content/attributes';
 import { CAREER_IDS, CAREERS, type CareerId } from '@/content/careers';
 import { SIGNS } from '@/content/signs';
+import { WORLDS } from '@/content/worlds';
 import { litStarNumbers, rankingFor, statsOf } from '@/logic/character';
 import { isConstellationComplete } from '@/logic/constellation';
 import { canStartQuest } from '@/logic/game';
@@ -61,6 +62,26 @@ export default function PathDetail() {
         <Text style={styles.count}>{lit.length} of 5 stars lit</Text>
       </View>
       <Body>{career.oneLiner}</Body>
+      <View style={styles.worlds}>
+        {career.worlds.map((w) => (
+          <Pressable
+            key={w}
+            accessibilityRole="link"
+            onPress={() => router.push({ pathname: '/world/[id]', params: { id: w } })}
+            style={styles.world}
+          >
+            <Text style={styles.worldText}>
+              {WORLDS[w].emoji} {WORLDS[w].name}
+            </Text>
+          </Pressable>
+        ))}
+      </View>
+      {career.realityCheck ? (
+        <Card style={{ borderColor: C.lavender }}>
+          <Label>Reality check</Label>
+          <Text style={styles.item}>{career.realityCheck}</Text>
+        </Card>
+      ) : null}
 
       <View style={styles.interest}>
         {INTEREST_OPTIONS.map((o) => (
@@ -155,6 +176,9 @@ export default function PathDetail() {
 const styles = StyleSheet.create({
   count: { fontFamily: F.bodyMedium, fontSize: 13, color: C.gold },
   interest: { flexDirection: 'row', gap: S.sm, justifyContent: 'center' },
+  worlds: { flexDirection: 'row', flexWrap: 'wrap', gap: S.sm, justifyContent: 'center' },
+  world: { paddingHorizontal: S.md, paddingVertical: 6, borderRadius: 999, backgroundColor: C.night, borderWidth: 1, borderColor: C.border },
+  worldText: { fontFamily: F.body, fontSize: 13, color: C.textMuted },
   chip: { paddingHorizontal: S.md, paddingVertical: 8, borderRadius: 999, borderWidth: 1, borderColor: C.border },
   chipOn: { borderColor: C.gold, backgroundColor: C.goldSoft },
   chipText: { fontFamily: F.bodyMedium, fontSize: 14, color: C.text },

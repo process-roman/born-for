@@ -220,11 +220,11 @@ This avoids drawing 60 separate illustrations.
 ---
 
 ### 8. Attribute model
-Eight attributes, each 0–100: Creativity, Analytical thinking, Empathy, Communication, Organization, Independence, Curiosity, Persistence. Full sign tables and poll statements are in SIGNS_AND_ONBOARDING_SPEC.md.
+Sixteen traits, each 0–100, in four families: Mind (Analytical thinking, Curiosity, Attention to detail, Organization), Spark (Creativity, Aesthetic eye, Courage, Independence), Heart (Empathy, Communication, Teamwork, Leadership) and Body (Hands-on skill, Physical energy, Persistence, Calm under pressure). Each sign has 8 **signature** traits (confirmed in the poll) and 8 **background** traits (optional to confirm, trainable). Full sign tables and poll statements are in SIGNS_AND_ONBOARDING_SPEC.md v0.2.
 
 **Bands:** Strong (80–100), Solid (60–79), Developing (40–59), Untrained (0–39).
 
-**Starting stats:** Each sign has a fixed profile totalling 480 points.
+**Starting stats:** Each sign ranks all 16 traits on a shared ladder, so every profile totals 930 points.
 
 **Confirmed base:** From the poll. Answer targets: That's me = 85, Sometimes = 55, Not really = 25, Skip = sign value. **Confirmed value = 30% sign + 70% answer target.**
 
@@ -334,7 +334,7 @@ Navigation after onboarding: **Home | Character | Explore**.
 ---
 
 ### 14. Content scope
-**Pilot (internal, one-sign vertical slice):** Cancer profile and illustration, all poll statements, **6 careers with full 5-star constellations (30 quests)**, real next steps for those 6, titles for those 6, evolving character layers for Cancer, full flow including free tier, paywall stub, account and notifications.
+**Pilot (internal, one-sign vertical slice):** Cancer profile and illustration, all poll statements, **24 careers across 12 career worlds, each with a full 5-star constellation built from one beginner-first quest template (120 quests)**, real next steps for those 6, titles for those 6, evolving character layers for Cancer, full flow including free tier, paywall stub, account and notifications.
 
 **First external MVP:** All 12 sign profiles and illustrations, ~30 careers with constellations (~150 quests, using shared quest templates where possible), real next steps for every career, all titles, all character layers, real payments, cloud backup.
 

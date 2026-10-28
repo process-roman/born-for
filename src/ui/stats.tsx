@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 
-import { ATTRIBUTE_IDS, ATTRIBUTE_LABELS, type AttributeId, type Stats } from '@/content/attributes';
+import { ATTRIBUTE_IDS, ATTRIBUTE_LABELS, FAMILIES, type AttributeId, type Stats } from '@/content/attributes';
 import type { Element } from '@/content/signs';
 import type { Difficulty } from '@/logic/difficulty';
 import { bandFor } from '@/logic/stats';
@@ -17,6 +17,7 @@ export function StatBar({
   ghost,
   highlight,
   note,
+  dim,
 }: {
   attribute: AttributeId;
   value: number;
@@ -24,11 +25,13 @@ export function StatBar({
   ghost?: number;
   highlight?: boolean;
   note?: string;
+  /** Background traits the user hasn't confirmed or trained yet. */
+  dim?: boolean;
 }) {
   const band = bandFor(value);
   const color = bandColor(band, element);
   return (
-    <View style={styles.row}>
+    <View style={[styles.row, dim && { opacity: 0.45 }]}>
       <View style={styles.labels}>
         <Text style={[styles.name, highlight && { color: C.gold }]}>
           {highlight ? '★ ' : ''}
@@ -50,20 +53,25 @@ export function StatBar({
   );
 }
 
+/** `attributes` limits and orders the list (default: all 16, highlights first). */
 export function StatList({
   stats,
   element,
+  attributes,
   ghost,
   highlights = [],
   notes = {},
+  dimmed = [],
 }: {
   stats: Stats;
   element: Element;
+  attributes?: readonly AttributeId[];
   ghost?: Stats;
   highlights?: AttributeId[];
   notes?: Partial<Record<AttributeId, string>>;
+  dimmed?: readonly AttributeId[];
 }) {
-  const order = [...highlights, ...ATTRIBUTE_IDS.filter((a) => !highlights.includes(a))];
+  const order = attributes ?? [...highlights, ...ATTRIBUTE_IDS.filter((a) => !highlights.includes(a))];
   return (
     <View style={{ gap: S.md }}>
       {order.map((a) => (
@@ -75,7 +83,24 @@ export function StatList({
           ghost={ghost?.[a]}
           highlight={highlights.includes(a)}
           note={notes[a]}
+          dim={dimmed.includes(a)}
         />
+      ))}
+    </View>
+  );
+}
+
+/** All 16 traits grouped into the four families, for the character sheet. */
+export function TraitSheet(props: Omit<Parameters<typeof StatList>[0], 'attributes'>) {
+  return (
+    <View style={{ gap: S.lg }}>
+      {FAMILIES.map((f) => (
+        <View key={f.id} style={{ gap: S.sm }}>
+          <Text style={styles.family}>
+            {f.name} <Text style={styles.familyBlurb}>· {f.blurb}</Text>
+          </Text>
+          <StatList {...props} attributes={f.traits} />
+        </View>
       ))}
     </View>
   );
@@ -89,6 +114,8 @@ export function DifficultyPill({ difficulty }: { difficulty: Difficulty }) {
 
 const styles = StyleSheet.create({
   row: { gap: 6 },
+  family: { fontFamily: F.display, fontSize: 15, color: C.gold },
+  familyBlurb: { fontFamily: F.body, fontSize: 13, color: C.textMuted },
   labels: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline' },
   name: { fontFamily: F.bodyMedium, fontSize: 14, color: C.text },
   band: { fontFamily: F.body, fontSize: 12 },

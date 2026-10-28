@@ -33,7 +33,7 @@ export default function Poll() {
       useNativeDriver,
     }).start(() => {
       setBusy(false);
-      if (index + 1 >= cards.length) router.push('/called');
+      if (index + 1 >= cards.length) router.push('/background');
       else setIndex(index + 1);
     });
   };
@@ -55,7 +55,7 @@ export default function Poll() {
   if (!state.sign || !confirmed) return <Redirect href="/" />;
   const sign = SIGNS[state.sign];
   const card = cards[index];
-  if (!card) return <Redirect href="/called" />;
+  if (!card) return <Redirect href="/background" />;
 
   const rotate = pan.x.interpolate({ inputRange: [-300, 0, 300], outputRange: ['-12deg', '0deg', '12deg'] });
   const yesOpacity = pan.x.interpolate({ inputRange: [0, SWIPE], outputRange: [0, 1], extrapolate: 'clamp' });

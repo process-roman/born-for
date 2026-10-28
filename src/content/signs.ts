@@ -1,6 +1,10 @@
 // The 12 signs (Signs & Onboarding Spec §2, Blueprint §6).
+//
+// Each sign ranks all 16 traits: 8 signature traits (predicted strongest, confirmed in the poll)
+// and 8 background traits (still valued, optional to confirm). Values come from one shared
+// ladder, so every sign has the same total and none is "better" than another.
 
-import type { Stats } from './attributes';
+import { ATTRIBUTE_IDS, type AttributeId, type Stats } from './attributes';
 
 export const SIGN_IDS = [
   'aries',
@@ -21,6 +25,12 @@ export type SignId = (typeof SIGN_IDS)[number];
 
 export type Element = 'fire' | 'earth' | 'air' | 'water';
 
+export const SIGNATURE_LADDER = [85, 80, 75, 70, 70, 65, 65, 60] as const;
+export const BACKGROUND_LADDER = [55, 50, 50, 45, 45, 40, 40, 35] as const;
+export const SIGN_STAT_MIN = 35;
+export const SIGN_STAT_MAX = 85;
+export const SIGN_STAT_BUDGET = [...SIGNATURE_LADDER, ...BACKGROUND_LADDER].reduce((a, b) => a + b, 0);
+
 export interface SignInfo {
   name: string;
   archetype: string;
@@ -30,21 +40,33 @@ export interface SignInfo {
   adjective: string;
   /** Tints character screens and drives the level-3 element glow. */
   element: Element;
-  /** Starting stats: 480 points, each between 35 and 85. */
+  /** Strongest first. The first three are starred at the reveal. */
+  signature: readonly AttributeId[];
+  /** Strongest first. */
+  background: readonly AttributeId[];
+  /** Starting stats, from the ladders. */
   stats: Stats;
 }
 
-export const SIGN_STAT_MIN = 35;
-export const SIGN_STAT_MAX = 85;
+type SignDef = Omit<SignInfo, 'stats'>;
 
-export const SIGNS: Record<SignId, SignInfo> = {
+function withStats(def: SignDef): SignInfo {
+  const values = new Map<AttributeId, number>();
+  def.signature.forEach((a, i) => values.set(a, SIGNATURE_LADDER[i]!));
+  def.background.forEach((a, i) => values.set(a, BACKGROUND_LADDER[i]!));
+  const stats = Object.fromEntries(ATTRIBUTE_IDS.map((a) => [a, values.get(a) ?? 0])) as Stats;
+  return { ...def, stats };
+}
+
+const DEFS: Record<SignId, SignDef> = {
   aries: {
     name: 'Aries',
     archetype: 'The Trailblazer',
     revealLine: 'You go first, act fast and figure it out on the way.',
     adjective: 'Bold',
     element: 'fire',
-    stats: { creativity: 60, analytical: 50, empathy: 50, communication: 70, organization: 40, independence: 85, curiosity: 70, persistence: 55 },
+    signature: ['courage', 'leadership', 'independence', 'physical', 'communication', 'curiosity', 'creativity', 'hands_on'],
+    background: ['persistence', 'teamwork', 'calm', 'analytical', 'aesthetic', 'empathy', 'organization', 'detail'],
   },
   taurus: {
     name: 'Taurus',
@@ -52,7 +74,8 @@ export const SIGNS: Record<SignId, SignInfo> = {
     revealLine: 'You make things that last, one steady step at a time.',
     adjective: 'Steady',
     element: 'earth',
-    stats: { creativity: 65, analytical: 55, empathy: 55, communication: 50, organization: 70, independence: 60, curiosity: 40, persistence: 85 },
+    signature: ['persistence', 'hands_on', 'aesthetic', 'calm', 'organization', 'creativity', 'detail', 'physical'],
+    background: ['empathy', 'teamwork', 'analytical', 'independence', 'communication', 'leadership', 'courage', 'curiosity'],
   },
   gemini: {
     name: 'Gemini',
@@ -60,7 +83,8 @@ export const SIGNS: Record<SignId, SignInfo> = {
     revealLine: 'Ideas move through you, and you love passing them on.',
     adjective: 'Quick',
     element: 'air',
-    stats: { creativity: 65, analytical: 60, empathy: 50, communication: 85, organization: 40, independence: 55, curiosity: 85, persistence: 40 },
+    signature: ['communication', 'curiosity', 'creativity', 'analytical', 'teamwork', 'courage', 'independence', 'aesthetic'],
+    background: ['empathy', 'leadership', 'hands_on', 'physical', 'calm', 'organization', 'detail', 'persistence'],
   },
   cancer: {
     name: 'Cancer',
@@ -68,7 +92,8 @@ export const SIGNS: Record<SignId, SignInfo> = {
     revealLine: 'You look after people and the things that matter to them.',
     adjective: 'Gentle',
     element: 'water',
-    stats: { creativity: 60, analytical: 50, empathy: 85, communication: 60, organization: 65, independence: 40, curiosity: 50, persistence: 70 },
+    signature: ['empathy', 'persistence', 'organization', 'teamwork', 'communication', 'creativity', 'detail', 'hands_on'],
+    background: ['calm', 'aesthetic', 'analytical', 'leadership', 'curiosity', 'courage', 'physical', 'independence'],
   },
   leo: {
     name: 'Leo',
@@ -76,7 +101,8 @@ export const SIGNS: Record<SignId, SignInfo> = {
     revealLine: 'You create, you lead, and people notice when you walk in.',
     adjective: 'Radiant',
     element: 'fire',
-    stats: { creativity: 80, analytical: 40, empathy: 55, communication: 80, organization: 40, independence: 65, curiosity: 55, persistence: 65 },
+    signature: ['leadership', 'creativity', 'communication', 'courage', 'aesthetic', 'independence', 'persistence', 'teamwork'],
+    background: ['physical', 'empathy', 'calm', 'curiosity', 'hands_on', 'analytical', 'organization', 'detail'],
   },
   virgo: {
     name: 'Virgo',
@@ -84,7 +110,8 @@ export const SIGNS: Record<SignId, SignInfo> = {
     revealLine: 'You see the details others miss and make things work better.',
     adjective: 'Precise',
     element: 'earth',
-    stats: { creativity: 45, analytical: 85, empathy: 50, communication: 45, organization: 85, independence: 50, curiosity: 50, persistence: 70 },
+    signature: ['analytical', 'detail', 'organization', 'persistence', 'hands_on', 'calm', 'empathy', 'curiosity'],
+    background: ['teamwork', 'communication', 'independence', 'aesthetic', 'creativity', 'leadership', 'physical', 'courage'],
   },
   libra: {
     name: 'Libra',
@@ -92,7 +119,8 @@ export const SIGNS: Record<SignId, SignInfo> = {
     revealLine: 'You bring people together and find the balance in any room.',
     adjective: 'Graceful',
     element: 'air',
-    stats: { creativity: 70, analytical: 60, empathy: 75, communication: 80, organization: 55, independence: 35, curiosity: 55, persistence: 50 },
+    signature: ['communication', 'empathy', 'aesthetic', 'teamwork', 'creativity', 'analytical', 'calm', 'curiosity'],
+    background: ['organization', 'leadership', 'detail', 'persistence', 'hands_on', 'physical', 'courage', 'independence'],
   },
   scorpio: {
     name: 'Scorpio',
@@ -100,9 +128,8 @@ export const SIGNS: Record<SignId, SignInfo> = {
     revealLine: "You dig deep and don't stop until you find the truth.",
     adjective: 'Relentless',
     element: 'water',
-    // Empathy raised from the spec's 55 to 65 (Scorpio is consistently described as perceptive and
-    // intuitive about people), funded by Creativity and Organization. Top 3 unchanged.
-    stats: { creativity: 45, analytical: 75, empathy: 65, communication: 40, organization: 45, independence: 70, curiosity: 55, persistence: 85 },
+    signature: ['persistence', 'analytical', 'independence', 'courage', 'calm', 'empathy', 'detail', 'leadership'],
+    background: ['curiosity', 'creativity', 'organization', 'physical', 'aesthetic', 'hands_on', 'teamwork', 'communication'],
   },
   sagittarius: {
     name: 'Sagittarius',
@@ -110,7 +137,8 @@ export const SIGNS: Record<SignId, SignInfo> = {
     revealLine: 'You chase new places, new ideas and the big picture.',
     adjective: 'Wandering',
     element: 'fire',
-    stats: { creativity: 60, analytical: 55, empathy: 50, communication: 65, organization: 35, independence: 80, curiosity: 85, persistence: 50 },
+    signature: ['curiosity', 'independence', 'courage', 'communication', 'physical', 'creativity', 'analytical', 'leadership'],
+    background: ['teamwork', 'empathy', 'hands_on', 'aesthetic', 'calm', 'persistence', 'organization', 'detail'],
   },
   capricorn: {
     name: 'Capricorn',
@@ -118,7 +146,8 @@ export const SIGNS: Record<SignId, SignInfo> = {
     revealLine: 'You plan the climb and you finish what you start.',
     adjective: 'Unshakable',
     element: 'earth',
-    stats: { creativity: 45, analytical: 70, empathy: 45, communication: 45, organization: 85, independence: 60, curiosity: 45, persistence: 85 },
+    signature: ['organization', 'persistence', 'leadership', 'analytical', 'calm', 'detail', 'independence', 'hands_on'],
+    background: ['physical', 'teamwork', 'communication', 'curiosity', 'empathy', 'courage', 'creativity', 'aesthetic'],
   },
   aquarius: {
     name: 'Aquarius',
@@ -126,7 +155,8 @@ export const SIGNS: Record<SignId, SignInfo> = {
     revealLine: "You imagine what doesn't exist yet and go build it.",
     adjective: 'Visionary',
     element: 'air',
-    stats: { creativity: 80, analytical: 65, empathy: 45, communication: 50, organization: 35, independence: 80, curiosity: 80, persistence: 45 },
+    signature: ['creativity', 'independence', 'curiosity', 'analytical', 'courage', 'teamwork', 'communication', 'hands_on'],
+    background: ['empathy', 'leadership', 'aesthetic', 'detail', 'physical', 'calm', 'persistence', 'organization'],
   },
   pisces: {
     name: 'Pisces',
@@ -134,9 +164,14 @@ export const SIGNS: Record<SignId, SignInfo> = {
     revealLine: 'You feel deeply and turn imagination into something real.',
     adjective: 'Dreaming',
     element: 'water',
-    stats: { creativity: 85, analytical: 45, empathy: 85, communication: 60, organization: 35, independence: 55, curiosity: 65, persistence: 50 },
+    signature: ['creativity', 'empathy', 'aesthetic', 'curiosity', 'teamwork', 'communication', 'hands_on', 'independence'],
+    background: ['calm', 'analytical', 'persistence', 'physical', 'courage', 'detail', 'leadership', 'organization'],
   },
 };
+
+export const SIGNS: Record<SignId, SignInfo> = Object.fromEntries(
+  SIGN_IDS.map((id) => [id, withStats(DEFS[id])]),
+) as Record<SignId, SignInfo>;
 
 export function getSignStats(sign: SignId): Stats {
   return SIGNS[sign].stats;

@@ -30,6 +30,10 @@ export const PREFERENCE_IDS = [
   'learning',
   'tech',
   'performing',
+  'active',
+  'nature',
+  'building',
+  'food',
 ] as const;
 
 export type PreferenceId = (typeof PREFERENCE_IDS)[number];
@@ -43,6 +47,10 @@ export const PREFERENCES: readonly Option<PreferenceId>[] = [
   { id: 'learning', emoji: '🔭', label: 'Learning and exploring ideas' },
   { id: 'tech', emoji: '💻', label: 'Working with tech' },
   { id: 'performing', emoji: '🎤', label: 'Performing and presenting' },
+  { id: 'active', emoji: '🏃', label: 'Being active and playing sport' },
+  { id: 'nature', emoji: '🌿', label: 'Nature, plants and animals' },
+  { id: 'building', emoji: '🔧', label: 'Building and fixing things' },
+  { id: 'food', emoji: '🍳', label: 'Food and cooking' },
 ];
 
 export const PREFERENCE_LABELS = labelsOf(PREFERENCES);
