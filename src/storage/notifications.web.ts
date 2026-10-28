@@ -13,3 +13,5 @@ export async function scheduleCheckIn(_date: Date, _title: string, _body: string
 }
 
 export async function cancelCheckIn(_id: string | null): Promise<void> {}
+
+export function useCheckInTap(_onTap: () => void) {}

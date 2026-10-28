@@ -2,11 +2,14 @@
 
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
 
+import type { BadgeId } from '@/content/badges';
 import { CAREERS, type CareerId, type StarNumber } from '@/content/careers';
+import type { SignId } from '@/content/signs';
 import type { Character, Reflection } from '@/logic/character';
 import { setPathInterest } from '@/logic/character';
 import * as G from '@/logic/game';
 import type { PathInterest } from '@/logic/ranking';
+import type { PollAnswers } from '@/logic/stats';
 import { getItem, removeItem, setItem } from '@/storage/kv';
 import { cancelCheckIn, requestReminderPermission, scheduleCheckIn } from '@/storage/notifications';
 
@@ -37,6 +40,9 @@ interface GameContextValue {
   setInterest: (careerId: CareerId, interest: PathInterest) => void;
   equipTitle: (careerId: CareerId) => void;
   unlock: () => void;
+  recalibrate: (answers: PollAnswers) => BadgeId[];
+  switchCuspSign: (sign: SignId) => void;
+  setReminders: (on: boolean) => void;
   reset: () => void;
 }
 
@@ -94,6 +100,21 @@ export function GameProvider({ children }: { children: ReactNode }) {
       setInterest: (careerId, interest) => update((g) => ({ ...g, character: setPathInterest(g.character, careerId, interest) })),
       equipTitle: (careerId) => update((g) => ({ ...g, equippedTitle: careerId })),
       unlock: () => update(G.unlock),
+      recalibrate: (answers) => {
+        if (!game) return [];
+        const result = G.recalibrateGame(game, answers);
+        commit(result.game);
+        return result.newBadges;
+      },
+      switchCuspSign: (sign) => update((g) => G.switchCuspSign(g, sign)),
+      setReminders: (on) => {
+        if (!on) void cancelCheckIn(game?.activeQuest?.notificationId ?? null);
+        update((g) => ({
+          ...g,
+          remindersEnabled: on,
+          activeQuest: !on && g.activeQuest ? { ...g.activeQuest, notificationId: null } : g.activeQuest,
+        }));
+      },
       reset: () => {
         void cancelCheckIn(game?.activeQuest?.notificationId ?? null);
         setLastResult(null);

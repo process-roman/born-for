@@ -6,7 +6,8 @@ import { levelOf, litStarNumbers } from '@/logic/character';
 import type { Game } from '@/logic/game';
 import { titleFor } from '@/logic/titles';
 import { LEVEL_THRESHOLDS, xpToNextLevel } from '@/logic/xp';
-import { C, F, glyph, S } from './theme';
+import { CharacterAvatar } from './CharacterAvatar';
+import { C, F, S } from './theme';
 
 export function equippedTitleText(game: Game): string | null {
   const id = game.equippedTitle;
@@ -27,9 +28,7 @@ export function CharacterHeader({ game }: { game: Game }) {
 
   return (
     <View style={styles.row}>
-      <View style={styles.glyphWrap}>
-        <Text style={styles.glyph}>{glyph(character.sign)}</Text>
-      </View>
+      <CharacterAvatar character={character} size={68} />
       <View style={{ flex: 1, gap: 4 }}>
         <Text style={styles.title}>{title ?? sign.archetype}</Text>
         <Text style={styles.sub}>
@@ -47,8 +46,6 @@ export function CharacterHeader({ game }: { game: Game }) {
 
 const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center', gap: S.md },
-  glyphWrap: { width: 56, height: 56, borderRadius: 28, borderWidth: 1, borderColor: C.goldBorder, alignItems: 'center', justifyContent: 'center', backgroundColor: C.night },
-  glyph: { fontSize: 28, color: C.gold },
   title: { fontFamily: F.display, fontSize: 18, color: C.text },
   sub: { fontFamily: F.body, fontSize: 13, color: C.textMuted },
   track: { height: 6, borderRadius: 3, backgroundColor: C.track, overflow: 'hidden', marginTop: 2 },

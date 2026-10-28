@@ -45,6 +45,8 @@ export interface Character {
   totalXp: number;
   stars: Partial<Record<CareerId, LitStar[]>>;
   feedback: FeedbackMap;
+  /** How many times the poll was rerun. Missing in saves from before recalibration existed. */
+  recalibrations?: number;
 }
 
 export interface OnboardingInput {
@@ -78,7 +80,12 @@ export function createCharacter({ intent, sign, cuspSigns, answers, enjoy, workS
 
 /** Reruns the poll: updates the confirmed base, keeps earned XP. */
 export function recalibrate(character: Character, answers: PollAnswers): Character {
-  return { ...character, answers, confirmed: confirmStats(character.sign, answers) };
+  return {
+    ...character,
+    answers,
+    confirmed: confirmStats(character.sign, answers),
+    recalibrations: (character.recalibrations ?? 0) + 1,
+  };
 }
 
 /**

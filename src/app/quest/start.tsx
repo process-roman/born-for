@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { Pressable, StyleSheet, Switch, Text, View } from 'react-native';
 
 import { CAREER_IDS, getQuest, type CareerId, type StarNumber } from '@/content/careers';
-import { canStartQuest, checkInTime, type WhenChoice } from '@/logic/game';
+import { canStartQuest, checkInTime, remindersOn, type WhenChoice } from '@/logic/game';
 import { useGame } from '@/state/game';
 import { remindersSupported } from '@/storage/notifications';
 import { Body, Button, Label, OptionCard, Screen, Title } from '@/ui/components';
@@ -19,7 +19,7 @@ export default function QuestStart() {
   const { game, startQuest } = useGame();
   const [when, setWhen] = useState<WhenChoice['kind']>('today');
   const [day, setDay] = useState(1);
-  const [remind, setRemind] = useState(remindersSupported);
+  const [remind, setRemind] = useState(() => remindersSupported && (!game || remindersOn(game)));
   const [busy, setBusy] = useState(false);
 
   const careerId = params.career as CareerId;

@@ -1,10 +1,24 @@
 // The saved game: character plus quest state, purchase flag and what to suggest next.
 // Pure functions so they can be unit-tested; the app store persists the result.
 
+import type { BadgeId } from '../content/badges';
 import { CAREERS, type CareerId, type StarNumber } from '../content/careers';
-import { completeQuest, litStarNumbers, rankingFor, setPathInterest, type Character, type Reflection, type QuestRewards } from './character';
+import type { SignId } from '../content/signs';
+import { newBadges } from './badges';
+import {
+  changeCuspSign,
+  completeQuest,
+  litStarNumbers,
+  rankingFor,
+  recalibrate,
+  setPathInterest,
+  type Character,
+  type QuestRewards,
+  type Reflection,
+} from './character';
 import { easierQuest, isStarAvailable, nextQuest } from './constellation';
 import { nextRecommendation, suggestDifferentPath, type NextStep } from './recommend';
+import type { PollAnswers } from './stats';
 
 /** Bumped when the saved shape changes; older saves are dropped (v2: 16 traits, 24 careers). */
 export const GAME_VERSION = 2;
@@ -38,6 +52,12 @@ export interface Game {
   activeQuest: ActiveQuest | null;
   suggestion: Suggestion | null;
   equippedTitle: CareerId | null;
+  /** Settings: offer check-in reminders when starting a quest. Missing means on. */
+  remindersEnabled?: boolean;
+}
+
+export function remindersOn(game: Game): boolean {
+  return game.remindersEnabled !== false;
 }
 
 export function newGame(character: Character, paid: boolean): Game {
@@ -124,6 +144,7 @@ export interface FinishResult {
   star: StarNumber;
   rewards: QuestRewards;
   next: NextStep;
+  newBadges: BadgeId[];
 }
 
 /** "Done": light the star, grant rewards, pick what to suggest next. A new title is equipped right away. */
@@ -144,7 +165,19 @@ export function finishQuest(game: Game, reflection: Reflection | null, now: Date
     star: active.star,
     rewards,
     next,
+    newBadges: newBadges(game.character, character),
   };
+}
+
+/** Settings → Recalibrate: rerun the poll; earned XP and progress stay. */
+export function recalibrateGame(game: Game, answers: PollAnswers): { game: Game; newBadges: BadgeId[] } {
+  const character = recalibrate(game.character, answers);
+  return { game: { ...game, character }, newBadges: newBadges(game.character, character) };
+}
+
+/** Settings → switch to the other cusp sign. */
+export function switchCuspSign(game: Game, sign: SignId): Game {
+  return { ...game, character: changeCuspSign(game.character, sign) };
 }
 
 export function unlock(game: Game): Game {

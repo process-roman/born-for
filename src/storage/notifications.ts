@@ -2,9 +2,11 @@
 
 import * as Notifications from 'expo-notifications';
 import { AndroidImportance } from 'expo-notifications';
+import { useEffect } from 'react';
 import { Platform } from 'react-native';
 
 const CHANNEL = 'quest-check-ins';
+const CHECK_IN = 'check-in';
 
 export const remindersSupported = true;
 
@@ -33,11 +35,27 @@ export async function requestReminderPermission(): Promise<boolean> {
 export async function scheduleCheckIn(date: Date, title: string, body: string): Promise<string | null> {
   if (date.getTime() <= Date.now()) return null;
   return Notifications.scheduleNotificationAsync({
-    content: { title, body },
+    content: { title, body, data: { type: CHECK_IN } },
     trigger: { type: Notifications.SchedulableTriggerInputTypes.DATE, date, channelId: CHANNEL },
   });
 }
 
 export async function cancelCheckIn(id: string | null): Promise<void> {
   if (id) await Notifications.cancelScheduledNotificationAsync(id);
+}
+
+/** Calls onTap when the user opens the app from a check-in reminder, including from a cold start. */
+export function useCheckInTap(onTap: () => void) {
+  const response = Notifications.useLastNotificationResponse();
+  useEffect(() => {
+    if (
+      response &&
+      response.actionIdentifier === Notifications.DEFAULT_ACTION_IDENTIFIER &&
+      response.notification.request.content.data?.type === CHECK_IN
+    ) {
+      onTap();
+      // Handled once; without this the same tap would fire again on the next launch.
+      void Notifications.clearLastNotificationResponseAsync();
+    }
+  }, [response, onTap]);
 }
