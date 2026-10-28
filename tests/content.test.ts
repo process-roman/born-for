@@ -3,6 +3,7 @@ import { ATTRIBUTE_IDS, SIGN_STAT_BUDGET } from '../src/content/attributes';
 import { CAREER_IDS, CAREERS } from '../src/content/careers';
 import { PREFERENCE_IDS } from '../src/content/preferences';
 import { SIGN_IDS, SIGN_STAT_MAX, SIGN_STAT_MIN, SIGNS } from '../src/content/signs';
+import { ZODIAC_CONSTELLATIONS } from '../src/content/zodiacConstellations';
 
 describe('sign profiles', () => {
   it.each(SIGN_IDS)('%s totals 480 points, each between 35 and 85', (id) => {
@@ -56,5 +57,23 @@ describe('careers', () => {
   it('class names are unique', () => {
     const names = CAREER_IDS.map((id) => CAREERS[id].className);
     expect(new Set(names).size).toBe(names.length);
+  });
+});
+
+describe('zodiac constellations', () => {
+  it.each(SIGN_IDS)('%s has stars on the grid and lines between real stars', (id) => {
+    const { stars, lines } = ZODIAC_CONSTELLATIONS[id];
+    expect(stars.length).toBeGreaterThanOrEqual(4);
+    for (const [x, y] of stars) {
+      expect(x).toBeGreaterThanOrEqual(0);
+      expect(x).toBeLessThanOrEqual(100);
+      expect(y).toBeGreaterThanOrEqual(0);
+      expect(y).toBeLessThanOrEqual(100);
+    }
+    for (const [a, b] of lines) {
+      expect(stars[a]).toBeDefined();
+      expect(stars[b]).toBeDefined();
+      expect(a).not.toBe(b);
+    }
   });
 });
