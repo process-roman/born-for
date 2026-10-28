@@ -1,11 +1,13 @@
 // Paywall stub with the free-tier teaser (Blueprint §4.1, §10). No real purchase yet.
+// Shown at the end of onboarding, after the free quest ("second moment") and from locked screens.
 
-import { Redirect, router } from 'expo-router';
+import { Redirect, router, useLocalSearchParams } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { CAREERS } from '@/content/careers';
 import type { IntentId } from '@/content/preferences';
 import { rankingFor } from '@/logic/character';
+import { useGame } from '@/state/game';
 import { useOnboarding } from '@/state/onboarding';
 import { Body, Button, Card, Label, Screen, Step, Title } from '@/ui/components';
 import { DifficultyPill } from '@/ui/stats';
@@ -25,23 +27,39 @@ const UNLOCKS = [
   'Real next steps: courses, communities and entry roles',
 ];
 
+const SECOND_MOMENT = { title: 'Your first star is lit.', body: 'Unlock the full constellation, and every other path waiting in your sky.' };
+
 export default function Paywall() {
-  const { state, character } = useOnboarding();
+  const { second } = useLocalSearchParams<{ second?: string }>();
+  const onboarding = useOnboarding();
+  const { game, begin, unlock } = useGame();
+  const character = game?.character ?? onboarding.character;
   if (!character) return <Redirect href="/" />;
   const top = rankingFor(character).ranked[0]!;
-  const copy = HEADLINES[state.intent ?? 'career'];
+  const copy = second === '1' ? SECOND_MOMENT : HEADLINES[character.intent ?? 'career'];
+
+  const finish = (paid: boolean) => {
+    if (game) {
+      if (paid) unlock();
+    } else {
+      begin(character, paid);
+    }
+    if (router.canDismiss()) router.dismissAll();
+    if (paid) router.replace('/paths');
+    else router.replace(game ? '/home' : { pathname: '/paths', params: { free: '1' } });
+  };
 
   return (
     <Screen
       footer={
         <>
-          <Button title="Unlock your paths" onPress={() => router.push('/paths')} />
+          <Button title="Unlock your paths" onPress={() => finish(true)} />
           <Text style={styles.stub}>Test build: no payment is taken.</Text>
-          <Button title="Not now" variant="ghost" onPress={() => router.push({ pathname: '/paths', params: { free: '1' } })} />
+          <Button title="Not now" variant="ghost" onPress={() => finish(false)} />
         </>
       }
     >
-      <Step index={7} total={8} />
+      {game ? null : <Step index={7} total={8} />}
       <Title>{copy.title}</Title>
       <Body muted>{copy.body}</Body>
 

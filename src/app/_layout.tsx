@@ -6,10 +6,13 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 
+import { GameProvider } from '@/state/game';
 import { OnboardingProvider } from '@/state/onboarding';
+import { configureNotifications } from '@/storage/notifications';
 import { C } from '@/ui/theme';
 
 SplashScreen.preventAutoHideAsync();
+configureNotifications();
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({ Cinzel_400Regular, Cinzel_700Bold, DMSans_400Regular, DMSans_500Medium, DMSans_700Bold });
@@ -21,9 +24,11 @@ export default function RootLayout() {
   if (!loaded && !error) return null;
 
   return (
-    <OnboardingProvider>
-      <StatusBar style="light" />
-      <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: C.nightDeep }, animation: 'fade' }} />
-    </OnboardingProvider>
+    <GameProvider>
+      <OnboardingProvider>
+        <StatusBar style="light" />
+        <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: C.nightDeep }, animation: 'fade' }} />
+      </OnboardingProvider>
+    </GameProvider>
   );
 }

@@ -1,15 +1,18 @@
 // Q1: Welcome + intent.
 
-import { router } from 'expo-router';
+import { Redirect, router } from 'expo-router';
 import { Text, View } from 'react-native';
 
 import { INTENTS } from '@/content/preferences';
+import { useGame } from '@/state/game';
 import { useOnboarding } from '@/state/onboarding';
 import { Body, Label, OptionCard, Screen, Title } from '@/ui/components';
 import { C, F, S } from '@/ui/theme';
 
 export default function Welcome() {
   const { state, dispatch } = useOnboarding();
+  const { game } = useGame();
+  if (game) return <Redirect href="/home" />;
   return (
     <Screen>
       <View style={{ alignItems: 'center', gap: S.md, marginTop: S.xxl, marginBottom: S.lg }}>
