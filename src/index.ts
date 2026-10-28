@@ -12,3 +12,4 @@ export * from './logic/xp';
 export * from './logic/constellation';
 export * from './logic/titles';
 export * from './logic/character';
+export * from './logic/recommend';
