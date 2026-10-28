@@ -1,0 +1,16 @@
+{
+  "name": "born-for",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Born For: zodiac + RPG self-discovery app. Core content and rules (M0).",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.5"
+  }
+}
