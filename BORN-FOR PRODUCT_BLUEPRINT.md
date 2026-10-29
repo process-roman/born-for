@@ -50,7 +50,7 @@
 3. **Character reveal.** Stars connect into the Cancer constellation, then the card flips: "Cancer: The Guardian." Show all eight starting stats, top 3 highlighted as strongest probable attributes.
 4. **Confirm poll.** One swipe card per attribute with a behavioral statement and the sign's prediction. That's me / Sometimes / Not really / Skip. Top 3 first. About 30 seconds.
 5. **"Your sign called 6 of 8."** Confirmed bars shown over a ghost outline of the sign's prediction. Shareable character card offered here.
-6. **What do you enjoy?** Pick up to 3 of 8 options.
+6. **Which worlds pull you?** Pick up to 3 of 17 career worlds, then **any jobs that catch your eye** inside them.
 7. **How do you like to work?** On my own / Small team / Lots of people / Not sure.
 8. **Paywall.** "Your career paths are ready." See section 10 for what free users get if they decline.
 
@@ -239,7 +239,7 @@ A transparent weighted model in pure TypeScript. No AI at launch.
 
 Each career has: description and day-to-day reality, 2–3 primary attributes with required levels, interest tags, work style, training/education and downsides, a 5-star constellation of quests, a class name for titles, a constellation shape and "Real next steps" content.
 
-**Ranking (provisional):** **55% preferences + 45% confirmed attribute fit.** Work style adds a small bonus and appears as a reason.
+**Ranking:** **50% interest (picked jobs, chosen worlds) + 40% confirmed trait fit + 10% work style.** Results are grouped: your picks, more in your worlds, and up to two wildcards where your traits fit unusually well. See PILOT_CONTENT.md §4.
 
 **Difficulty:** From the gap between current stats and the career's primary attribute requirements:
 - ★ **Natural fit**: attributes already match well
@@ -295,7 +295,7 @@ Difficulty updates live as attributes grow. It never hides a career.
 3. Character reveal
 4. Confirm poll
 5. "Your sign called X of 8" + share card
-6. What do you enjoy? / How do you like to work?
+6. Which worlds pull you? / Any jobs catch your eye? / How do you like to work?
 7. Paywall (plus free-tier teaser)
 8. Save your character (account prompt)
 9. Explore Paths: ranked career cards with difficulty and reasons

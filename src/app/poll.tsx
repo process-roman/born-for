@@ -75,7 +75,7 @@ export default function Poll() {
         </>
       }
     >
-      <Step index={3} total={8} />
+      <Step index={3} total={9} />
       <Label style={{ textAlign: 'center' }}>
         Is this you? · {index + 1} of {cards.length}
       </Label>

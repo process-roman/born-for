@@ -81,7 +81,8 @@ describe('cusp choice on the character', () => {
   const base = {
     cuspSigns: ['gemini', 'cancer'] as ['gemini', 'cancer'],
     answers: { empathy: 'yes' as const },
-    enjoy: ['making' as const],
+    worlds: ['art' as const],
+    picks: [] as never[],
     workStyle: 'small_team' as const,
   };
 

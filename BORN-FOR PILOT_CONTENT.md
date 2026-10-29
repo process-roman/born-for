@@ -1,7 +1,9 @@
-# Pilot Content & Formulas v0.2
+# Pilot Content & Formulas v0.3
 **Companion to:** PRODUCT_BLUEPRINT.md v0.3 and SIGNS_AND_ONBOARDING_SPEC.md v0.2 | **Date:** October 28, 2026
 
-**What changed from v0.1:**
+**What changed in v0.3:** direction-first matching (users pick worlds, then jobs), 17 worlds, 99 careers including creator and gaming careers, a new match score (§4.2, §4.5) and result groups (§4.5b).
+
+**What changed in v0.2:**
 - Six careers became **24 careers in 12 career worlds**, so an 18-year-old who doesn't know what they want can browse the whole job market, not just desk jobs.
 - Every career uses the same **beginner-first quest template**: no quest assumes you already work in the field.
 - Requirements use the 16 traits from the signs spec.
@@ -10,79 +12,41 @@
 ---
 
 ## 1. Career worlds
-Broad worlds an 18-year-old can browse, loosely based on how career guidance groups the job market (Holland interest types, government career clusters). A career can sit in more than one world: someone who loves flowers reaches **Florist** through Create & Design and **Landscape gardener** through Nature.
+v0.3 replaces the abstract "What do you enjoy?" options with a **direction-first** flow (signs spec §3): users pick the worlds that pull them, then the jobs that catch their eye. The worlds are broad areas an 18-year-old recognizes, including the creator and gaming careers younger people actually aim for. A job can sit in up to three worlds.
 
-| World | Pilot careers | More later |
-|---|---|---|
-| 🎨 Create & Design | UX/product design, Florist | Graphic designer, fashion designer, interior designer |
-| 💻 Tech & Digital | Software development, Data analysis | IT support, game developer, cybersecurity |
-| 📈 Business & Money | Marketing, Project coordination | Sales, accountant, entrepreneur |
-| 🤝 People & Care | Teaching, Social work | Counsellor, childcare worker |
-| 🩺 Health | Nursing, Physiotherapy | Paramedic, nutritionist, pharmacist |
-| ⚽ Sport & Movement | Professional athlete, Personal trainer | Coach, PE teacher, sports analyst |
-| 🌍 Nature, Animals & Outdoors | Vet nurse, Landscape gardener | Farmer, park ranger, horticulturist |
-| 🔧 Build, Fix & Make | Electrician, Carpenter | Mechanic, plumber, engineering technician |
-| 🍳 Food & Hospitality | Chef, Event planner | Baker, hotel manager |
-| 🎭 Arts, Media & Performance | Musician, Writer | Actor, photographer, content creator |
-| 🔬 Science & Research | Lab scientist, Environmental scientist | Biologist, chemist |
-| 🛡️ Public Service & Law | Firefighter, Law | Police officer, city planner |
-
-Cross-listed: Florist (Create, Nature), UX (Create, Tech), Data analysis (Tech, Business), Marketing (Business, Create), Physiotherapy (Health, Sport), Personal trainer (Sport, Health), Vet nurse (Nature, Health), Landscape gardener (Nature, Build), Carpenter (Build, Create), Chef (Food, Create), Event planner (Food, Business), Environmental scientist (Science, Nature), Firefighter (Public service, Health), Law (Public service, Business), Nursing (Health, People).
-
-**Long shots stay open, honestly.** Careers like Professional athlete and Musician carry a "reality check" on their card: the path stays selectable ("no closed doors"), and the card says plainly how narrow it is and points to the realistic jobs around it.
-
-### Preference IDs (Q2)
-| ID | Label |
+| World | Jobs |
 |---|---|
-| `making` | Making and designing things |
-| `puzzles` | Solving puzzles and problems |
-| `helping` | Helping and supporting people |
-| `organizing` | Planning and organizing |
-| `leading` | Leading and persuading |
-| `learning` | Learning and exploring ideas |
-| `tech` | Working with tech |
-| `performing` | Performing and presenting |
-| `active` | Being active and playing sport |
-| `nature` | Nature, plants and animals |
-| `building` | Building and fixing things |
-| `food` | Food and cooking |
+| 📈 Business & Entrepreneurship | Startup founder, E-commerce store owner, Marketing, Sales, Recruiter, Accountant, Real estate agent, Project coordination, Data analysis, Event planner, Law, Hotel manager, Fashion buyer, Social media manager, Copywriter |
+| 👗 Fashion & Beauty | Fashion designer, Stylist, Makeup artist, Hairdresser, Fashion buyer, Nail artist, Model\*, Influencer\*, Tattoo artist |
+| 📱 Creators & Media | YouTuber\*, Streamer\*, Influencer\*, Podcaster, Social media manager, Video editor, Photographer, Marketing, Esports caster, Music producer, Journalist, Travel creator\*, Stylist, E-commerce store owner |
+| 🎮 Gaming & Esports | Game developer, Game designer, Game artist, Esports player\*, Esports caster, QA tester, Animator, Streamer\* |
+| 🎨 Art & Design | Graphic designer, Illustrator, Animator, Tattoo artist, Interior designer, Architect, UX/product design, Florist, Carpenter, Photographer, Video editor, Game artist, Game designer, Makeup artist, Pastry chef, Screenwriter |
+| 🎵 Music & Performance | Musician\*, Music producer/DJ, Actor\*, Dancer\*, Sound engineer |
+| ✍️ Writing & Journalism | Writer, Journalist, Copywriter, Screenwriter, Podcaster |
+| 💻 Tech & AI | Software development, AI engineer, Cybersecurity analyst, App developer, IT support, Data analysis, UX/product design, Game developer, QA tester, Sound engineer, Sports analyst, Drone pilot |
+| ⚽ Sport & Fitness | Professional athlete\*, Personal trainer, Sports coach, Physiotherapy, Sports analyst, Yoga instructor, Dancer\*, Esports player\* |
+| 🩺 Health & Mind | Nursing, Doctor, Paramedic, Psychologist, Pharmacist, Nutritionist, Physiotherapy, Personal trainer, Vet nurse, Veterinarian, Counsellor, Yoga instructor |
+| 🤝 People & Education | Teaching, Early childhood educator, Social work, Counsellor, Youth worker, Recruiter, Psychologist, Sports coach, Tour guide |
+| 🌍 Nature & Animals | Veterinarian, Vet nurse, Marine biologist, Park ranger, Farmer, Landscape gardener, Florist, Environmental scientist |
+| 🍳 Food & Hospitality | Chef, Pastry chef, Barista, Bartender, Event planner, Hotel manager, Nutritionist |
+| 🔧 Build & Fix | Electrician, Carpenter, Mechanic, Plumber, Welder, Drone pilot, Landscape gardener, Interior designer, Architect |
+| ✈️ Travel & Adventure | Pilot, Flight attendant, Tour guide, Travel creator\*, Hotel manager, Diplomat |
+| 🔬 Science & Space | Astronomer, Chemist, Lab scientist, Environmental scientist, Marine biologist, AI engineer, Doctor, Pharmacist |
+| 🛡️ Law & Public Service | Law, Police officer, Firefighter, Diplomat, Policy advisor, Paramedic, Park ranger, Cybersecurity analyst |
+
+\* **Long shots stay open, honestly.** These carry a "reality check" on their card: the path stays selectable ("no closed doors"), and the card says plainly how narrow it is and points to the realistic jobs around it (e.g. YouTuber → video editor, social media manager, marketing).
 
 ### Work style IDs (Q3)
 `solo` · `small_team` · `many` · `unsure`
 
 ---
 
-## 2. The 24 pilot careers
-Key traits are the three primary traits with the level each career asks for. Full entries (day-to-day, downsides, education, quests, next steps) are in CAREERS.md.
+## 2. Careers
+**99 careers** across the 17 worlds. Each has a one-liner, day-to-day, downsides, education, three key traits with required levels, work styles, a five-star constellation built from the quest template (§3), and real next steps. The full list with every quest is in **CAREERS.md**, generated from the content files (`npm run docs:careers`).
 
-| Career | Class | Constellation | Key traits (required) | Interest tags | Work style |
-|---|---|---|---|---|---|
-| UX/product design | Shaper | The Lens | Creativity 70, Empathy 60, Communication 60 | making 1, tech .5, puzzles .5 | small team |
-| Florist | Bloomweaver | The Bouquet | Aesthetic eye 70, Hands-on 65, Creativity 60 | making 1, nature 1, helping .5 | solo, small team |
-| Software development | Codesmith | The Anvil | Analytical 75, Persistence 70, Curiosity 60 | tech 1, puzzles 1, making .5 | solo, small team |
-| Data analysis | Oracle | The Eye | Analytical 75, Curiosity 65, Detail 60 | puzzles 1, tech .5, learning .5 | solo, small team |
-| Marketing | Herald | The Horn | Communication 75, Creativity 65, Curiosity 55 | leading 1, making .5, performing .5 | small team, many |
-| Project coordination | Quartermaster | The Key | Organization 75, Communication 65, Leadership 55 | organizing 1, leading .5, helping .5 | many, small team |
-| Teaching | Mentor | The Lantern | Communication 75, Empathy 75, Persistence 60 | helping 1, performing 1, learning .5 | many |
-| Social work | Keeper | The Hearth | Empathy 80, Calm 65, Communication 65 | helping 1, organizing .5 | many, small team |
-| Nursing | Healer | The Chalice | Empathy 75, Calm 70, Detail 65 | helping 1, learning .5, active .5 | many |
-| Physiotherapy | Mender | The Spine | Analytical 70, Hands-on 65, Empathy 65 | helping 1, active 1, learning .5 | small team |
-| Professional athlete | Contender | The Laurel | Physical energy 85, Persistence 80, Calm 65 | active 1, performing .5 | small team, many |
-| Personal trainer | Drillmaster | The Kettlebell | Physical energy 70, Communication 65, Leadership 60 | active 1, helping 1, leading .5 | solo, small team |
-| Vet nurse | Beastwarden | The Paw | Empathy 70, Calm 70, Hands-on 60 | nature 1, helping 1 | small team |
-| Landscape gardener | Druid | The Oak | Hands-on 70, Aesthetic eye 60, Physical energy 65 | nature 1, building 1, making .5 | solo, small team |
-| Electrician | Sparkwright | The Bolt | Hands-on 70, Analytical 65, Detail 65 | building 1, puzzles .5, tech .5 | solo, small team |
-| Carpenter | Artisan | The Square | Hands-on 75, Detail 65, Physical energy 60 | building 1, making 1 | solo, small team |
-| Chef | Hearthmaster | The Flame | Hands-on 70, Calm 70, Creativity 60 | food 1, making 1 | small team, many |
-| Event planner | Steward | The Banner | Organization 75, Communication 65, Calm 60 | organizing 1, leading .5, food .5 | many |
-| Musician | Bard | The Lyre | Creativity 75, Persistence 75, Aesthetic eye 65 | performing 1, making 1 | solo, small team |
-| Writer | Scribe | The Quill | Creativity 70, Communication 70, Independence 60 | making 1, learning 1 | solo |
-| Lab scientist | Alchemist | The Flask | Analytical 75, Detail 75, Curiosity 65 | learning 1, puzzles 1 | solo, small team |
-| Environmental scientist | Ranger | The Fern | Analytical 70, Curiosity 70, Physical energy 55 | nature 1, learning 1, puzzles .5 | small team |
-| Firefighter | Sentinel | The Shield | Physical energy 80, Courage 70, Teamwork 65 | active 1, helping 1 | many |
-| Law | Arbiter | The Scales | Analytical 75, Communication 75, Detail 65 | puzzles 1, leading 1, learning .5 | small team, many |
+Trending careers added in v0.3 for younger users: YouTuber, Streamer, Influencer, Podcaster, Social media manager, Video editor, Game developer, Game designer, Esports player and caster, AI engineer, Cybersecurity analyst, Tattoo artist, Makeup artist, Music producer/DJ, Drone pilot, Travel creator, Astronomer. These came from surveys of younger generations' dream jobs, where YouTuber, TikTok creator, influencer, model and fashion designer rank near the top.
 
-Every preference reaches at least one career, and every one of the 16 traits matters to at least one career (as a key trait or a quest trait).
+New careers keep the same quality bar as the original 24 (beginner-first quests, honest downsides, realistic routes), but their constellation shapes are generated from the career id instead of drawn by hand.
 
 ---
 
@@ -119,24 +83,33 @@ All formulas were run on the five personas in section 5.
 - `confirmed = round(0.3 × sign + 0.7 × target)`
 - `current = min(100, confirmed + earnedAttributeXP)`
 
-### 4.2 Preference score (P, 0–1)
-For each selected preference, take the career's tag weight (0 if no match). Sort descending.
-- `P = min(1, (w1 + 0.5 × w2) / 1.5)`
-- One primary match → 0.67 · primary + secondary → 0.83 · two primary → 1.0 · one secondary only → 0.33 · no match → 0
+### 4.2 Interest score (I, 0–1)
+How much the user's own direction points at a career:
+- **Picked** the job on "Any of these catch your eye?" → **1.0**
+- In one of the user's **chosen worlds** → **0.6**
+- Anywhere else → **0.5 × similarity** to the closest picked job, if that similarity is at least 0.4 (otherwise 0)
+
+Similarity between two careers = 0.5 × shared worlds (Jaccard) + 0.5 × shared key traits (Σ min weight).
 
 ### 4.3 Attribute fit (A, 0–1)
-- `A = Σ weight × min(current / required, 1)` over the career's primary attributes
+- `A = Σ weight × min(current / required, 1)` over the career's primary traits
 
 ### 4.4 Work style (W, 0–1)
 - 1 if the user's work style is in the career's list · 0.5 if user picked `unsure` · 0 otherwise
 
 ### 4.5 Match score (0–100)
-- `score = 100 × (0.52 × P + 0.43 × A + 0.05 × W)`
-- Preferences still outweigh attributes; work style is a small tiebreaker.
-- Sort by score, then P, then A, then career name.
-- Don't show the raw number to users; show rank and reasons.
+- `score = 100 × (0.5 × I + 0.4 × A + 0.1 × W)`
+- The user's direction outweighs their traits; traits decide order within it and how hard each path will be.
+- Sort by score, then I, then A, then strongest-trait alignment (Σ weight × stat / 100), then career name.
+- Don't show the raw number to users; show groups, rank and reasons.
 
-**Fix from testing:** The v0.3 blueprint added work style as a +5 bonus on top of 55/45, which pushed scores above 100. It's now part of the weights.
+**Fix from v0.2 testing:** with 12 abstract enjoy options and only 24 careers, results felt random (no fashion job at all, "making things" pointing at florist, chef and carpenter at once), and users who skipped the poll got careers chosen mostly by their sign. Direction-first picks and 99 careers fix both.
+
+### 4.5b Result groups
+Career reveal and Explore show three groups:
+1. **Your picks:** the jobs the user picked, by score.
+2. **More in your worlds:** other careers in their chosen worlds, by score.
+3. **Wildcards:** up to 2 careers outside their worlds where their traits fit very well (A ≥ 0.9) and whose main key trait is one of the user’s four strongest, by strongest-trait alignment. The card leads with “Runs on your {trait}, one of your strongest traits”. This is where the sign and traits add discovery instead of deciding for the user.
 
 ### 4.6 Difficulty
 For each primary attribute: `gap = required − current`. A **key gap** is a gap over 10.
@@ -157,7 +130,7 @@ For each primary attribute: `gap = required − current`. A **key gap** is a gap
 
 ### 4.8 Reasons (2–3 per career card)
 Pick in this order, skipping any that don't apply:
-1. **Preference:** highest-weight matched tag → "You enjoy {preference label}"
+1. **Interest:** picked → "You picked this"; in a chosen world → "In a world you chose: {world}"; otherwise, if it's close to a pick → "Close to {picked job}"
 2. **Strength:** primary attribute with the highest current value at or above required → "Your {attribute} is {band}"
 3. **Growth or work style:** largest key gap → "{Attribute} needs some training"; if no gap, work-style match → "Fits how you like to work: {label}"
 
@@ -194,81 +167,69 @@ Only granted when a quest is completed **and** reflected on.
 ---
 
 ## 5. Test personas (computed results)
-These are the expected outputs for unit tests (`tests/ranking.test.ts`), computed with the 16 traits and 24 careers. Scores are shown for testing only.
+Expected outputs for unit tests (`tests/ranking.test.ts`), computed with direction-first matching, 16 traits and 99 careers. Scores are shown for testing only.
 
 ### Persona 1: Maya · Cancer · accepts every sign stat
-- **Poll:** all Skip · no background traits added
-- **Enjoys:** helping, organizing · **Work:** lots of different people
-- **Sign called:** 8 of 8
+- **Poll:** all Skip · **Worlds:** People & Education, Business · **Picks:** Teaching · **Work:** lots of people
 
-| Rank | Career | Score | Difficulty |
-|---|---|---|---|
-| 1 | Project coordination | 89.4 | ★ Natural fit |
-| 2 | Social work | 89.3 | ★ Natural fit |
-| 3 | Teaching | 81.7 | ★ Natural fit |
-| 4 | Event planner | 81.6 | ★ Natural fit |
+| Group | Careers |
+|---|---|
+| Your picks | Teaching (99.1, ★ Natural fit) |
+| More in your worlds | Recruiter (80.0), Social media manager (80.0), Event planner (79.0), Real estate agent (78.9) … |
+| Wildcards | Built on her Empathy or Persistence (e.g. Nutritionist) |
 
-**Check:** ✅ Her preferences decide the top 4, all people-and-planning paths across three worlds. Science paths sit at the bottom (★★★) but stay listed.
+**Check:** ✅ Her own pick leads. If she marks Teaching "Not for me", Recruiter takes the top spot.
 
 ### Persona 2: Liam · Cancer · analytical, not empathetic
 - **Poll:** Empathy = Not really · **Background:** Analytical, Curiosity, Independence added
-- **Enjoys:** puzzles, tech · **Work:** on my own
-- **Stats:** Analytical 74, Curiosity 73, Independence 70, Empathy 43, others as sign
-- **Sign called:** 7 of 8 (only Empathy is a Cancer signature trait he changed)
+- **Worlds:** Tech & AI, Science & Space · **Picks:** Software development, AI engineer · **Work:** on my own
 
-| Rank | Career | Score | Difficulty |
-|---|---|---|---|
-| 1 | Software development | 99.8 | ★ Natural fit |
-| 2 | Data analysis | 91.1 | ★ Natural fit |
-| 3 | Lab scientist | 80.5 | ★ Natural fit |
+| Group | Careers |
+|---|---|
+| Your picks | Software development (99.8, ★), AI engineer (98.8, ★) |
+| More in your worlds | App developer (80.0), Sports analyst, Data analysis, Chemist … |
 
-**Check:** ✅ Same sign as Maya, completely different results: background traits let him show strengths Cancer doesn't lead with. Firefighter is last (★★★).
+**Check:** ✅ Same sign as Maya, completely different results. Paramedic ranks last.
 
-### Persona 3: Zoe · Leo · performer
-- **Poll:** all Skip
-- **Enjoys:** leading, performing, making · **Work:** lots of different people
+### Persona 3: Zoe · Leo · performer and creator
+- **Poll:** all Skip · **Worlds:** Creators & Media, Music & Performance, Business · **Picks:** YouTuber, Actor · **Work:** lots of people
 
-| Rank | Career | Score | Difficulty |
-|---|---|---|---|
-| 1 | Musician | 93.0 | ★ Natural fit |
-| 2 | Marketing | 89.4 | ★ Natural fit |
-| 3 | Writer | 77.7 | ★ Natural fit |
+| Group | Careers |
+|---|---|
+| Your picks | Actor (94.4, ★★ Empathy to train), YouTuber (88.4, ★) |
+| More in your worlds | Sales, Marketing, Real estate agent, Hotel manager … |
+| Wildcards | Graphic designer, Writer (built on her Creativity and Aesthetic eye) |
 
-**Check:** ✅ Leo's Creativity and Communication plus performing put the stage first. Musician's card carries its reality check.
+**Check:** ✅ A harder pick (Actor) still ranks above easier jobs she didn't choose. Both picks show their reality checks.
 
-### Persona 4: Noah · Virgo · likes making things
-- **Poll:** Creativity = Sometimes (a background trait for Virgo)
-- **Enjoys:** making · **Work:** small team
+### Persona 4: Noah · Virgo · wants to design
+- **Poll:** Creativity = Sometimes · **Worlds:** Art & Design, Build & Fix · **Picks:** UX/product design · **Work:** small team
 
-| Rank | Career | Score | Difficulty |
-|---|---|---|---|
-| 1 | Chef | 79.9 | ★ Natural fit |
-| 2 | Carpenter | 77.2 | ★★ Some training (Physical energy) |
-| 3 | UX/product design | 76.1 | ★★ Some training (Creativity) |
-| 4 | Florist | 75.1 | ★★ Some training (Aesthetic eye) |
+| Group | Careers |
+|---|---|
+| Your picks | UX/product design (93.9, ★★ Creativity to train) |
+| More in your worlds | Electrician, Drone pilot, Mechanic, Plumber … (Virgo hands-on skill and detail) |
+| Wildcards | Accountant, Cybersecurity analyst (built on his Detail and Analytical thinking) |
 
-**Check:** ✅ "Making" no longer means only screens: hands-on careers lead, and his Virgo hands-on skill and detail make them natural fits.
+### Persona 5: Ava · Pisces · unsure, no picks
+- **Poll:** Organization = Not really, Communication = Sometimes · **Worlds:** Health & Mind, Art & Design, Nature & Animals · **Picks:** none · **Work:** not sure yet
 
-### Persona 5: Ava · Pisces · unsure how she works
-- **Poll:** Organization = Not really (background), Communication = Sometimes
-- **Enjoys:** helping, making, learning · **Work:** not sure yet
-- **Sign called:** 7 of 8 (Communication dropped a band)
+| Group | Careers |
+|---|---|
+| Top paths in her worlds | Fashion designer, Florist, Illustrator, Graphic designer (tied on score; ties go to careers built on her strongest traits) |
+| Wildcards | Early childhood educator, Influencer (built on her Empathy and Creativity) |
 
-| Rank | Career | Score | Difficulty |
-|---|---|---|---|
-| 1 | Writer | 94.9 | ★★ Some training (Communication) |
-| 2 | Florist | 88.8 | ★ Natural fit |
-| 3 | Physiotherapy | 84.5 | ★★ Some training (Analytical) |
-
-**Check:** ✅ "Not sure" work style gets a neutral half-score. Event planner drops to the bottom because she said Not really to Organization.
+**Check:** ✅ With no picks, the worlds lead. "Not sure" work style is neutral. Accountant drops near the bottom because she said Not really to Organization.
 
 ### Effect check (16 traits)
 Completing all five UX quests (reflected, no chips) adds +10 Empathy, +8 Creativity, +6 Communication, +4 Curiosity, +4 Detail, +4 Persistence. For Noah that moves UX design from ★★ Some training to ★ Natural fit.
 
 ### Edge cases for unit tests
 - Score never exceeds 100 (Liam's 99.8 is the near-maximum case)
-- No preference match → P = 0, career still listed under "See all paths"
-- Tie scores → sorted by P, then A, then name
+- No interest → I = 0, career still listed under "Browse worlds"
+- Tie scores → sorted by I, then A, then strongest-trait alignment, then name
+- "Close to" needs a real resemblance (similarity ≥ 0.4)
+- Wildcards: outside the user's worlds, A ≥ 0.9, and the career's main trait is one of the user's four strongest
 - Stats cap at 100 after attribute XP
 - Recalibration changes confirmed base but keeps earned XP
 - Background traits never change "Your sign called X of 8"

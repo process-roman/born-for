@@ -32,12 +32,12 @@ export default function Called() {
     <Screen
       footer={
         <>
-          <Button title="Continue" onPress={() => router.push('/enjoy')} />
+          <Button title="Continue" onPress={() => router.push('/worlds')} />
           <Button title="Share my character" variant="secondary" onPress={share} />
         </>
       }
     >
-      <Step index={4} total={8} />
+      <Step index={4} total={9} />
       <View style={{ alignItems: 'center', gap: S.xs }}>
         <Text style={styles.glyph}>{glyph(state.sign)}</Text>
         <Title>

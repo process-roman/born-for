@@ -14,8 +14,8 @@ import { DifficultyPill } from '@/ui/stats';
 import { C, F, S } from '@/ui/theme';
 
 const HEADLINES: Record<IntentId, { title: string; body: string }> = {
-  career: { title: 'Your career paths are ready.', body: 'Ranked for what you enjoy and the stats you confirmed.' },
-  change: { title: 'Your career paths are ready.', body: 'Ranked for what you enjoy and the stats you confirmed, so you can test a switch before you make it.' },
+  career: { title: 'Your career paths are ready.', body: 'Ranked for the worlds and jobs you picked, and the stats you confirmed.' },
+  change: { title: 'Your career paths are ready.', body: 'Ranked for the worlds and jobs you picked, so you can test a switch before you make it.' },
   discover: { title: 'Paths that match your character are ready.', body: 'See where your character could grow, one real-world quest at a time.' },
   curious: { title: 'Your character has somewhere to go.', body: 'Your sign is just the beginning. See the paths your character is built for.' },
 };
@@ -59,7 +59,7 @@ export default function Paywall() {
         </>
       }
     >
-      {game ? null : <Step index={7} total={8} />}
+      {game ? null : <Step index={8} total={9} />}
       <Title>{copy.title}</Title>
       <Body muted>{copy.body}</Body>
 

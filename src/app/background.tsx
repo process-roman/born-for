@@ -21,7 +21,7 @@ export default function Background() {
     <Screen
       footer={<Button title={picked.length ? `Add ${picked.length} and continue` : 'Nothing else, continue'} onPress={() => router.push('/called')} />}
     >
-      <Step index={3} total={8} />
+      <Step index={3} total={9} />
       <Title>Anything else that’s you?</Title>
       <Body muted>
         {sign.name} doesn’t usually lead with these, but plenty of {sign.name}s have them. Tap any that sound like you.

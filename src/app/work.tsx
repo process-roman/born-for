@@ -10,11 +10,11 @@ import { S } from '@/ui/theme';
 
 export default function Work() {
   const { state, dispatch } = useOnboarding();
-  if (!state.sign || state.enjoy.length === 0) return <Redirect href="/" />;
+  if (!state.sign || state.worlds.length === 0) return <Redirect href="/" />;
 
   return (
     <Screen>
-      <Step index={6} total={8} />
+      <Step index={7} total={9} />
       <Title>How do you like to work?</Title>
       <Body muted>There’s no wrong answer, and “Not sure yet” won’t count against any path.</Body>
       <View style={{ gap: S.sm }}>

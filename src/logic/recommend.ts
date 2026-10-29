@@ -1,17 +1,16 @@
 // Related paths and the next recommendation after a reflection (Blueprint §3 step 16, §4.4, §4.5).
 //
-// Two careers are related when they share interests and key attributes, computed from the career
+// Two careers are related when they share worlds and key traits, computed from the career
 // content itself so new careers need no hand-written relationship lists. When choosing a related path,
 // the reflection steers: attributes that felt natural pull toward paths that use them, attributes
 // that felt hard push away. The user's own ranking breaks close calls.
 
 import { ATTRIBUTE_LABELS, type AttributeId } from '../content/attributes';
 import { CAREER_IDS, CAREERS, type Career, type CareerId, type Quest } from '../content/careers';
-import { PREFERENCE_LABELS, type PreferenceId } from '../content/preferences';
+import { WORLDS } from '../content/worlds';
 import { litStarNumbers, rankingFor, type Character, type Reflection } from './character';
 import { isConstellationComplete, nextQuest } from './constellation';
-
-export const SIMILARITY_WEIGHTS = { interests: 0.5, attributes: 0.5 } as const;
+import { careerSimilarity } from './similarity';
 
 /** How much one "felt natural" / "felt hard" attribute moves a candidate, times its requirement weight. */
 export const NATURAL_PULL = 0.5;
@@ -21,32 +20,7 @@ export const RANK_PULL = 0.2;
 /** How much similarity counts against a path when the user wants something different. */
 export const DIFFERENT_PUSH = 0.5;
 
-/** Weighted Jaccard over interest tags: Σ min / Σ max. */
-function interestOverlap(a: Career, b: Career): number {
-  const tags = new Set([...Object.keys(a.interestTags), ...Object.keys(b.interestTags)]) as Set<PreferenceId>;
-  let shared = 0;
-  let total = 0;
-  for (const t of tags) {
-    const wa = a.interestTags[t] ?? 0;
-    const wb = b.interestTags[t] ?? 0;
-    shared += Math.min(wa, wb);
-    total += Math.max(wa, wb);
-  }
-  return total === 0 ? 0 : shared / total;
-}
-
-/** Σ min(weight) over primary attributes both careers share. */
-function attributeOverlap(a: Career, b: Career): number {
-  return a.requirements.reduce((sum, r) => {
-    const other = b.requirements.find((o) => o.attribute === r.attribute);
-    return sum + (other ? Math.min(r.weight, other.weight) : 0);
-  }, 0);
-}
-
-/** 0–1, symmetric. */
-export function careerSimilarity(a: Career, b: Career): number {
-  return SIMILARITY_WEIGHTS.interests * interestOverlap(a, b) + SIMILARITY_WEIGHTS.attributes * attributeOverlap(a, b);
-}
+export { careerSimilarity };
 
 /** Other careers, closest first. */
 export function relatedCareers(careerId: CareerId): { careerId: CareerId; similarity: number }[] {
@@ -88,8 +62,8 @@ function relatedReason(from: Career, to: Career, natural: AttributeId | undefine
     const names = shared.map((r) => ATTRIBUTE_LABELS[r.attribute]).join(' and ');
     return `Uses the same ${names} as ${from.name}`;
   }
-  const tag = (Object.keys(to.interestTags) as PreferenceId[]).find((t) => (from.interestTags[t] ?? 0) > 0);
-  return tag ? `Also about ${PREFERENCE_LABELS[tag].toLowerCase()}` : `Close to ${from.name}`;
+  const world = to.worlds.find((w) => from.worlds.includes(w));
+  return world ? `Also in ${WORLDS[world].name}` : `Close to ${from.name}`;
 }
 
 /** A nearby path, steered by what felt natural or hard in the reflection. */

@@ -4,8 +4,8 @@ Zodiac + RPG self-discovery app. Specs: `BORN-FOR PRODUCT_BLUEPRINT.md`, `SIGNS_
 
 Expo (React Native + TypeScript) with Expo Router.
 
-- `src/app/`: screens. Onboarding: intent → birthday (cusp prompt, manual sign) → character reveal → confirm poll (8 signature traits) → "Anything else that's you?" (background traits) → "Your sign called X of 8" → enjoy → work style → paywall stub → career reveal or free teaser. Then Home | Character | Explore tabs, career worlds, path details, quest start (with check-in reminder), reflection and rewards, Settings (cusp sign, reminders, recalibrate, delete data)
-- `src/content/`: 16 traits in four families, all 12 signs (signature and background traits), onboarding questions, 12 career worlds, 24 careers with template quests, constellations, design tokens
+- `src/app/`: screens. Onboarding: intent → birthday (cusp prompt, manual sign) → character reveal → confirm poll (8 signature traits) → "Anything else that's you?" (background traits) → "Your sign called X of 8" → worlds → job picks → work style → paywall stub → career reveal or free teaser. Then Home | Character | Explore tabs, career worlds, path details, quest start (with check-in reminder), reflection and rewards, Settings (cusp sign, reminders, recalibrate, delete data)
+- `src/content/`: 16 traits in four families, all 12 signs (signature and background traits), onboarding questions, 17 career worlds, 99 careers (`careers/` by area, shared template in `careerKit.ts`), constellations, design tokens
 - `src/logic/`: sign from birthday (with cusp detection), poll scoring and "Your sign called X of 8", ranking and reasons, difficulty, XP and levels, constellation unlocks, titles, related paths and next-quest recommendations, character state
 - `src/logic/game.ts`: the saved game (quests, free tier, what to suggest next, recalibration); `badges.ts` and `avatar.ts`: badges and the evolving character layers
 - `src/state/`, `src/storage/`, `src/ui/`: app state, on-device storage (SQLite on phones, localStorage on web), reminders and shared components

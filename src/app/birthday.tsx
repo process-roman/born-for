@@ -46,7 +46,7 @@ export default function Birthday() {
     const [a, b] = mode.signs;
     return (
       <Screen footer={<Button title="Back" variant="ghost" onPress={() => setMode({ kind: 'date' })} />}>
-        <Step index={1} total={8} />
+        <Step index={1} total={9} />
         <Title>You were born on the cusp</Title>
         <Body muted>
           The Sun moved from {SIGNS[a].name} into {SIGNS[b].name} around your birthday. Which one feels like you? You can change this later in
@@ -70,7 +70,7 @@ export default function Birthday() {
   if (mode.kind === 'manual') {
     return (
       <Screen footer={<Button title="Use my birthday instead" variant="ghost" onPress={() => setMode({ kind: 'date' })} />}>
-        <Step index={1} total={8} />
+        <Step index={1} total={9} />
         <Title>Choose your sign</Title>
         <View style={styles.grid}>
           {SIGN_IDS.map((s) => (
@@ -93,7 +93,7 @@ export default function Birthday() {
         </>
       }
     >
-      <Step index={1} total={8} />
+      <Step index={1} total={9} />
       <Title>When were you born?</Title>
       <Body muted>We only use it to find your sign. We don’t keep your birth date.</Body>
       <View style={{ gap: S.sm, marginTop: S.lg }}>

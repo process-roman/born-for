@@ -35,8 +35,8 @@ describe('badges', () => {
   });
 
   it('Three Paths and World Traveller', () => {
-    let c = light(createCharacter(MAYA), 'teaching', [1]); // People & Care
-    c = light(c, 'chef', [1]); // Food, Create
+    let c = light(createCharacter(MAYA), 'teaching', [1]); // People & Education
+    c = light(c, 'pastry_chef', [1]); // Food, Art
     expect(earnedBadges(c)).toContain('world_traveller');
     expect(earnedBadges(c)).not.toContain('three_paths');
     c = light(c, 'nursing', [1]);

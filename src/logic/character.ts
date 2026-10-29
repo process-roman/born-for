@@ -2,7 +2,8 @@
 
 import { ATTRIBUTE_IDS, zeroStats, type AttributeId, type Stats } from '../content/attributes';
 import { getQuest, type CareerId, type StarNumber } from '../content/careers';
-import type { IntentId, PreferenceId, WorkStyleId } from '../content/preferences';
+import type { IntentId, WorkStyleId } from '../content/preferences';
+import type { WorldId } from '../content/worlds';
 import type { SignId } from '../content/signs';
 import { isConstellationComplete, isStarAvailable } from './constellation';
 import { rankCareers, type FeedbackMap, type PathInterest, type Ranking } from './ranking';
@@ -31,7 +32,10 @@ export interface Character {
   /** Both signs when the birthday fell on a cusp, so the choice can be changed in settings. */
   cuspSigns: [SignId, SignId] | null;
   intent: IntentId | null;
-  enjoy: PreferenceId[];
+  /** "Which worlds pull you?" */
+  worlds: WorldId[];
+  /** "Any of these catch your eye?" */
+  picks: CareerId[];
   workStyle: WorkStyleId;
   /** Answers from the first poll and the latest one, kept so a sign change can recompute stats. */
   dayOneAnswers: PollAnswers;
@@ -54,18 +58,20 @@ export interface OnboardingInput {
   sign: SignId;
   cuspSigns?: [SignId, SignId];
   answers: PollAnswers;
-  enjoy: PreferenceId[];
+  worlds: WorldId[];
+  picks: CareerId[];
   workStyle: WorkStyleId;
 }
 
-export function createCharacter({ intent, sign, cuspSigns, answers, enjoy, workStyle }: OnboardingInput): Character {
+export function createCharacter({ intent, sign, cuspSigns, answers, worlds, picks, workStyle }: OnboardingInput): Character {
   if (cuspSigns && !cuspSigns.includes(sign)) throw new Error(`${sign} is not one of the cusp signs`);
   const confirmed = confirmStats(sign, answers);
   return {
     sign,
     cuspSigns: cuspSigns ?? null,
     intent: intent ?? null,
-    enjoy,
+    worlds,
+    picks,
     workStyle,
     dayOneAnswers: answers,
     answers,
@@ -123,7 +129,8 @@ export function titlesOf(character: Character): Title[] {
 export function rankingFor(character: Character): Ranking {
   return rankCareers({
     stats: statsOf(character),
-    enjoy: character.enjoy,
+    worlds: character.worlds,
+    picks: character.picks,
     workStyle: character.workStyle,
     feedback: character.feedback,
   });

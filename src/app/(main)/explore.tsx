@@ -9,27 +9,22 @@ import { rankingFor } from '@/logic/character';
 import { useGame } from '@/state/game';
 import { Body, Button, Card, Label, Screen, Title } from '@/ui/components';
 import { PathCard } from '@/ui/PathCard';
+import { ResultGroups } from '@/ui/ResultGroups';
 import { DifficultyPill } from '@/ui/stats';
 import { C, F, S } from '@/ui/theme';
-
-const TOP = 3;
 
 export default function Explore() {
   const { game } = useGame();
   if (!game) return null;
-  const { ranked, notForMe } = rankingFor(game.character);
+  const ranking = rankingFor(game.character);
+  const { ranked, notForMe } = ranking;
   const top = ranked[0]!;
 
   return (
     <Screen>
       <Title>Explore</Title>
       {game.paid ? (
-        <>
-          <Label>Top paths for you</Label>
-          {ranked.slice(0, TOP).map((m, i) => (
-            <PathCard key={m.careerId} match={m} rank={i + 1} onPress={() => router.push({ pathname: '/path/[id]', params: { id: m.careerId } })} />
-          ))}
-        </>
+        <ResultGroups ranking={ranking} character={game.character} />
       ) : (
         <Card style={{ borderColor: C.goldBorder }}>
           <Label>Your top path</Label>

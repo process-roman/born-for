@@ -1,7 +1,9 @@
-# Signs, Onboarding & Design Spec v0.2
+# Signs, Onboarding & Design Spec v0.3
 **Companion to:** PRODUCT_BLUEPRINT.md v0.3 | **Date:** October 28, 2026
 
-**What changed from v0.1:**
+**What changed in v0.3:** "What do you enjoy?" became direction-first: pick worlds, then the jobs that catch your eye (§3).
+
+**What changed in v0.2:**
 - 8 attributes became **16 traits** in four families. Every sign has **8 signature traits** (predicted strongest, shown at the reveal and confirmed in the poll) and **8 background traits** (still valued by the sign, optional to confirm, trainable through quests). A Cancer who leads can now say so.
 - Sign values come from one shared ladder, so every sign has the same 930-point total.
 - "What do you enjoy?" grew from 8 to 12 options so every career world has a way in.
@@ -117,21 +119,13 @@ Three questions, all tap-only, no typing.
 
 **Used for:** Tailoring copy and the home screen. "Discover who I am" leads with the character and attribute quests; career answers lead with paths. Also a useful analytics segment.
 
-### Q2: After confirming stats — "What do you enjoy most?" (pick up to 3)
-- 🎨 Making and designing things
-- 🧩 Solving puzzles and problems
-- 🤝 Helping and supporting people
-- 📋 Planning and organizing
-- 📣 Leading and persuading
-- 🔭 Learning and exploring ideas
-- 💻 Working with tech
-- 🎤 Performing and presenting
-- 🏃 Being active and playing sport
-- 🌿 Nature, plants and animals
-- 🔧 Building and fixing things
-- 🍳 Food and cooking
+### Q2: After confirming stats — "Which worlds pull you?" (pick up to 3)
+A grid of the 17 career worlds (PILOT_CONTENT.md §1), each with an emoji and a one-line blurb: Business & Entrepreneurship, Fashion & Beauty, Creators & Media, Gaming & Esports, Art & Design, Music & Performance, Writing & Journalism, Tech & AI, Sport & Fitness, Health & Mind, People & Education, Nature & Animals, Food & Hospitality, Build & Fix, Travel & Adventure, Science & Space, Law & Public Service.
 
-**Used for:** The preferences part of career ranking. Each option maps to career interest tags, and every career world (PILOT_CONTENT.md §1) is reachable from at least one option.
+### Q2b: "Any of these catch your eye?" (pick any, or none)
+The jobs inside the chosen worlds, as chips grouped by world. Long shots are marked. Picking nothing is fine; the app still ranks every job in those worlds.
+
+**Used for:** The interest part of career ranking (50% weight): a picked job scores highest, jobs in chosen worlds next, everything else only by similarity. The user's direction leads; the sign and traits decide order, difficulty and a couple of wildcards.
 
 ### Q3: "How do you like to work?" (single choice)
 - 🧍 Mostly on my own
@@ -208,7 +202,7 @@ After onboarding, the Character screen shows all 16 traits by family. Background
 ## 5. Next steps after onboarding
 
 **Full flow:**
-Q1 intent → birthday → character reveal → confirm poll → "Your sign called X of 8" → Q2 enjoy → Q3 work style → **paywall** → career reveal → first quest
+Q1 intent → birthday → character reveal → confirm poll → "Anything else that's you?" → "Your sign called X of 8" → Q2 worlds → Q2b jobs → Q3 work style → **paywall** → career reveal → first quest
 
 ### After the paywall
 1. **Career reveal.** Top 3 paths animate in one by one, each with difficulty (Natural fit / Some training / Challenging but achievable) and 2–3 reasons. "See all paths" below.

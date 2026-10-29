@@ -11,12 +11,10 @@ import { SIGNS } from '@/content/signs';
 import { rankingFor } from '@/logic/character';
 import { useGame } from '@/state/game';
 import { Body, Button, Card, Label, Screen, Title } from '@/ui/components';
-import { PathCard } from '@/ui/PathCard';
+import { ResultGroups } from '@/ui/ResultGroups';
 import { QuestCard } from '@/ui/quest';
 import { DifficultyPill } from '@/ui/stats';
 import { C, F, glyph, S } from '@/ui/theme';
-
-const TOP = 3;
 
 function Staggered({ children, index }: { children: React.ReactNode; index: number }) {
   const [v] = useState(() => new Animated.Value(0));
@@ -77,12 +75,10 @@ export default function Paths() {
     <Screen footer={<Button title="Go to home" onPress={() => router.replace('/home')} />}>
       <Title>{TITLES[character.intent ?? 'career']}</Title>
       <Body muted>Every path stays open. Harder ones just take more training. Tap one to see its constellation.</Body>
-      {ranked.slice(0, TOP).map((m, i) => (
-        <Staggered key={m.careerId} index={i}>
-          <PathCard match={m} rank={i + 1} onPress={() => router.push({ pathname: '/path/[id]', params: { id: m.careerId } })} />
-        </Staggered>
-      ))}
-      <Button title="See all paths" variant="ghost" onPress={() => router.replace('/explore')} />
+      <Staggered index={0}>
+        <ResultGroups ranking={rankingFor(character)} character={character} />
+      </Staggered>
+      <Button title="Browse every world" variant="ghost" onPress={() => router.replace('/explore')} />
     </Screen>
   );
 }

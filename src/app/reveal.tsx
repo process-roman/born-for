@@ -43,7 +43,7 @@ export default function Reveal() {
 
   return (
     <Screen footer={<Button title="Confirm my stats" onPress={() => router.push('/poll')} />}>
-      <Step index={2} total={8} />
+      <Step index={2} total={9} />
       <Animated.View
         style={{
           opacity: flip,

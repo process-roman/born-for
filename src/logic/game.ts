@@ -20,8 +20,8 @@ import { easierQuest, isStarAvailable, nextQuest } from './constellation';
 import { nextRecommendation, suggestDifferentPath, type NextStep } from './recommend';
 import type { PollAnswers } from './stats';
 
-/** Bumped when the saved shape changes; older saves are dropped (v2: 16 traits, 24 careers). */
-export const GAME_VERSION = 2;
+/** Bumped when the saved shape changes; older saves are dropped (v2: 16 traits; v3: worlds and job picks). */
+export const GAME_VERSION = 3;
 /** An active quest with no action for this long gets a gentle "Still on it?" (Blueprint §4.5). */
 export const STALE_AFTER_DAYS = 14;
 

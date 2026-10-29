@@ -29,20 +29,20 @@ describe('free tier', () => {
   const free = newGame(createCharacter(MAYA), false);
 
   it('only the first Taste quest on the top path can be started', () => {
-    expect(topCareer(free)).toBe('project_coord');
-    expect(canStartQuest(free, 'project_coord', 1)).toBe(true);
-    expect(canStartQuest(free, 'teaching', 1)).toBe(false);
-    expect(homeSuggestion(free)).toMatchObject({ careerId: 'project_coord', star: 1, kind: 'start' });
+    expect(topCareer(free)).toBe('teaching');
+    expect(canStartQuest(free, 'teaching', 1)).toBe(true);
+    expect(canStartQuest(free, 'recruiter', 1)).toBe(false);
+    expect(homeSuggestion(free)).toMatchObject({ careerId: 'teaching', star: 1, kind: 'start' });
   });
 
   it('after the free star is lit, nothing else opens until unlock', () => {
-    const { game } = play(free, 'project_coord', 1);
-    expect(litStarNumbers(game.character, 'project_coord')).toEqual([1]);
-    expect(canStartQuest(game, 'project_coord', 2)).toBe(false);
+    const { game } = play(free, 'teaching', 1);
+    expect(litStarNumbers(game.character, 'teaching')).toEqual([1]);
+    expect(canStartQuest(game, 'teaching', 2)).toBe(false);
     expect(homeSuggestion(game)).toBeNull();
     const paid = unlock(game);
-    expect(canStartQuest(paid, 'project_coord', 2)).toBe(true);
-    expect(homeSuggestion(paid)).toMatchObject({ careerId: 'project_coord', star: 2 });
+    expect(canStartQuest(paid, 'teaching', 2)).toBe(true);
+    expect(homeSuggestion(paid)).toMatchObject({ careerId: 'teaching', star: 2 });
   });
 });
 
@@ -73,8 +73,8 @@ describe('quest loop (paid)', () => {
   });
 
   it('mixed feelings suggest a related path', () => {
-    const r = play(paid, 'ux_design', 1, { enjoyment: 3, wouldDoMore: 'maybe', feltNatural: ['hands_on'], feltHard: [] });
-    expect(r.game.suggestion).toMatchObject({ careerId: 'chef', kind: 'related_path' });
+    const r = play(paid, 'ux_design', 1, { enjoyment: 3, wouldDoMore: 'maybe', feltNatural: ['analytical'], feltHard: [] });
+    expect(r.game.suggestion).toMatchObject({ careerId: 'game_designer', kind: 'related_path' });
   });
 
   it('Not now keeps the quest but snoozes it', () => {

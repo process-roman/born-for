@@ -6,7 +6,7 @@ import { writeFileSync } from 'node:fs';
 
 import { ATTRIBUTE_LABELS } from '../src/content/attributes';
 import { CAREER_IDS, CAREERS, type QuestStep } from '../src/content/careers';
-import { PREFERENCE_LABELS, WORK_STYLE_LABELS, type PreferenceId } from '../src/content/preferences';
+import { WORK_STYLE_LABELS } from '../src/content/preferences';
 import { WORLDS } from '../src/content/worlds';
 
 const STEP_LABELS: Record<QuestStep, string> = {
@@ -27,16 +27,13 @@ const lines: string[] = [
   '',
   '*Generated from `src/content/careers.ts` by `npm run docs:careers`. Edit the source, not this file.*',
   '',
-  `${CAREER_IDS.length} careers. Rules, worlds and the quest template are in BORN-FOR PILOT_CONTENT.md.`,
+  `${CAREER_IDS.length} careers. Rules, worlds, ranking and the quest template are in BORN-FOR PILOT_CONTENT.md.`,
   '',
 ];
 
 CAREER_IDS.forEach((id, i) => {
   const c = CAREERS[id];
   const worlds = c.worlds.map((w) => `${WORLDS[w].emoji} ${WORLDS[w].name}`).join(' · ');
-  const tags = (Object.entries(c.interestTags) as [PreferenceId, number][])
-    .map(([p, w]) => `${PREFERENCE_LABELS[p]} ${w}`)
-    .join(' · ');
 
   lines.push(
     '---',
@@ -63,7 +60,6 @@ CAREER_IDS.forEach((id, i) => {
     '|---|---|---|',
     ...c.requirements.map((r) => `| ${ATTRIBUTE_LABELS[r.attribute]} | ${r.required} | ${r.weight.toFixed(2)} |`),
     '',
-    `**Interest tags:** ${tags}`,
     `**Work style:** ${c.workStyles.map((w) => WORK_STYLE_LABELS[w]).join(' · ')}`,
     '',
     '**Quests:**',

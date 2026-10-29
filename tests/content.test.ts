@@ -1,8 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { ATTRIBUTE_IDS } from '../src/content/attributes';
-import { CAREER_IDS, CAREERS, careersInWorld } from '../src/content/careers';
+import { CAREER_IDS, CAREERS, careersInWorld, DEFINED_CAREER_IDS } from '../src/content/careers';
 import { WORLD_IDS } from '../src/content/worlds';
-import { PREFERENCE_IDS } from '../src/content/preferences';
 import { SIGN_IDS, SIGN_STAT_BUDGET, SIGN_STAT_MAX, SIGN_STAT_MIN, SIGNS } from '../src/content/signs';
 import { ZODIAC_CONSTELLATIONS } from '../src/content/zodiacConstellations';
 
@@ -39,10 +38,9 @@ describe('careers', () => {
     expect(c.workStyles.length).toBeGreaterThan(0);
   });
 
-  it('every preference leads to at least one career', () => {
-    for (const p of PREFERENCE_IDS) {
-      expect(CAREER_IDS.some((id) => (CAREERS[id].interestTags[p] ?? 0) > 0), p).toBe(true);
-    }
+  it('every listed id is defined exactly once', () => {
+    expect([...DEFINED_CAREER_IDS].sort()).toEqual([...CAREER_IDS].sort());
+    expect(new Set(DEFINED_CAREER_IDS).size).toBe(DEFINED_CAREER_IDS.length);
   });
 
   it('every attribute matters to at least one career', () => {
@@ -93,8 +91,18 @@ describe('signature and background traits', () => {
 });
 
 describe('career worlds', () => {
-  it('every world has at least two careers', () => {
-    for (const w of WORLD_IDS) expect(careersInWorld(w).length, w).toBeGreaterThanOrEqual(2);
+  it('every world has at least five careers', () => {
+    for (const w of WORLD_IDS) expect(careersInWorld(w).length, w).toBeGreaterThanOrEqual(5);
+  });
+
+  it('creator and gaming careers are there, with reality checks on the long shots', () => {
+    for (const id of ['youtuber', 'streamer', 'influencer', 'esports_player', 'model'] as const) expect(CAREERS[id].realityCheck, id).toBeTruthy();
+    expect(careersInWorld('creators').length).toBeGreaterThanOrEqual(10);
+    expect(careersInWorld('gaming').length).toBeGreaterThanOrEqual(6);
+  });
+
+  it('careers sit in at most three worlds', () => {
+    for (const id of CAREER_IDS) expect(CAREERS[id].worlds.length, id).toBeLessThanOrEqual(3);
   });
 
   it('every career belongs to a known world', () => {
@@ -106,6 +114,7 @@ describe('career worlds', () => {
 
   it('long shots carry a reality check', () => {
     expect(CAREERS.athlete.realityCheck).toBeTruthy();
+    expect(CAREERS.bartender.realityCheck).toMatch(/legal age/);
     expect(CAREERS.musician.realityCheck).toBeTruthy();
   });
 });

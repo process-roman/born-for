@@ -38,17 +38,15 @@ describe('career similarity', () => {
     expect(careerSimilarity(CAREERS.teaching, CAREERS.teaching)).toBeCloseTo(1, 10);
   });
 
-  it('pairs careers sensibly, across worlds too', () => {
-    // Blueprint's own example, "Designers often explore Marketing", is still a top-2 neighbor.
-    expect(relatedCareers('ux_design').slice(0, 2).map((r) => r.careerId)).toEqual(['writer', 'marketing']);
-    expect(relatedCareers('software_dev')[0]).toMatchObject({ careerId: 'data_analysis' });
-    expect(relatedCareers('lab_scientist')[0]).toMatchObject({ careerId: 'data_analysis' });
-    expect(relatedCareers('project_coord')[0]).toMatchObject({ careerId: 'event_planner' });
-    expect(relatedCareers('teaching')[0]).toMatchObject({ careerId: 'social_work' });
-    expect(relatedCareers('carpenter')[0]).toMatchObject({ careerId: 'landscape_gardener' });
-    expect(relatedCareers('florist')[0]).toMatchObject({ careerId: 'landscape_gardener' });
-    expect(relatedCareers('personal_trainer')[0]).toMatchObject({ careerId: 'firefighter' });
-    expect(careerSimilarity(CAREERS.software_dev, CAREERS.data_analysis)).toBeCloseTo(0.575, 3);
+  it('pairs careers sensibly, by shared worlds and traits', () => {
+    expect(relatedCareers('ux_design')[0]).toMatchObject({ careerId: 'graphic_designer' });
+    expect(relatedCareers('software_dev')[0]).toMatchObject({ careerId: 'app_developer' });
+    expect(relatedCareers('lab_scientist')[0]).toMatchObject({ careerId: 'chemist' });
+    expect(relatedCareers('teaching')[0]).toMatchObject({ careerId: 'youth_worker' });
+    expect(relatedCareers('carpenter')[0]).toMatchObject({ careerId: 'welder' });
+    expect(relatedCareers('florist')[0]).toMatchObject({ careerId: 'fashion_designer' });
+    expect(relatedCareers('youtuber').slice(0, 2).map((r) => r.careerId)).toEqual(expect.arrayContaining(['influencer']));
+    expect(careerSimilarity(CAREERS.software_dev, CAREERS.app_developer)).toBeCloseTo(0.85, 3);
   });
 });
 
@@ -71,51 +69,50 @@ describe('related path', () => {
 
   it('defaults to the closest path, with a reason naming what they share', () => {
     const s = suggestRelatedPath(noah, 'ux_design')!;
-    expect(s.careerId).toBe('writer');
+    expect(s.careerId).toBe('graphic_designer');
     expect(s.quest.tier).toBe('taste');
     expect(s.reason).toBe('Uses the same Creativity and Communication as UX/product design');
   });
 
-  it('"felt natural" pulls toward paths that use it, even in other worlds', () => {
-    const hands = suggestRelatedPath(noah, 'ux_design', reflection({ feltNatural: ['hands_on'] }))!;
-    expect(hands.careerId).toBe('chef');
-    expect(hands.reason).toBe('Hands-on skill felt natural, and Chef runs on it');
+  it('"felt natural" pulls toward paths that use it', () => {
     const aesthetic = suggestRelatedPath(noah, 'ux_design', reflection({ feltNatural: ['aesthetic'] }))!;
-    expect(aesthetic.careerId).toBe('musician');
+    expect(aesthetic.careerId).toBe('graphic_designer');
+    expect(aesthetic.reason).toBe('Aesthetic eye felt natural, and Graphic designer runs on it');
+    const analytical = suggestRelatedPath(noah, 'ux_design', reflection({ feltNatural: ['analytical'] }))!;
+    expect(analytical.careerId).toBe('game_designer');
   });
 
   it('"felt hard" pushes away from paths that need it', () => {
-    const s = suggestRelatedPath(noah, 'ux_design', reflection({ feltHard: ['communication'] }))!;
-    expect(s.careerId).toBe('musician');
+    const s = suggestRelatedPath(noah, 'ux_design', reflection({ feltHard: ['aesthetic'] }))!;
+    expect(CAREERS[s.careerId].requirements.map((r) => r.attribute)).not.toContain('aesthetic');
   });
 
   it('skips Not for me and finished paths', () => {
-    let c = setPathInterest(noah, 'writer', 'not_for_me');
-    expect(suggestRelatedPath(c, 'ux_design')!.careerId).not.toBe('writer');
-    c = light(createCharacter(NOAH), 'writer', [1, 2, 3, 4, 5]);
-    expect(suggestRelatedPath(c, 'ux_design')!.careerId).not.toBe('writer');
+    let c = setPathInterest(noah, 'graphic_designer', 'not_for_me');
+    expect(suggestRelatedPath(c, 'ux_design')!.careerId).not.toBe('graphic_designer');
+    c = light(createCharacter(NOAH), 'graphic_designer', [1, 2, 3, 4, 5]);
+    expect(suggestRelatedPath(c, 'ux_design')!.careerId).not.toBe('graphic_designer');
   });
 
   it('offers the next star on a path that is already started', () => {
-    const c = light(noah, 'writer', [1, 2]);
-    const s = suggestRelatedPath(c, 'ux_design')!;
-    expect(s).toMatchObject({ careerId: 'writer', quest: { star: 3 } });
+    const c = light(noah, 'graphic_designer', [1, 2]);
+    expect(suggestRelatedPath(c, 'ux_design')).toMatchObject({ careerId: 'graphic_designer', quest: { star: 3 } });
   });
 });
 
 describe('different path', () => {
   it("picks the user's best-ranked path that isn't a close neighbor", () => {
-    // Maya: Project coordination ranks first; Event planning is its closest neighbor, so it's passed over.
-    const c = light(createCharacter(MAYA), 'project_coord', [1], reflection({ enjoyment: 1, wouldDoMore: 'no' }));
-    const s = suggestDifferentPath(c, 'project_coord')!;
-    expect(s.careerId).not.toBe('event_planner');
-    expect(s.careerId).toBe('nursing');
-    expect(s.reason).toBe('You enjoy helping and supporting people');
+    // Maya didn't enjoy Teaching; its close neighbors (youth work, social work) are passed over.
+    const c = light(createCharacter(MAYA), 'teaching', [1], reflection({ enjoyment: 1, wouldDoMore: 'no' }));
+    const s = suggestDifferentPath(c, 'teaching')!;
+    expect(['youth_worker', 'social_work', 'early_childhood']).not.toContain(s.careerId);
+    expect(s.careerId).toBe('event_planner');
+    expect(s.reason).toBe('In a world you chose: Business & Entrepreneurship');
   });
 
-  it('strong preferences can still win over similarity', () => {
+  it('stays inside the user’s worlds when it can', () => {
     const c = light(createCharacter(LIAM), 'software_dev', [1]);
-    expect(suggestDifferentPath(c, 'software_dev')!.careerId).toBe('data_analysis');
+    expect(suggestDifferentPath(c, 'software_dev')!.careerId).toBe('chemist');
   });
 });
 
@@ -137,13 +134,13 @@ describe('next recommendation', () => {
     const r = reflection({ feltNatural: ['organization'] });
     const c = light(maya, 'teaching', [1], r);
     const next = nextRecommendation(c, 'teaching', r);
-    expect(next).toMatchObject({ kind: 'related_path', careerId: 'social_work', quest: { tier: 'taste' } });
+    expect(next).toMatchObject({ kind: 'related_path', careerId: 'youth_worker', quest: { tier: 'taste' } });
   });
 
   it('disliked → a different path', () => {
     const r = reflection({ enjoyment: 1, wouldDoMore: 'no' });
     const c = light(maya, 'teaching', [1], r);
-    expect(nextRecommendation(c, 'teaching', r)).toMatchObject({ kind: 'different_path', careerId: 'project_coord' });
+    expect(nextRecommendation(c, 'teaching', r)).toMatchObject({ kind: 'different_path', careerId: 'event_planner' });
   });
 
   it('finished constellation → path complete with a related path', () => {
@@ -152,7 +149,7 @@ describe('next recommendation', () => {
     expect(nextRecommendation(c, 'ux_design', r)).toMatchObject({
       kind: 'path_complete',
       careerId: 'ux_design',
-      related: { careerId: 'writer' },
+      related: { careerId: 'graphic_designer' },
     });
   });
 
