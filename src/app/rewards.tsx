@@ -9,6 +9,7 @@ import { CAREERS, getQuest } from '@/content/careers';
 import { SIGNS } from '@/content/signs';
 import { litStarNumbers } from '@/logic/character';
 import { LAYER_NAMES } from '@/logic/avatar';
+import { confirmedLine, thatsYouLine } from '@/logic/confirmed';
 import { useGame } from '@/state/game';
 import { CharacterAvatar } from '@/ui/CharacterAvatar';
 import { Body, Button, Card, Label, Screen, Title } from '@/ui/components';
@@ -19,7 +20,7 @@ import { C, F, S } from '@/ui/theme';
 export default function Rewards() {
   const { game, lastResult } = useGame();
   if (!game || !lastResult) return <Redirect href="/home" />;
-  const { careerId, star, rewards, next, newBadges } = lastResult;
+  const { careerId, star, rewards, next, newBadges, newlyConfirmed, thatsYou } = lastResult;
   const career = CAREERS[careerId];
   const gains = ATTRIBUTE_IDS.filter((a) => rewards.attributeXp[a] > 0);
   const leveledUp = rewards.levelAfter > rewards.levelBefore;
@@ -74,6 +75,20 @@ export default function Rewards() {
           <Text style={styles.moment}>{rewards.newTitle.text}</Text>
         </Card>
       ) : null}
+
+      {thatsYou ? (
+        <Card style={{ borderColor: C.gold, alignItems: 'center' }}>
+          <Label>That’s you</Label>
+          <Text style={styles.moment}>{thatsYouLine(careerId)}</Text>
+        </Card>
+      ) : null}
+
+      {newlyConfirmed.map((a) => (
+        <Card key={a} style={{ borderColor: C.goldBorder, alignItems: 'center' }}>
+          <Label>✓ Confirmed by you</Label>
+          <Text style={styles.moment}>{confirmedLine(game.character, a)}</Text>
+        </Card>
+      ))}
 
       {newBadges.map((id) => (
         <Card key={id} style={{ borderColor: C.goldBorder, alignItems: 'center' }}>

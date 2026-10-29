@@ -93,7 +93,7 @@ describe('result groups', () => {
         const career = CAREERS[m.careerId];
         expect(career.worlds.some((w) => persona.worlds.includes(w))).toBe(false);
         expect(m.attributeFit).toBeGreaterThanOrEqual(WILDCARD_MIN_FIT);
-        expect(m.reasons[0]).toMatch(/^Runs on your .+, one of your strongest traits$/);
+        expect(m.reasons[0]).toMatch(/^Runs on your .+, one of your superpowers$/);
         const main = [...career.requirements].sort((a, b) => b.weight - a.weight)[0]!.attribute;
         expect(strongest).toContain(main);
       }

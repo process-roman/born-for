@@ -237,7 +237,7 @@ export function groupMatches(ranking: Ranking, stats: Stats): MatchGroups {
     .map((m) => {
       const trait = mainTrait(CAREERS[m.careerId]);
       const rest = m.reasons.filter((r) => !r.startsWith('Close to') && !r.startsWith(`Your ${ATTRIBUTE_LABELS[trait]} is`));
-      return { ...m, reasons: [`Runs on your ${ATTRIBUTE_LABELS[trait]}, one of your strongest traits`, ...rest].slice(0, 3) };
+      return { ...m, reasons: [`Runs on your ${ATTRIBUTE_LABELS[trait]}, one of your superpowers`, ...rest].slice(0, 3) };
     });
   return {
     picks: ranked.filter((m) => m.source === 'picked'),

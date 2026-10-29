@@ -39,6 +39,7 @@
 7. **Fast first reveal.** The character reveal arrives within seconds, with no account required.
 8. **No dead ends.** Every screen, including after declining the paywall or finishing a path, has a clear next step.
 9. **Progress is visible and beautiful.** Growth shows up in the character, the constellations and the titles, not just in numbers.
+10. **Borrowed confidence becomes earned confidence.** The sign names your superpowers; quests let you prove them ("Confirmed by you"). Be bold about strengths, never promise outcomes. See SIGNS_AND_ONBOARDING_SPEC.md §6 "Voice and promise".
 
 ---
 

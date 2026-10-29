@@ -9,6 +9,7 @@ export const BADGE_IDS = [
   'world_traveller',
   'level_3',
   'hidden_talent',
+  'proven',
   'recalibrated',
 ] as const;
 
@@ -30,5 +31,6 @@ export const BADGES: Record<BadgeId, Badge> = {
   world_traveller: { id: 'world_traveller', emoji: '🌍', name: 'World Traveller', description: 'Explored paths in three different worlds.' },
   level_3: { id: 'level_3', emoji: '✨', name: 'Rising', description: 'Reached level 3.' },
   hidden_talent: { id: 'hidden_talent', emoji: '🔓', name: 'Hidden Talent', description: 'Unlocked a background trait your sign didn’t predict.' },
+  proven: { id: 'proven', emoji: '✅', name: 'Proven', description: 'Confirmed three traits yourself on quests.' },
   recalibrated: { id: 'recalibrated', emoji: '🔄', name: 'Recalibrated', description: 'Rechecked your stats.' },
 };

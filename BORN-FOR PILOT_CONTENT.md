@@ -109,7 +109,7 @@ Similarity between two careers = 0.5 × shared worlds (Jaccard) + 0.5 × shared 
 Career reveal and Explore show three groups:
 1. **Your picks:** the jobs the user picked, by score.
 2. **More in your worlds:** other careers in their chosen worlds, by score.
-3. **Wildcards:** up to 2 careers outside their worlds where their traits fit very well (A ≥ 0.9) and whose main key trait is one of the user’s four strongest, by strongest-trait alignment. The card leads with “Runs on your {trait}, one of your strongest traits”. This is where the sign and traits add discovery instead of deciding for the user.
+3. **Wildcards:** up to 2 careers outside their worlds where their traits fit very well (A ≥ 0.9) and whose main key trait is one of the user’s four strongest, by strongest-trait alignment. The card leads with “Runs on your {trait}, one of your superpowers”. This is where the sign and traits add discovery instead of deciding for the user.
 
 ### 4.6 Difficulty
 For each primary attribute: `gap = required − current`. A **key gap** is a gap over 10.

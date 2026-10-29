@@ -42,7 +42,7 @@ export function ResultGroups({ ranking, character }: { ranking: Ranking; charact
         matches={groups.inWorlds}
         limit={WORLD_PREVIEW}
       />
-      <Group title="Wildcards" blurb="Outside your worlds, but built on your strongest traits." matches={groups.wildcards} />
+      <Group title="Wildcards" blurb="Outside your worlds, but built on your superpowers." matches={groups.wildcards} />
     </View>
   );
 }

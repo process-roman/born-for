@@ -1,10 +1,12 @@
 // The saved game: character plus quest state, purchase flag and what to suggest next.
 // Pure functions so they can be unit-tested; the app store persists the result.
 
+import type { AttributeId } from '../content/attributes';
 import type { BadgeId } from '../content/badges';
 import { CAREERS, type CareerId, type StarNumber } from '../content/careers';
 import type { SignId } from '../content/signs';
 import { newBadges } from './badges';
+import { isThatsYouMoment, newlyConfirmed } from './confirmed';
 import {
   changeCuspSign,
   completeQuest,
@@ -145,6 +147,10 @@ export interface FinishResult {
   rewards: QuestRewards;
   next: NextStep;
   newBadges: BadgeId[];
+  /** Traits marked "felt natural" for the first time on this quest. */
+  newlyConfirmed: AttributeId[];
+  /** 3 lit stars on this path, all enjoyed. */
+  thatsYou: boolean;
 }
 
 /** "Done": light the star, grant rewards, pick what to suggest next. A new title is equipped right away. */
@@ -166,6 +172,8 @@ export function finishQuest(game: Game, reflection: Reflection | null, now: Date
     rewards,
     next,
     newBadges: newBadges(game.character, character),
+    newlyConfirmed: newlyConfirmed(game.character, character),
+    thatsYou: isThatsYouMoment(character, active.careerId),
   };
 }
 

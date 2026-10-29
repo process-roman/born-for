@@ -8,6 +8,7 @@ import { CAREER_IDS, CAREERS } from '@/content/careers';
 import { SIGNS } from '@/content/signs';
 import { LAYER_NAMES, avatarLayers, nextLayerName } from '@/logic/avatar';
 import { earnedBadges } from '@/logic/badges';
+import { confirmedTraits } from '@/logic/confirmed';
 import { litStarNumbers, statsOf, titlesOf } from '@/logic/character';
 import { backgroundTraits, topAttributes } from '@/logic/poll';
 import { useGame } from '@/state/game';
@@ -25,10 +26,13 @@ export default function CharacterScreen() {
   const sign = SIGNS[character.sign];
   const titles = titlesOf(character);
   const started = CAREER_IDS.filter((id) => litStarNumbers(character, id).length > 0);
-  const dimmed = backgroundTraits(character.sign).filter((a) => character.answers[a] !== 'yes' && character.earned[a] === 0);
+  const dimmed = backgroundTraits(character.sign).filter(
+    (a) => character.answers[a] !== 'yes' && character.earned[a] === 0 && !confirmedTraits(character).includes(a),
+  );
   const layers = avatarLayers(character);
   const nextLayer = nextLayerName(layers.level);
   const badges = new Set(earnedBadges(character));
+  const confirmed = confirmedTraits(character);
 
   return (
     <Screen>
@@ -50,7 +54,14 @@ export default function CharacterScreen() {
 
       <Card>
         <Label>Then vs now</Label>
-        <TraitSheet stats={statsOf(character)} ghost={character.dayOne} element={sign.element} highlights={topAttributes(character.sign)} dimmed={dimmed} />
+        <TraitSheet
+          stats={statsOf(character)}
+          ghost={character.dayOne}
+          element={sign.element}
+          highlights={topAttributes(character.sign)}
+          dimmed={dimmed}
+          notes={Object.fromEntries(confirmed.map((a) => [a, '✓ Confirmed by you']))}
+        />
         <View style={styles.legend}>
           <View style={styles.legendGhost} />
           <Text style={styles.legendText}>Dashed outline: your stats on day one. Faded: background traits you haven’t unlocked yet.</Text>

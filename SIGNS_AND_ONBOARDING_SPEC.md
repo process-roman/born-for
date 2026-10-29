@@ -268,6 +268,27 @@ Q1 intent → birthday → character reveal → confirm poll → "Anything else 
 - Plain and accurate for career facts: training needed, salary ranges, day-to-day reality.
 - Never negative about low stats: "untrained," "room to grow."
 
+### Voice and promise: borrowed confidence → earned confidence
+The sign gives users a confident starting story; their own quests turn it into something they've proven. The app is bold about strengths and honest about outcomes.
+
+**Say boldly:**
+- "Your superpowers: Empathy, Persistence, Organization." (the sign's top 3 at the reveal)
+- "Paths where your superpowers shine."
+- "People with your strengths often thrive here."
+- "Runs on your Empathy, one of your superpowers."
+
+**Never promise:**
+- That a sign guarantees happiness, success or a specific career ("you will be happy as a designer").
+- That a low stat rules anything out ("Pisces can't do analytics").
+
+**Confirmed by you:** when a reflection marks a trait as "felt natural" for the first time, the rewards screen says so:
+- Superpower the sign predicted: "Your sign called Creativity. You just proved it."
+- Trait the sign didn't lead with: "Your sign didn't predict Leadership. You found it yourself."
+
+Confirmed traits get a ✓ on the character sheet.
+
+**"That's you":** when a path reaches 3 lit stars and every reflection on it was enjoyed (4–5): "3 stars in UX/product design, and you loved every one. That's not your sign talking. That's you."
+
 ### References
 - **Persona 5:** social stats (Knowledge, Guts, Kindness…) that grow through real activities. The closest game reference to this app's core mechanic.
 - **Co-Star:** how modern astrology apps feel premium and minimal.

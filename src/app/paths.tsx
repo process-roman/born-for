@@ -29,9 +29,9 @@ function Staggered({ children, index }: { children: React.ReactNode; index: numb
 }
 
 const TITLES: Record<IntentId, string> = {
-  career: 'Your top paths',
-  change: 'Paths worth testing',
-  discover: 'Paths that match your character',
+  career: 'Paths where your superpowers shine',
+  change: 'Paths worth testing with your superpowers',
+  discover: 'Where your superpowers could take you',
   curious: 'Where your character could go',
 };
 
@@ -74,7 +74,7 @@ export default function Paths() {
   return (
     <Screen footer={<Button title="Go to home" onPress={() => router.replace('/home')} />}>
       <Title>{TITLES[character.intent ?? 'career']}</Title>
-      <Body muted>Every path stays open. Harder ones just take more training. Tap one to see its constellation.</Body>
+      <Body muted>People with your strengths often thrive here. Try one with a 20-minute quest and see how it feels. Every path stays open.</Body>
       <Staggered index={0}>
         <ResultGroups ranking={rankingFor(character)} character={character} />
       </Staggered>

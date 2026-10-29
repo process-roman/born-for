@@ -109,6 +109,7 @@ export default function Reflect() {
       </View>
 
       <Label>What felt natural? (up to {MAX_FELT_NATURAL})</Label>
+      <Text style={styles.hint}>Tap a trait and you’ve confirmed it yourself, not just your sign.</Text>
       <Chips selected={natural} onToggle={toggle(natural, setNatural)} max={MAX_FELT_NATURAL} />
 
       <Label>What felt hard?</Label>
@@ -118,6 +119,7 @@ export default function Reflect() {
 }
 
 const styles = StyleSheet.create({
+  hint: { fontFamily: F.body, fontSize: 13, color: C.textMuted, marginTop: -S.sm },
   faces: { flexDirection: 'row', justifyContent: 'space-between' },
   face: { width: 58, height: 58, borderRadius: 29, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: C.border, backgroundColor: C.night },
   faceOn: { borderColor: C.gold, backgroundColor: C.goldSoft },

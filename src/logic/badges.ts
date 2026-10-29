@@ -5,11 +5,13 @@ import { BADGE_IDS, type BadgeId } from '../content/badges';
 import { CAREERS, type CareerId } from '../content/careers';
 import { SIGNS } from '../content/signs';
 import { levelOf, litStarNumbers, titlesOf, type Character } from './character';
+import { confirmedTraits } from './confirmed';
 import { isConstellationComplete } from './constellation';
 
 export const REFLECTIVE_COUNT = 5;
 export const PATHS_FOR_BADGE = 3;
 export const WORLDS_FOR_BADGE = 3;
+export const PROVEN_TRAITS = 3;
 
 export function earnedBadges(character: Character): BadgeId[] {
   const started = (Object.keys(character.stars) as CareerId[]).filter((id) => litStarNumbers(character, id).length > 0);
@@ -26,6 +28,7 @@ export function earnedBadges(character: Character): BadgeId[] {
     world_traveller: worlds.size >= WORLDS_FOR_BADGE,
     level_3: levelOf(character) >= 3,
     hidden_talent: background.some((a) => character.answers[a] === 'yes' || character.dayOneAnswers[a] === 'yes'),
+    proven: confirmedTraits(character).length >= PROVEN_TRAITS,
     recalibrated: (character.recalibrations ?? 0) > 0,
   };
   return BADGE_IDS.filter((id) => has[id]);

@@ -4,6 +4,7 @@ import { Redirect, router } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
 import { Animated, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { ATTRIBUTE_LABELS } from '@/content/attributes';
 import { SIGNS } from '@/content/signs';
 import { ELEMENT_COLORS } from '@/content/theme';
 import { ZODIAC_CONSTELLATIONS } from '@/content/zodiacConstellations';
@@ -59,10 +60,12 @@ export default function Reveal() {
           <Title>{sign.archetype}</Title>
           <Body muted>{sign.revealLine}</Body>
           <View style={[styles.divider, { backgroundColor: element }]} />
-          <Label>Your sign suggests</Label>
+          <Label>Your superpowers</Label>
+          <Text style={styles.superpowers}>{topAttributes(state.sign).map((a) => ATTRIBUTE_LABELS[a]).join(' · ')}</Text>
+          <Label>Your sign’s strengths</Label>
           <StatList stats={sign.stats} element={sign.element} attributes={signatureTraits(state.sign)} highlights={topAttributes(state.sign)} />
           <Text style={styles.footnote}>
-            ★ Strongest probable traits. + 8 background traits you can unlock. Next, you’ll tell us if your sign got you right.
+            ★ Your superpowers. Plus 8 background traits you can unlock. Next, tell us if your sign got you right; quests will let you prove it.
           </Text>
         </Card>
       </Animated.View>
@@ -77,5 +80,6 @@ const styles = StyleSheet.create({
   cardTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   glyph: { fontSize: 40, color: C.gold },
   divider: { height: 1, opacity: 0.4, marginVertical: S.sm },
+  superpowers: { fontFamily: F.display, fontSize: 18, lineHeight: 26, color: C.gold, textAlign: 'center' },
   footnote: { fontFamily: F.body, fontSize: 13, lineHeight: 18, color: C.textMuted },
 });
