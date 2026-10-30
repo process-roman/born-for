@@ -63,7 +63,7 @@ export default function Paywall() {
       <Title>{copy.title}</Title>
       <Body muted>{copy.body}</Body>
 
-      <Card style={{ borderColor: C.goldBorder }}>
+      <Card>
         <Label>Your top path</Label>
         <View style={styles.blurred} accessibilityLabel="Hidden career name">
           <Text style={styles.blurredText}>{CAREERS[top.careerId].name.replace(/\S/g, '•')}</Text>
@@ -72,21 +72,22 @@ export default function Paywall() {
         {top.reasons[0] ? <Text style={styles.reason}>✦ {top.reasons[0]}</Text> : null}
       </Card>
 
-      <View style={{ gap: S.sm }}>
+      <Card>
+        <Label>What you unlock</Label>
         {UNLOCKS.map((u) => (
           <Text key={u} style={styles.unlock}>
             <Text style={{ color: C.gold }}>★ </Text>
             {u}
           </Text>
         ))}
-      </View>
+      </Card>
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
   blurred: { paddingVertical: S.xs },
-  blurredText: { fontFamily: F.display, fontSize: 22, letterSpacing: 2, color: C.textMuted, opacity: 0.6 },
+  blurredText: { fontFamily: F.display, fontSize: 28, letterSpacing: 2, color: C.textMuted, opacity: 0.6 },
   reason: { fontFamily: F.body, fontSize: 15, color: C.text },
   unlock: { fontFamily: F.body, fontSize: 15, lineHeight: 22, color: C.text },
   stub: { fontFamily: F.body, fontSize: 12, color: C.textMuted, textAlign: 'center' },

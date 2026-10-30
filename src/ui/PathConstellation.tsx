@@ -3,10 +3,10 @@ import { Animated, Platform, View } from 'react-native';
 
 import type { Career, StarNumber } from '@/content/careers';
 import { litLines } from '@/logic/constellation';
-import { C } from './theme';
+import { night } from './theme';
 
 /**
- * A career constellation: lit stars glow gold, unlit stay dim, and a line draws only when both of
+ * A career constellation, drawn as gold line art for plum cards and night scenes: lit stars glow gold, unlit stay dim, and a line draws only when both of
  * its stars are lit (Blueprint §5). Star 5 is the Test "boss" star and renders larger.
  * `fresh` pulses a newly lit star.
  */
@@ -52,8 +52,8 @@ export function PathConstellation({
               top: (p.y + q.y) / 2 - 0.75,
               width: length,
               height: 1.5,
-              backgroundColor: on ? C.gold : C.text,
-              opacity: on ? 0.6 : 0.08,
+              backgroundColor: on ? night.gold : night.text,
+              opacity: on ? 0.75 : 0.14,
               transform: [{ rotate: `${Math.atan2(q.y - p.y, q.x - p.x)}rad` }],
             }}
           />
@@ -70,10 +70,10 @@ export function PathConstellation({
           width: d,
           height: d,
           borderRadius: d / 2,
-          backgroundColor: isLit ? C.gold : 'transparent',
+          backgroundColor: isLit ? night.gold : 'transparent',
           borderWidth: isLit ? 0 : 1,
-          borderColor: 'rgba(244, 241, 234, 0.35)',
-          shadowColor: C.gold,
+          borderColor: 'rgba(248, 241, 231, 0.45)',
+          shadowColor: night.gold,
           shadowOpacity: isLit ? 0.9 : 0,
           shadowRadius: d,
           shadowOffset: { width: 0, height: 0 },

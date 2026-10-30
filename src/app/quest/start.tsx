@@ -10,7 +10,7 @@ import { useGame } from '@/state/game';
 import { remindersSupported } from '@/storage/notifications';
 import { Body, Button, Label, OptionCard, Screen, Title } from '@/ui/components';
 import { QuestCard } from '@/ui/quest';
-import { C, F, S } from '@/ui/theme';
+import { C, F, palette, S } from '@/ui/theme';
 
 const DAYS_AHEAD = 7;
 
@@ -88,7 +88,7 @@ export default function QuestStart() {
               nudge, no streaks.
             </Text>
           </View>
-          <Switch value={remind} onValueChange={setRemind} trackColor={{ true: C.gold, false: C.track }} thumbColor={C.text} />
+          <Switch value={remind} onValueChange={setRemind} trackColor={{ true: C.gold, false: C.track }} thumbColor={palette.white} />
         </View>
       ) : (
         <Body muted>Check-in reminders work in the phone app. On the web, come back to Home when you’re done.</Body>

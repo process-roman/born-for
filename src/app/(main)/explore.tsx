@@ -26,7 +26,7 @@ export default function Explore() {
       {game.paid ? (
         <ResultGroups ranking={ranking} character={game.character} />
       ) : (
-        <Card style={{ borderColor: C.goldBorder }}>
+        <Card>
           <Label>Your top path</Label>
           <Text style={styles.hidden}>{CAREERS[top.careerId].name.replace(/\S/g, '•')}</Text>
           <DifficultyPill difficulty={top.difficulty} />

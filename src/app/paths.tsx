@@ -60,7 +60,7 @@ export default function Paths() {
           <Title>{sign.archetype}</Title>
           <Body muted>Your character is saved on this device. Here’s one free quest on your top path.</Body>
         </View>
-        <Card style={{ borderColor: C.goldBorder }}>
+        <Card>
           <Label>Your top path</Label>
           <Text style={styles.hidden}>{CAREERS[top.careerId].name.replace(/\S/g, '•')}</Text>
           <DifficultyPill difficulty={top.difficulty} />

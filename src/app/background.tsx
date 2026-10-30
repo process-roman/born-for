@@ -8,7 +8,7 @@ import { SIGNS } from '@/content/signs';
 import { backgroundTraits } from '@/logic/poll';
 import { useOnboarding } from '@/state/onboarding';
 import { Body, Button, Screen, Step, Title } from '@/ui/components';
-import { C, F, S } from '@/ui/theme';
+import { C, F, radius, S } from '@/ui/theme';
 
 export default function Background() {
   const { state, dispatch } = useOnboarding();
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     gap: S.md,
     paddingHorizontal: S.lg,
     paddingVertical: S.md,
-    borderRadius: 14,
+    borderRadius: radius.md,
     borderWidth: 1,
     borderColor: C.border,
     backgroundColor: C.night,

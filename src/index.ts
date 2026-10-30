@@ -2,7 +2,6 @@ export * from './content/attributes';
 export * from './content/signs';
 export * from './content/preferences';
 export * from './content/careers';
-export * from './content/theme';
 export * from './logic/stats';
 export * from './logic/poll';
 export * from './logic/birthday';

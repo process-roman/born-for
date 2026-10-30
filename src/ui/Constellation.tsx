@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Animated, Easing, Platform, View } from 'react-native';
 
 import type { ZodiacShape } from '@/content/zodiacConstellations';
-import { C } from './theme';
+import { night } from './theme';
 
 const useNativeDriver = Platform.OS !== 'web';
 
@@ -10,7 +10,7 @@ const useNativeDriver = Platform.OS !== 'web';
 export function Constellation({
   shape,
   size,
-  color = C.gold,
+  color = night.gold,
   onDone,
 }: {
   shape: ZodiacShape;
@@ -70,7 +70,7 @@ export function Constellation({
               width: 10,
               height: 10,
               borderRadius: 5,
-              backgroundColor: C.text,
+              backgroundColor: night.text,
               shadowColor: color,
               shadowOpacity: 0.9,
               shadowRadius: 8,

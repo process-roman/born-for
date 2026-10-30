@@ -16,7 +16,8 @@ import { Body, Button, Card, Label, Screen, Title } from '@/ui/components';
 import { PathConstellation } from '@/ui/PathConstellation';
 import { TIER_LABELS } from '@/ui/quest';
 import { DifficultyPill } from '@/ui/stats';
-import { C, F, S } from '@/ui/theme';
+import { PlumCard } from '@/ui/kit';
+import { C, day, F, night, S, type } from '@/ui/theme';
 
 const INTEREST_OPTIONS: { id: PathInterest; label: string }[] = [
   { id: 'interested', label: 'Interested' },
@@ -58,9 +59,11 @@ export default function PathDetail() {
           {career.constellation.name} · The {SIGNS[character.sign].adjective} {career.className}
         </Label>
         <Title>{career.name}</Title>
+      </View>
+      <PlumCard style={styles.sky}>
         <PathConstellation career={career} lit={lit} size={220} />
         <Text style={styles.count}>{lit.length} of 5 stars lit</Text>
-      </View>
+      </PlumCard>
       <Body>{career.oneLiner}</Body>
       <View style={styles.worlds}>
         {career.worlds.map((w) => (
@@ -77,7 +80,7 @@ export default function PathDetail() {
         ))}
       </View>
       {career.realityCheck ? (
-        <Card style={{ borderColor: C.lavender }}>
+        <Card style={{ backgroundColor: day.accentSoft }}>
           <Label>Reality check</Label>
           <Text style={styles.item}>{career.realityCheck}</Text>
         </Card>
@@ -127,7 +130,7 @@ export default function PathDetail() {
               accessibilityRole="button"
               disabled={!startable || isActive}
               onPress={() => router.push({ pathname: '/quest/start', params: { career: careerId, star: String(q.star) } })}
-              style={[styles.quest, startable && !isActive && styles.questOpen]}
+              style={[styles.quest, startable && !isActive && styles.questOpen, isLit && { opacity: 1 }]}
             >
               <Text style={[styles.questStar, isLit && { color: C.gold }]}>{isLit ? '★' : '☆'}</Text>
               <View style={{ flex: 1 }}>
@@ -152,7 +155,7 @@ export default function PathDetail() {
         <Text style={styles.item}>{career.education}</Text>
       </Card>
 
-      <Card style={complete ? { borderColor: C.goldBorder } : undefined}>
+      <Card>
         <Label>Real next steps</Label>
         {complete ? (
           <>
@@ -174,20 +177,21 @@ export default function PathDetail() {
 }
 
 const styles = StyleSheet.create({
-  count: { fontFamily: F.bodyMedium, fontSize: 13, color: C.gold },
+  sky: { alignItems: 'center' },
+  count: { ...type.label, color: night.gold },
   interest: { flexDirection: 'row', gap: S.sm, justifyContent: 'center' },
   worlds: { flexDirection: 'row', flexWrap: 'wrap', gap: S.sm, justifyContent: 'center' },
-  world: { paddingHorizontal: S.md, paddingVertical: 6, borderRadius: 999, backgroundColor: C.night, borderWidth: 1, borderColor: C.border },
-  worldText: { fontFamily: F.body, fontSize: 13, color: C.textMuted },
+  world: { paddingHorizontal: S.md, paddingVertical: 6, borderRadius: 999, backgroundColor: C.goldSoft },
+  worldText: { fontFamily: F.bodyMedium, fontSize: 13, color: C.gold },
   chip: { paddingHorizontal: S.md, paddingVertical: 8, borderRadius: 999, borderWidth: 1, borderColor: C.border },
   chipOn: { borderColor: C.gold, backgroundColor: C.goldSoft },
   chipText: { fontFamily: F.bodyMedium, fontSize: 14, color: C.text },
   item: { fontFamily: F.body, fontSize: 15, lineHeight: 22, color: C.text },
   reason: { fontFamily: F.body, fontSize: 14, lineHeight: 20, color: C.textMuted },
-  sub: { fontFamily: F.bodyBold, fontSize: 13, color: C.gold, marginTop: S.xs },
+  sub: { ...type.h3, fontSize: 18, color: C.text, marginTop: S.xs },
   quest: { flexDirection: 'row', alignItems: 'center', gap: S.md, padding: S.md, borderRadius: 12, borderWidth: 1, borderColor: C.border, opacity: 0.6 },
-  questOpen: { opacity: 1, borderColor: C.goldBorder },
+  questOpen: { opacity: 1, borderColor: C.gold },
   questStar: { fontSize: 20, color: C.textMuted },
-  questName: { fontFamily: F.bodyMedium, fontSize: 15, color: C.text },
+  questName: { ...type.h3, fontSize: 18, color: C.text },
   questMeta: { fontFamily: F.body, fontSize: 13, color: C.textMuted },
 });

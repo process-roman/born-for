@@ -1,4 +1,4 @@
-// Rewards: the star lights up, XP, attribute XP, level and title moments, then what's next (Blueprint §3 steps 15–16).
+// Rewards, a night scene: the star lights up, XP, attribute XP, level and title moments, then what's next (Blueprint §3 steps 15–16).
 
 import { Redirect, router } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
@@ -15,7 +15,7 @@ import { CharacterAvatar } from '@/ui/CharacterAvatar';
 import { Body, Button, Card, Label, Screen, Title } from '@/ui/components';
 import { PathConstellation } from '@/ui/PathConstellation';
 import { QuestCard } from '@/ui/quest';
-import { C, F, S } from '@/ui/theme';
+import { night, S, type } from '@/ui/theme';
 
 export default function Rewards() {
   const { game, lastResult } = useGame();
@@ -29,6 +29,7 @@ export default function Rewards() {
 
   return (
     <Screen
+      tone="night"
       footer={
         !game.paid ? (
           <>
@@ -52,7 +53,7 @@ export default function Rewards() {
           <Label>You trained</Label>
           {gains.map((a) => (
             <Text key={a} style={styles.gain}>
-              {ATTRIBUTE_LABELS[a]} <Text style={{ color: C.gold }}>+{rewards.attributeXp[a]}</Text>
+              {ATTRIBUTE_LABELS[a]} <Text style={{ color: night.gold }}>+{rewards.attributeXp[a]}</Text>
             </Text>
           ))}
         </Card>
@@ -61,7 +62,7 @@ export default function Rewards() {
       )}
 
       {leveledUp ? (
-        <Card style={{ borderColor: C.goldBorder, alignItems: 'center' }}>
+        <Card style={styles.momentCard}>
           <Label>Level {rewards.levelAfter}</Label>
           <CharacterAvatar character={game.character} size={120} />
           <Text style={styles.moment}>Your {SIGNS[game.character.sign].archetype.replace('The ', '')} has grown.</Text>
@@ -70,28 +71,28 @@ export default function Rewards() {
       ) : null}
 
       {rewards.newTitle ? (
-        <Card style={{ borderColor: C.goldBorder, alignItems: 'center' }}>
+        <Card style={styles.momentCard}>
           <Label>{rewards.newTitle.starred ? 'Title upgraded' : 'New title'}</Label>
           <Text style={styles.moment}>{rewards.newTitle.text}</Text>
         </Card>
       ) : null}
 
       {thatsYou ? (
-        <Card style={{ borderColor: C.gold, alignItems: 'center' }}>
+        <Card style={[styles.momentCard, { borderColor: night.gold }]}>
           <Label>That’s you</Label>
           <Text style={styles.moment}>{thatsYouLine(careerId)}</Text>
         </Card>
       ) : null}
 
       {newlyConfirmed.map((a) => (
-        <Card key={a} style={{ borderColor: C.goldBorder, alignItems: 'center' }}>
+        <Card key={a} style={styles.momentCard}>
           <Label>✓ Confirmed by you</Label>
           <Text style={styles.moment}>{confirmedLine(game.character, a)}</Text>
         </Card>
       ))}
 
       {newBadges.map((id) => (
-        <Card key={id} style={{ borderColor: C.goldBorder, alignItems: 'center' }}>
+        <Card key={id} style={styles.momentCard}>
           <Label>Badge unlocked</Label>
           <Text style={styles.moment}>
             {BADGES[id].emoji} {BADGES[id].name}
@@ -101,7 +102,7 @@ export default function Rewards() {
       ))}
 
       {next.kind === 'path_complete' ? (
-        <Card style={{ borderColor: C.goldBorder }}>
+        <Card>
           <Label>Real next steps unlocked</Label>
           <Body style={{ textAlign: 'left' }}>Courses, communities and entry roles for {career.name} are now on its path page.</Body>
           <Button title="See next steps" variant="secondary" onPress={() => router.push({ pathname: '/path/[id]', params: { id: careerId } })} />
@@ -126,8 +127,9 @@ export default function Rewards() {
 }
 
 const styles = StyleSheet.create({
-  xp: { fontFamily: F.bodyBold, fontSize: 22, color: C.gold },
-  gain: { fontFamily: F.bodyMedium, fontSize: 15, color: C.text },
-  moment: { fontFamily: F.display, fontSize: 20, color: C.text, textAlign: 'center' },
-  reason: { fontFamily: F.body, fontSize: 14, color: C.textMuted },
+  xp: { ...type.h2, color: night.accent },
+  gain: { ...type.bodyMedium, fontSize: 15, color: night.text },
+  momentCard: { alignItems: 'center' },
+  moment: { ...type.h3, color: night.text, textAlign: 'center' },
+  reason: { ...type.small, color: night.textMuted },
 });

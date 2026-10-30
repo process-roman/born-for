@@ -10,7 +10,7 @@ import { pollCards } from '@/logic/poll';
 import { bandFor, type PollAnswer } from '@/logic/stats';
 import { useOnboarding } from '@/state/onboarding';
 import { Body, Button, Label, Screen, Step } from '@/ui/components';
-import { bandColor, C, F, S } from '@/ui/theme';
+import { bandColor, C, F, radius, S, shadow, type } from '@/ui/theme';
 
 const SWIPE = 110;
 const useNativeDriver = Platform.OS !== 'web';
@@ -88,9 +88,9 @@ export default function Poll() {
         >
           <Animated.Text style={[styles.stamp, styles.stampYes, { opacity: yesOpacity }]}>THAT’S ME</Animated.Text>
           <Animated.Text style={[styles.stamp, styles.stampNo, { opacity: noOpacity }]}>NOT REALLY</Animated.Text>
-          <Text style={styles.attribute}>{ATTRIBUTE_LABELS[card.attribute].toUpperCase()}</Text>
+          <Text style={styles.attribute}>{ATTRIBUTE_LABELS[card.attribute]}</Text>
           <Text style={styles.prediction}>
-            Your sign says: <Text style={{ color: bandColor(card.signBand, sign.element), fontFamily: F.bodyBold }}>{card.signBand}</Text>
+            Your sign says: <Text style={{ color: C.gold, fontFamily: F.bodyBold }}>{card.signBand}</Text>
           </Text>
           <Text style={styles.statement}>“{card.statement}”</Text>
         </Animated.View>
@@ -125,25 +125,24 @@ const styles = StyleSheet.create({
   deck: { flex: 1, minHeight: 260, justifyContent: 'center' },
   card: {
     minHeight: 260,
-    borderRadius: 22,
-    borderWidth: 1,
-    borderColor: C.goldBorder,
+    borderRadius: radius.lg,
     backgroundColor: C.night,
+    ...shadow.soft,
     padding: S.xl,
     justifyContent: 'center',
     gap: S.md,
     userSelect: 'none',
   },
-  attribute: { fontFamily: F.display, fontSize: 22, letterSpacing: 2, color: C.text, textAlign: 'center' },
+  attribute: { ...type.h1, color: C.text, textAlign: 'center' },
   prediction: { fontFamily: F.body, fontSize: 14, color: C.textMuted, textAlign: 'center' },
-  statement: { fontFamily: F.body, fontStyle: 'italic', fontSize: 20, lineHeight: 28, color: C.text, textAlign: 'center', marginTop: S.sm },
+  statement: { fontFamily: type.heroItalic.fontFamily, fontSize: 24, lineHeight: 30, color: C.text, textAlign: 'center', marginTop: S.sm },
   stamp: { position: 'absolute', top: S.lg, fontFamily: F.bodyBold, fontSize: 13, letterSpacing: 1.5, borderWidth: 1.5, borderRadius: 6, paddingHorizontal: 8, paddingVertical: 2 },
   stampYes: { left: S.lg, color: C.gold, borderColor: C.gold },
-  stampNo: { right: S.lg, color: C.lavender, borderColor: C.lavender },
+  stampNo: { right: S.lg, color: C.textMuted, borderColor: C.textMuted },
   answers: { flexDirection: 'row', gap: S.sm },
   answer: { flex: 1, paddingHorizontal: S.xs },
   bars: { flexDirection: 'row', justifyContent: 'center', gap: 6, height: 44 },
-  barTrack: { width: 14, height: '100%', borderRadius: 3, backgroundColor: C.track, justifyContent: 'flex-end', overflow: 'hidden' },
-  barFill: { width: '100%', borderRadius: 3 },
-  barGhost: { borderWidth: 1, borderColor: 'rgba(244, 241, 234, 0.35)', borderStyle: 'dashed' },
+  barTrack: { width: 10, height: '100%', borderRadius: radius.pill, backgroundColor: C.track, justifyContent: 'flex-end', overflow: 'hidden' },
+  barFill: { width: '100%', borderRadius: radius.pill },
+  barGhost: { borderWidth: 1, borderColor: C.goldBorder, borderStyle: 'dashed' },
 });

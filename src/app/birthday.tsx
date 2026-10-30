@@ -8,7 +8,7 @@ import { SIGN_IDS, SIGNS, type SignId } from '@/content/signs';
 import { isValidBirthDate, signFromBirthday } from '@/logic/birthday';
 import { useOnboarding } from '@/state/onboarding';
 import { Body, Button, Label, OptionCard, Screen, Step, Title } from '@/ui/components';
-import { C, F, glyph, S } from '@/ui/theme';
+import { C, F, glyph, radius, S, shadow } from '@/ui/theme';
 
 const OLDEST_YEAR = 1920;
 
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
   input: {
     minWidth: 0,
     height: 60,
-    borderRadius: 14,
+    borderRadius: radius.md,
     borderWidth: 1,
     borderColor: C.border,
     backgroundColor: C.night,
@@ -166,15 +166,14 @@ const styles = StyleSheet.create({
     fontSize: 22,
     textAlign: 'center',
   },
-  error: { fontFamily: F.body, fontSize: 14, color: '#F2784B', textAlign: 'center' },
+  error: { fontFamily: F.body, fontSize: 14, color: '#9C3D2B', textAlign: 'center' },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: S.sm, justifyContent: 'center' },
   signTile: {
     width: '31%',
     aspectRatio: 1,
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: C.border,
+    borderRadius: radius.md,
     backgroundColor: C.night,
+    ...shadow.soft,
     alignItems: 'center',
     justifyContent: 'center',
     gap: S.xs,

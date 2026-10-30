@@ -7,7 +7,7 @@ import { SIGNS } from '@/content/signs';
 import { backgroundTraits, signCalled, signatureTraits, topAttributes } from '@/logic/poll';
 import { useOnboarding } from '@/state/onboarding';
 import { Body, Button, Card, Label, Screen, Step, Title } from '@/ui/components';
-import { StatList } from '@/ui/stats';
+import { StatList, TickLegend } from '@/ui/stats';
 import { C, F, glyph, S } from '@/ui/theme';
 
 export default function Called() {
@@ -61,10 +61,7 @@ export default function Called() {
           highlights={topAttributes(state.sign)}
           notes={notes}
         />
-        <View style={styles.legend}>
-          <View style={styles.legendGhost} />
-          <Text style={styles.legendText}>Dashed outline: what your sign predicted</Text>
-        </View>
+        <TickLegend>Tick: what your sign predicted</TickLegend>
       </Card>
       {added.length > 0 ? (
         <Card>
@@ -79,7 +76,5 @@ export default function Called() {
 
 const styles = StyleSheet.create({
   glyph: { fontSize: 36, color: C.gold },
-  legend: { flexDirection: 'row', alignItems: 'center', gap: S.sm },
-  legendGhost: { width: 22, height: 10, borderRadius: 3, borderWidth: 1, borderStyle: 'dashed', borderColor: 'rgba(244, 241, 234, 0.55)' },
   legendText: { fontFamily: F.body, fontSize: 12, color: C.textMuted },
 });

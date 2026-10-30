@@ -1,4 +1,3 @@
-import { Cinzel_400Regular, Cinzel_700Bold } from '@expo-google-fonts/cinzel';
 import { CormorantGaramond_500Medium, CormorantGaramond_500Medium_Italic, CormorantGaramond_600SemiBold } from '@expo-google-fonts/cormorant-garamond';
 import { DMSans_400Regular, DMSans_500Medium, DMSans_700Bold } from '@expo-google-fonts/dm-sans';
 import { useFonts } from 'expo-font';
@@ -10,7 +9,7 @@ import { useCallback, useEffect } from 'react';
 import { GameProvider, useGame } from '@/state/game';
 import { OnboardingProvider } from '@/state/onboarding';
 import { configureNotifications, useCheckInTap } from '@/storage/notifications';
-import { C } from '@/ui/theme';
+import { day } from '@/ui/theme';
 
 SplashScreen.preventAutoHideAsync();
 configureNotifications();
@@ -26,8 +25,6 @@ function CheckInTapHandler() {
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    Cinzel_400Regular,
-    Cinzel_700Bold,
     CormorantGaramond_500Medium,
     CormorantGaramond_500Medium_Italic,
     CormorantGaramond_600SemiBold,
@@ -46,8 +43,8 @@ export default function RootLayout() {
     <GameProvider>
       <OnboardingProvider>
         <CheckInTapHandler />
-        <StatusBar style="light" />
-        <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: C.nightDeep }, animation: 'fade' }} />
+        <StatusBar style="dark" />
+        <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: day.bg }, animation: 'fade' }} />
       </OnboardingProvider>
     </GameProvider>
   );

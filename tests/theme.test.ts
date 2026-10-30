@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { contrastRatio, day, night, palette } from '../src/ui/theme';
+import { contrastRatio, day, night, palette, tones } from '../src/ui/theme';
 
 const AA = 4.5;
 const AA_LARGE = 3;
@@ -21,6 +21,7 @@ describe('WCAG AA contrast', () => {
     ['night muted text on deep plum', night.textMuted, night.bg],
     ['night text on plum cards', night.text, night.surface],
     ['night muted text on plum cards', night.textMuted, night.surface],
+    ['night button text on peach', tones.night.onPrimary, tones.night.primary],
   ])('%s is at least 4.5:1', (_, fg, bg) => {
     expect(contrastRatio(fg, bg)).toBeGreaterThanOrEqual(AA);
   });

@@ -1,10 +1,24 @@
-import type { ReactNode } from 'react';
+// Shared screen building blocks. Every screen is either a cream "day" screen or a deep plum "night"
+// scene (Screen's `tone`); the components inside pick their colors from that tone.
+
+import { StatusBar } from 'expo-status-bar';
+import { createContext, useContext, type ReactNode } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View, type StyleProp, type TextStyle, type ViewStyle } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { C, F, MAX_WIDTH, S } from './theme';
+import { MAX_WIDTH, radius, shadow, space, tones, type, type Tone, type ToneColors } from './theme';
 
-/** Deterministic star dots behind every screen. */
+const ToneContext = createContext<Tone>('day');
+
+export function useTone(): Tone {
+  return useContext(ToneContext);
+}
+
+export function useToneColors(): ToneColors {
+  return tones[useContext(ToneContext)];
+}
+
+/** Deterministic star dots behind night scenes. */
 const STARS = (() => {
   let seed = 7;
   const rand = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
@@ -22,52 +36,67 @@ function Starfield() {
       {STARS.map((s, i) => (
         <View
           key={i}
-          style={{ position: 'absolute', left: s.left, top: s.top, width: s.size, height: s.size, borderRadius: s.size, backgroundColor: C.text, opacity: s.opacity }}
+          style={{ position: 'absolute', left: s.left, top: s.top, width: s.size, height: s.size, borderRadius: s.size, backgroundColor: tones.night.text, opacity: s.opacity }}
         />
       ))}
     </View>
   );
 }
 
-export function Screen({ children, footer, scroll = true }: { children: ReactNode; footer?: ReactNode; scroll?: boolean }) {
+export function Screen({ children, footer, scroll = true, tone = 'day' }: { children: ReactNode; footer?: ReactNode; scroll?: boolean; tone?: Tone }) {
   const body = <View style={styles.content}>{children}</View>;
   return (
-    <View style={styles.root}>
-      <Starfield />
-      <SafeAreaView style={styles.safe}>
-        {scroll ? (
-          <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
-            {body}
-          </ScrollView>
-        ) : (
-          <View style={[styles.scroll, { flex: 1 }]}>{body}</View>
-        )}
-        {footer ? <View style={styles.footer}>{footer}</View> : null}
-      </SafeAreaView>
-    </View>
+    <ToneContext.Provider value={tone}>
+      <View style={[styles.root, { backgroundColor: tones[tone].bg }]}>
+        <StatusBar style={tone === 'day' ? 'dark' : 'light'} />
+        {tone === 'night' ? <Starfield /> : null}
+        <SafeAreaView style={styles.safe}>
+          {scroll ? (
+            <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
+              {body}
+            </ScrollView>
+          ) : (
+            <View style={[styles.scroll, { flex: 1 }]}>{body}</View>
+          )}
+          {footer ? <View style={styles.footer}>{footer}</View> : null}
+        </SafeAreaView>
+      </View>
+    </ToneContext.Provider>
   );
 }
 
 export function Step({ index, total }: { index: number; total: number }) {
+  const t = useToneColors();
   return (
     <View style={styles.steps}>
       {Array.from({ length: total }, (_, i) => (
-        <View key={i} style={[styles.stepDot, i < index && styles.stepDone, i === index && styles.stepCurrent]} />
+        <View
+          key={i}
+          style={[
+            styles.stepDot,
+            { backgroundColor: t.track },
+            i < index && { backgroundColor: t.fill },
+            i === index && { backgroundColor: t.highlight, width: 18 },
+          ]}
+        />
       ))}
     </View>
   );
 }
 
 export function Title({ children, style }: { children: ReactNode; style?: StyleProp<TextStyle> }) {
-  return <Text style={[styles.title, style]}>{children}</Text>;
+  const t = useToneColors();
+  return <Text style={[styles.title, { color: t.text }, style]}>{children}</Text>;
 }
 
 export function Body({ children, muted, style }: { children: ReactNode; muted?: boolean; style?: StyleProp<TextStyle> }) {
-  return <Text style={[styles.body, muted && { color: C.textMuted }, style]}>{children}</Text>;
+  const t = useToneColors();
+  return <Text style={[styles.body, { color: muted ? t.textMuted : t.text }, style]}>{children}</Text>;
 }
 
 export function Label({ children, style }: { children: ReactNode; style?: StyleProp<TextStyle> }) {
-  return <Text style={[styles.label, style]}>{children}</Text>;
+  const tone = useTone();
+  return <Text style={[type.label, { color: tone === 'day' ? tones.day.textMuted : tones.night.highlight }, style]}>{children}</Text>;
 }
 
 export function Button({
@@ -83,6 +112,8 @@ export function Button({
   disabled?: boolean;
   style?: StyleProp<ViewStyle>;
 }) {
+  const t = useToneColors();
+  const color = variant === 'primary' ? t.onPrimary : variant === 'ghost' ? t.textMuted : t.text;
   return (
     <Pressable
       accessibilityRole="button"
@@ -90,17 +121,15 @@ export function Button({
       onPress={onPress}
       style={({ pressed }) => [
         styles.button,
-        variant === 'primary' && styles.buttonPrimary,
-        variant === 'secondary' && styles.buttonSecondary,
+        variant === 'primary' && [styles.buttonPrimary, { backgroundColor: t.primary }],
+        variant === 'secondary' && { borderWidth: 1, borderColor: t.selectedBorder },
         variant === 'ghost' && styles.buttonGhost,
         disabled && { opacity: 0.4 },
         pressed && { opacity: 0.8 },
         style,
       ]}
     >
-      <Text style={[styles.buttonText, variant === 'primary' ? { color: C.nightDeep } : { color: variant === 'ghost' ? C.textMuted : C.text }]}>
-        {title}
-      </Text>
+      <Text style={[variant === 'ghost' ? styles.ghostText : type.button, { color }]}>{title}</Text>
     </Pressable>
   );
 }
@@ -120,69 +149,74 @@ export function OptionCard({
   onPress: () => void;
   style?: StyleProp<ViewStyle>;
 }) {
+  const t = useToneColors();
   return (
     <Pressable
       accessibilityRole="button"
       accessibilityState={{ selected }}
       onPress={onPress}
-      style={({ pressed }) => [styles.option, selected && styles.optionSelected, pressed && { opacity: 0.85 }, style]}
+      style={({ pressed }) => [
+        styles.option,
+        { backgroundColor: t.surface, borderColor: t.line },
+        selected && { borderColor: t.selectedBorder, backgroundColor: t.surfaceSoft },
+        pressed && { opacity: 0.85 },
+        style,
+      ]}
     >
       {emoji ? <Text style={styles.optionEmoji}>{emoji}</Text> : null}
       <View style={{ flex: 1 }}>
-        <Text style={styles.optionLabel}>{label}</Text>
-        {detail ? <Text style={styles.optionDetail}>{detail}</Text> : null}
+        <Text style={[styles.optionLabel, { color: t.text }]}>{label}</Text>
+        {detail ? <Text style={[styles.optionDetail, { color: t.textMuted }]}>{detail}</Text> : null}
       </View>
     </Pressable>
   );
 }
 
 export function Card({ children, style }: { children: ReactNode; style?: StyleProp<ViewStyle> }) {
-  return <View style={[styles.card, style]}>{children}</View>;
+  const tone = useTone();
+  return <View style={[styles.card, tone === 'day' ? styles.cardDay : styles.cardNight, style]}>{children}</View>;
 }
 
-export function Pill({ text, color = C.gold }: { text: string; color?: string }) {
+export function Pill({ text, color }: { text: string; color?: string }) {
+  const t = useToneColors();
+  const c = color ?? t.highlight;
   return (
-    <View style={[styles.pill, { borderColor: color }]}>
-      <Text style={[styles.pillText, { color }]}>{text}</Text>
+    <View style={[styles.pill, { borderColor: c }]}>
+      <Text style={[styles.pillText, { color: c }]}>{text}</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: C.nightDeep },
+  root: { flex: 1 },
   safe: { flex: 1 },
-  scroll: { flexGrow: 1, alignItems: 'center', paddingHorizontal: S.lg, paddingTop: S.lg, paddingBottom: S.xl },
-  content: { width: '100%', maxWidth: MAX_WIDTH, gap: S.lg, flexGrow: 1 },
-  footer: { width: '100%', maxWidth: MAX_WIDTH, alignSelf: 'center', paddingHorizontal: S.lg, paddingBottom: S.lg, gap: S.sm },
-  steps: { flexDirection: 'row', gap: 6, justifyContent: 'center', marginBottom: S.sm },
-  stepDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: C.track },
-  stepDone: { backgroundColor: C.goldBorder },
-  stepCurrent: { backgroundColor: C.gold, width: 18 },
-  title: { fontFamily: F.display, fontSize: 26, lineHeight: 34, color: C.text, textAlign: 'center' },
-  body: { fontFamily: F.body, fontSize: 16, lineHeight: 23, color: C.text, textAlign: 'center' },
-  label: { fontFamily: F.bodyBold, fontSize: 12, letterSpacing: 1.6, textTransform: 'uppercase', color: C.textMuted },
-  button: { minHeight: 52, borderRadius: 14, alignItems: 'center', justifyContent: 'center', paddingHorizontal: S.xl },
-  buttonPrimary: { backgroundColor: C.gold },
-  buttonSecondary: { borderWidth: 1, borderColor: C.goldBorder, backgroundColor: C.goldSoft },
+  scroll: { flexGrow: 1, alignItems: 'center', paddingHorizontal: space.lg, paddingTop: space.lg, paddingBottom: space.xl },
+  content: { width: '100%', maxWidth: MAX_WIDTH, gap: space.lg, flexGrow: 1 },
+  footer: { width: '100%', maxWidth: MAX_WIDTH, alignSelf: 'center', paddingHorizontal: space.lg, paddingBottom: space.lg, gap: space.sm },
+  steps: { flexDirection: 'row', gap: 6, justifyContent: 'center', marginBottom: space.sm },
+  stepDot: { width: 6, height: 6, borderRadius: 3 },
+  title: { ...type.h1, textAlign: 'center' },
+  body: { ...type.body, textAlign: 'center' },
+  button: { minHeight: 52, borderRadius: radius.pill, alignItems: 'center', justifyContent: 'center', paddingHorizontal: space.xl },
+  buttonPrimary: shadow.soft,
   buttonGhost: { minHeight: 44 },
-  buttonText: { fontFamily: F.bodyBold, fontSize: 16 },
+  ghostText: { ...type.label, letterSpacing: 1.6 },
   option: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: S.md,
+    gap: space.md,
     minHeight: 60,
-    paddingHorizontal: S.lg,
-    paddingVertical: S.md,
-    borderRadius: 14,
+    paddingHorizontal: space.lg,
+    paddingVertical: space.md,
+    borderRadius: radius.md,
     borderWidth: 1,
-    borderColor: C.border,
-    backgroundColor: C.night,
   },
-  optionSelected: { borderColor: C.gold, backgroundColor: C.goldSoft },
   optionEmoji: { fontSize: 22 },
-  optionLabel: { fontFamily: F.bodyMedium, fontSize: 16, color: C.text },
-  optionDetail: { fontFamily: F.body, fontSize: 13, lineHeight: 18, color: C.textMuted, marginTop: 2 },
-  card: { borderRadius: 18, borderWidth: 1, borderColor: C.border, backgroundColor: C.night, padding: S.lg, gap: S.md },
-  pill: { alignSelf: 'flex-start', borderWidth: 1, borderRadius: 999, paddingHorizontal: 10, paddingVertical: 3 },
-  pillText: { fontFamily: F.bodyMedium, fontSize: 12 },
+  optionLabel: type.bodyMedium,
+  optionDetail: { ...type.small, fontSize: 13, lineHeight: 18, marginTop: 2 },
+  card: { borderRadius: radius.lg, padding: space.lg, gap: space.md },
+  cardDay: { backgroundColor: tones.day.surface, ...shadow.soft },
+  cardNight: { backgroundColor: tones.night.surface, borderWidth: 1, borderColor: tones.night.line },
+  pill: { alignSelf: 'flex-start', borderWidth: 1, borderRadius: radius.pill, paddingHorizontal: 10, paddingVertical: 3 },
+  pillText: { fontFamily: type.label.fontFamily, fontSize: 12 },
 });

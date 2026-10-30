@@ -230,27 +230,30 @@ Q1 intent → birthday → character reveal → confirm poll → "Anything else 
 ## 6. Design style: "Celestial RPG"
 **Concept:** A night sky meets a fantasy game character sheet. Mystical enough to feel like real astrology, structured enough to feel like a game. Clean and readable, never cluttered.
 
-### Color
-- **Base:** Deep night navy / indigo (`#0E1030`–`#1A1C4A`), dark-first.
-- **Primary accent:** Celestial gold (`#E8C26A`) for highlights, XP and key buttons.
-- **Text:** Soft white (`#F4F1EA`) and muted lavender-grey for secondary text.
-- **Element colors** (tint each sign's character screens):
-  - Fire: ember orange `#F2784B`
-  - Earth: moss green `#7DB46C`
-  - Air: sky blue `#7EC8E3`
-  - Water: deep teal `#3FA7A0`
-- **Band colors on stat bars:** Untrained grey → Developing lavender → Solid element color → Strong gold.
+All colors, fonts, spacing, radii and shadows live in one file, `src/ui/theme.ts`; `tests/theme.test.ts` checks contrast.
+
+### Day and night
+- **Day (everyday screens: home, careers, character, onboarding):** light cream background (`#F8F4EF`), white rounded cards with soft shadows, deep plum (`#3B2A4E`) for primary buttons and key text, lots of white space.
+- **Night (magic moments: sign reveal, star lighting up, level up, path complete):** full-screen deep plum (`#2A1E3A`) with a starfield, gold and peach accents.
+- **Accents:** peach / terracotta and thin gold lines. Peach is used only for fills and large text; terracotta only for large headings.
+- **Accessibility:** all body text meets WCAG AA (4.5:1) on its background.
+- **Element colors** survive only as the character's element glow (fire `#F2784B`, earth `#7DB46C`, air `#7EC8E3`, water `#3FA7A0`).
 
 ### Typography
-- **Display (archetype names, titles):** an elegant serif with fantasy character, e.g. **Cinzel** or **Cormorant**.
-- **UI and body:** a clean sans, e.g. **DM Sans** or **Inter**, for readability on career details.
+- **Serif (Cormorant Garamond):** headings, archetype names, quest names and titles.
+- **Sans (DM Sans):** body text and career details.
+- **Small tracked caps:** labels, tags and buttons.
 - Rule: serif for the magic, sans for the facts.
+
+### Recurring motif
+- **Arch window:** a dusk-gradient arch with stars, a moon and a gold orbit (welcome, Home, character). Gradient placeholders until the illustrations exist.
 
 ### Key UI elements
 - **Character card:** Trading-card / tarot-card shape with the archetype illustration, sign glyph, name and top 3 stats. Designed to be screenshot-friendly for sharing.
-- **Stat bars:** Segmented like game HP/XP bars, with an icon per attribute and a band label. Ghost outline shows the sign's original prediction.
-- **Quest cards:** Feel like a quest log: tier badge (Taste/Try/Test), time estimate, XP reward.
-- **Difficulty labels:** Small pill badges, styled like game difficulty (one, two or three stars).
+- **Stat bars:** Slim plum-tinted bars with a peach fill and a small-caps band label. A plum tick marks the sign's prediction (or day one).
+- **Quest cards:** Serif quest name with a tag line like "TASTE · 20 MIN · +80 XP".
+- **Constellations:** Gold line art on plum cards.
+- **Difficulty labels:** Small soft-tinted pills, styled like game difficulty (one, two or three stars).
 
 ### Illustration
 - One illustrated character per archetype: stylized, semi-realistic, tarot-meets-game-art. Not cartoony, not anime.

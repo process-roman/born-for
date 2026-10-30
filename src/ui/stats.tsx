@@ -4,12 +4,10 @@ import { ATTRIBUTE_IDS, ATTRIBUTE_LABELS, FAMILIES, type AttributeId, type Stats
 import type { Element } from '@/content/signs';
 import type { Difficulty } from '@/logic/difficulty';
 import { bandFor } from '@/logic/stats';
-import { Pill } from './components';
-import { bandColor, C, F, S } from './theme';
+import { useToneColors } from './components';
+import { bandColor, palette, radius, S, tones, type } from './theme';
 
-const SEGMENTS = 10;
-
-/** Segmented like a game HP bar. `ghost` outlines the sign's prediction behind the value. */
+/** Slim plum-tinted bar with a peach fill and a small-caps band label. `ghost` marks an earlier value (the sign's prediction, or day one) with a tick. */
 export function StatBar({
   attribute,
   value,
@@ -28,32 +26,42 @@ export function StatBar({
   /** Background traits the user hasn't confirmed or trained yet. */
   dim?: boolean;
 }) {
+  const t = useToneColors();
   const band = bandFor(value);
-  const color = bandColor(band, element);
   return (
     <View style={[styles.row, dim && { opacity: 0.45 }]}>
       <View style={styles.labels}>
-        <Text style={[styles.name, highlight && { color: C.gold }]}>
-          {highlight ? '★ ' : ''}
+        <Text style={[styles.name, { color: t.text }]}>
+          {highlight ? <Text style={{ color: t.highlight }}>★ </Text> : null}
           {ATTRIBUTE_LABELS[attribute]}
         </Text>
-        <Text style={[styles.band, { color }]}>
+        <Text style={[styles.band, { color: t.textMuted }]}>
           {note ? `${note} · ` : ''}
           {band}
         </Text>
       </View>
-      <View style={styles.track}>
-        <View style={[styles.fill, { width: `${value}%`, backgroundColor: color }]} />
-        {ghost !== undefined ? <View style={[styles.ghost, { width: `${ghost}%` }]} /> : null}
-        {Array.from({ length: SEGMENTS - 1 }, (_, i) => (
-          <View key={i} style={[styles.divider, { left: `${((i + 1) * 100) / SEGMENTS}%` }]} />
-        ))}
+      <View>
+        <View style={[styles.track, { backgroundColor: t.track }]}>
+          <View style={[styles.fill, { width: `${value}%`, backgroundColor: bandColor(band, element) }]} />
+        </View>
+        {ghost !== undefined ? <View style={[styles.tick, { left: `${ghost}%`, backgroundColor: t.highlight }]} /> : null}
       </View>
     </View>
   );
 }
 
 /** `attributes` limits and orders the list (default: all 16, highlights first). */
+/** Legend swatch for the `ghost` tick. */
+export function TickLegend({ children }: { children: string }) {
+  const t = useToneColors();
+  return (
+    <View style={styles.legend}>
+      <View style={[styles.legendTick, { backgroundColor: t.highlight }]} />
+      <Text style={[styles.legendText, { color: t.textMuted }]}>{children}</Text>
+    </View>
+  );
+}
+
 export function StatList({
   stats,
   element,
@@ -92,12 +100,13 @@ export function StatList({
 
 /** All 16 traits grouped into the four families, for the character sheet. */
 export function TraitSheet(props: Omit<Parameters<typeof StatList>[0], 'attributes'>) {
+  const t = useToneColors();
   return (
     <View style={{ gap: S.lg }}>
       {FAMILIES.map((f) => (
         <View key={f.id} style={{ gap: S.sm }}>
-          <Text style={styles.family}>
-            {f.name} <Text style={styles.familyBlurb}>· {f.blurb}</Text>
+          <Text style={[styles.family, { color: t.text }]}>
+            {f.name} <Text style={[styles.familyBlurb, { color: t.textMuted }]}>· {f.blurb}</Text>
           </Text>
           <StatList {...props} attributes={f.traits} />
         </View>
@@ -106,21 +115,32 @@ export function TraitSheet(props: Omit<Parameters<typeof StatList>[0], 'attribut
   );
 }
 
-const DIFFICULTY_COLORS = { 1: '#7DB46C', 2: C.gold, 3: '#F2784B' } as const;
+/** Soft tint per level; text stays plum so it reads at small size. */
+const DIFFICULTY_TINTS = { 1: palette.plumSoft, 2: palette.goldSoft, 3: palette.peachSoft } as const;
 
 export function DifficultyPill({ difficulty }: { difficulty: Difficulty }) {
-  return <Pill text={`${'★'.repeat(difficulty.level)} ${difficulty.label}`} color={DIFFICULTY_COLORS[difficulty.level]} />;
+  return (
+    <View style={[styles.difficulty, { backgroundColor: DIFFICULTY_TINTS[difficulty.level] }]}>
+      <Text style={styles.difficultyText}>
+        {'★'.repeat(difficulty.level)}  {difficulty.label}
+      </Text>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
   row: { gap: 6 },
-  family: { fontFamily: F.display, fontSize: 15, color: C.gold },
-  familyBlurb: { fontFamily: F.body, fontSize: 13, color: C.textMuted },
-  labels: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline' },
-  name: { fontFamily: F.bodyMedium, fontSize: 14, color: C.text },
-  band: { fontFamily: F.body, fontSize: 12 },
-  track: { height: 10, borderRadius: 3, backgroundColor: C.track, overflow: 'hidden' },
-  fill: { position: 'absolute', left: 0, top: 0, bottom: 0, borderRadius: 3 },
-  ghost: { position: 'absolute', left: 0, top: 0, bottom: 0, borderWidth: 1, borderColor: 'rgba(244, 241, 234, 0.55)', borderRadius: 3, borderStyle: 'dashed' },
-  divider: { position: 'absolute', top: 0, bottom: 0, width: 2, marginLeft: -1, backgroundColor: C.nightDeep },
+  family: type.h3,
+  familyBlurb: { ...type.small, fontSize: 13 },
+  labels: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline', gap: S.sm },
+  name: { fontFamily: type.bodyMedium.fontFamily, fontSize: 14 },
+  band: { ...type.label, fontSize: 10, letterSpacing: 1.8 },
+  track: { height: 6, borderRadius: radius.pill, overflow: 'hidden' },
+  fill: { position: 'absolute', left: 0, top: 0, bottom: 0, borderRadius: radius.pill },
+  tick: { position: 'absolute', top: -3, width: 2, height: 12, marginLeft: -1, borderRadius: 1 },
+  legend: { flexDirection: 'row', alignItems: 'center', gap: S.sm },
+  legendTick: { width: 2, height: 12, borderRadius: 1 },
+  legendText: { ...type.small, fontSize: 12, lineHeight: 16, flex: 1 },
+  difficulty: { alignSelf: 'flex-start', borderRadius: radius.pill, paddingHorizontal: 10, paddingVertical: 4 },
+  difficultyText: { ...type.label, fontSize: 10, letterSpacing: 1.6, color: tones.day.primary },
 });

@@ -32,7 +32,7 @@ export default function Recalibrate() {
         <Title>Stats updated</Title>
         <Body muted>Your starting stats now match who you are today. Everything you’ve earned is still there, and “Then vs now” shows the change.</Body>
         {earned.map((id) => (
-          <Card key={id} style={{ borderColor: C.goldBorder, alignItems: 'center' }}>
+          <Card key={id} style={{ alignItems: 'center' }}>
             <Label>Badge unlocked</Label>
             <Text style={styles.badge}>
               {BADGES[id].emoji} {BADGES[id].name}

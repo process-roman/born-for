@@ -5,17 +5,16 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { CAREERS } from '@/content/careers';
 import { SIGNS } from '@/content/signs';
-import { ELEMENT_COLORS } from '@/content/theme';
 import { WORLDS } from '@/content/worlds';
 import { avatarLayers } from '@/logic/avatar';
 import type { Character } from '@/logic/character';
-import { C, F, glyph, palette } from './theme';
+import { elementGlow, fonts, glyph, night, palette } from './theme';
 
 const AURA_STARS = 10;
 
 export function CharacterAvatar({ character, size }: { character: Character; size: number }) {
   const layers = avatarLayers(character);
-  const element = ELEMENT_COLORS[SIGNS[character.sign].element];
+  const element = elementGlow[SIGNS[character.sign].element];
   const core = size * 0.72;
   const label = `${SIGNS[character.sign].archetype}, level ${layers.level}${layers.item ? `, carrying a ${layers.item.name}` : ''}`;
 
@@ -36,7 +35,7 @@ export function CharacterAvatar({ character, size }: { character: Character; siz
                   width: d,
                   height: d,
                   borderRadius: d / 2,
-                  backgroundColor: C.text,
+                  backgroundColor: night.text,
                   opacity: 0.7,
                 }}
               />
@@ -51,13 +50,13 @@ export function CharacterAvatar({ character, size }: { character: Character; siz
             width: core,
             height: core,
             borderRadius: core / 2,
-            borderColor: layers.frame ? C.gold : layers.glow ? element : C.goldBorder,
+            borderColor: layers.frame ? night.gold : layers.glow ? element : night.line,
             borderWidth: layers.frame ? 3 : 1,
           },
           layers.glow && { shadowColor: element, shadowOpacity: 0.9, shadowRadius: size * 0.18, shadowOffset: { width: 0, height: 0 }, backgroundColor: palette.plum },
         ]}
       >
-        <Text style={{ fontSize: core * 0.5, color: C.gold }}>{glyph(character.sign)}</Text>
+        <Text style={{ fontSize: core * 0.5, color: night.gold }}>{glyph(character.sign)}</Text>
       </View>
 
       {layers.frame
@@ -89,7 +88,7 @@ export function CharacterAvatar({ character, size }: { character: Character; siz
 
 const styles = StyleSheet.create({
   core: { alignItems: 'center', justifyContent: 'center', backgroundColor: palette.plumDeep },
-  spark: { position: 'absolute', color: C.gold, fontFamily: F.body },
+  spark: { position: 'absolute', color: night.gold, fontFamily: fonts.sans },
   item: {
     position: 'absolute',
     right: 0,
@@ -98,6 +97,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: palette.plumDeep,
     borderWidth: 1,
-    borderColor: C.gold,
+    borderColor: night.gold,
   },
 });

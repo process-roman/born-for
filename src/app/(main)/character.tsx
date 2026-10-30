@@ -16,8 +16,9 @@ import { Body, Button, Card, Label, Screen } from '@/ui/components';
 import { CharacterAvatar } from '@/ui/CharacterAvatar';
 import { CharacterHeader } from '@/ui/CharacterHeader';
 import { PathConstellation } from '@/ui/PathConstellation';
-import { TraitSheet } from '@/ui/stats';
-import { C, F, S } from '@/ui/theme';
+import { TickLegend, TraitSheet } from '@/ui/stats';
+import { ArchWindow, PlumCard, SectionLabel } from '@/ui/kit';
+import { C, F, night, S, type } from '@/ui/theme';
 
 export default function CharacterScreen() {
   const { game, equipTitle } = useGame();
@@ -41,8 +42,10 @@ export default function CharacterScreen() {
         {sign.revealLine}
       </Body>
 
-      <Card style={{ alignItems: 'center' }}>
-        <CharacterAvatar character={character} size={150} />
+      <View style={{ alignItems: 'center', gap: S.sm }}>
+        <ArchWindow width={180} height={236}>
+          <CharacterAvatar character={character} size={140} />
+        </ArchWindow>
         <Text style={styles.layer}>
           Level {layers.level}: {LAYER_NAMES[layers.level - 1]}
           {layers.item ? ` · carrying a ${layers.item.name}` : ''}
@@ -50,7 +53,7 @@ export default function CharacterScreen() {
         <Text style={styles.legendText}>
           {nextLayer ? `Next: ${nextLayer.toLowerCase()} at level ${layers.level + 1}.` : 'Full celestial form reached.'} Placeholder art; illustrations come later.
         </Text>
-      </Card>
+      </View>
 
       <Card>
         <Label>Then vs now</Label>
@@ -62,10 +65,7 @@ export default function CharacterScreen() {
           dimmed={dimmed}
           notes={Object.fromEntries(confirmed.map((a) => [a, '✓ Confirmed by you']))}
         />
-        <View style={styles.legend}>
-          <View style={styles.legendGhost} />
-          <Text style={styles.legendText}>Dashed outline: your stats on day one. Faded: background traits you haven’t unlocked yet.</Text>
-        </View>
+        <TickLegend>Tick: your stats on day one. Faded: background traits you haven’t unlocked yet.</TickLegend>
       </Card>
 
       <Card>
@@ -104,12 +104,10 @@ export default function CharacterScreen() {
         </View>
       </Card>
 
-      <Card>
-        <Label>Night sky</Label>
+      <PlumCard>
+        <SectionLabel tone="night">Night sky</SectionLabel>
         {started.length === 0 ? (
-          <Body muted style={{ textAlign: 'left' }}>
-            Every path you explore adds a constellation here.
-          </Body>
+          <Text style={styles.skyEmpty}>Every path you explore adds a constellation here.</Text>
         ) : (
           <View style={styles.sky}>
             {started.map((id) => (
@@ -120,7 +118,7 @@ export default function CharacterScreen() {
             ))}
           </View>
         )}
-      </Card>
+      </PlumCard>
 
       <Button title="Settings" variant="secondary" onPress={() => router.push('/settings')} />
     </Screen>
@@ -128,18 +126,17 @@ export default function CharacterScreen() {
 }
 
 const styles = StyleSheet.create({
-  legend: { flexDirection: 'row', alignItems: 'center', gap: S.sm },
-  legendGhost: { width: 22, height: 10, borderRadius: 3, borderWidth: 1, borderStyle: 'dashed', borderColor: 'rgba(244, 241, 234, 0.55)' },
-  legendText: { fontFamily: F.body, fontSize: 12, color: C.textMuted },
+  legendText: { fontFamily: F.body, fontSize: 12, color: C.textMuted, textAlign: 'center' },
   title: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: S.md, borderRadius: 12, borderWidth: 1, borderColor: C.border },
   titleOn: { borderColor: C.gold, backgroundColor: C.goldSoft },
-  titleText: { fontFamily: F.display, fontSize: 16, color: C.text, flexShrink: 1 },
+  titleText: { ...type.h3, fontSize: 18, color: C.text, flexShrink: 1 },
   titleState: { fontFamily: F.bodyMedium, fontSize: 13, color: C.gold },
   sky: { flexDirection: 'row', flexWrap: 'wrap', gap: S.lg, justifyContent: 'center' },
-  layer: { fontFamily: F.display, fontSize: 15, color: C.text, textAlign: 'center' },
+  layer: { ...type.h3, color: C.text, textAlign: 'center' },
   badges: { flexDirection: 'row', flexWrap: 'wrap', gap: S.sm },
   badge: { width: '31%', alignItems: 'center', gap: 4, paddingVertical: S.sm, borderRadius: 12, borderWidth: 1, borderColor: C.border },
   badgeEmoji: { fontSize: 22 },
   badgeName: { fontFamily: F.body, fontSize: 11, color: C.text, textAlign: 'center' },
-  skyName: { fontFamily: F.body, fontSize: 12, color: C.textMuted },
+  skyName: { ...type.small, fontSize: 12, color: night.textMuted },
+  skyEmpty: { ...type.small, color: night.textMuted },
 });

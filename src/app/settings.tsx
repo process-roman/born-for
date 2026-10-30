@@ -9,7 +9,7 @@ import { remindersOn } from '@/logic/game';
 import { useGame } from '@/state/game';
 import { remindersSupported } from '@/storage/notifications';
 import { Body, Button, Card, Label, Screen, Title } from '@/ui/components';
-import { C, F, glyph, S } from '@/ui/theme';
+import { C, F, glyph, palette, S } from '@/ui/theme';
 
 export default function Settings() {
   const { game, switchCuspSign, setReminders, reset } = useGame();
@@ -62,7 +62,7 @@ export default function Settings() {
               value={remindersOn(game)}
               onValueChange={setReminders}
               trackColor={{ true: C.gold, false: C.track }}
-              thumbColor={C.text}
+              thumbColor={palette.white}
               accessibilityLabel="Check-in reminders"
             />
           </View>

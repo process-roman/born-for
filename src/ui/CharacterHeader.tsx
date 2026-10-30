@@ -7,7 +7,8 @@ import type { Game } from '@/logic/game';
 import { titleFor } from '@/logic/titles';
 import { LEVEL_THRESHOLDS, xpToNextLevel } from '@/logic/xp';
 import { CharacterAvatar } from './CharacterAvatar';
-import { C, F, S } from './theme';
+import { useToneColors } from './components';
+import { S, type } from './theme';
 
 export function equippedTitleText(game: Game): string | null {
   const id = game.equippedTitle;
@@ -25,20 +26,21 @@ export function CharacterHeader({ game }: { game: Game }) {
   const ceiling = LEVEL_THRESHOLDS[level] ?? character.totalXp;
   const progress = toNext === null ? 1 : (character.totalXp - floor) / (ceiling - floor);
   const title = equippedTitleText(game);
+  const t = useToneColors();
 
   return (
     <View style={styles.row}>
       <CharacterAvatar character={character} size={68} />
       <View style={{ flex: 1, gap: 4 }}>
-        <Text style={styles.title}>{title ?? sign.archetype}</Text>
-        <Text style={styles.sub}>
+        <Text style={[styles.title, { color: t.text }]}>{title ?? sign.archetype}</Text>
+        <Text style={[styles.sub, { color: t.textMuted }]}>
           {sign.name} · Level {level}
           {game.equippedTitle ? ` · ${CAREERS[game.equippedTitle].className}` : ''}
         </Text>
-        <View style={styles.track}>
-          <View style={[styles.fill, { width: `${Math.round(progress * 100)}%` }]} />
+        <View style={[styles.track, { backgroundColor: t.track }]}>
+          <View style={[styles.fill, { backgroundColor: t.fill }, { width: `${Math.round(progress * 100)}%` }]} />
         </View>
-        <Text style={styles.xp}>{toNext === null ? `${character.totalXp} XP · max level` : `${character.totalXp} XP · ${toNext} to level ${level + 1}`}</Text>
+        <Text style={[styles.xp, { color: t.textMuted }]}>{toNext === null ? `${character.totalXp} XP · max level` : `${character.totalXp} XP · ${toNext} to level ${level + 1}`}</Text>
       </View>
     </View>
   );
@@ -46,9 +48,9 @@ export function CharacterHeader({ game }: { game: Game }) {
 
 const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center', gap: S.md },
-  title: { fontFamily: F.display, fontSize: 18, color: C.text },
-  sub: { fontFamily: F.body, fontSize: 13, color: C.textMuted },
-  track: { height: 6, borderRadius: 3, backgroundColor: C.track, overflow: 'hidden', marginTop: 2 },
-  fill: { height: '100%', backgroundColor: C.gold, borderRadius: 3 },
-  xp: { fontFamily: F.body, fontSize: 12, color: C.textMuted },
+  title: type.h2,
+  sub: { ...type.label, fontSize: 10, letterSpacing: 1.8 },
+  track: { height: 6, borderRadius: 3, overflow: 'hidden', marginTop: 2 },
+  fill: { height: '100%', borderRadius: 3 },
+  xp: { ...type.small, fontSize: 12 },
 });

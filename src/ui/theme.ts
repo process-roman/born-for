@@ -7,7 +7,6 @@
 
 import type { Band } from '@/content/attributes';
 import type { Element } from '@/content/signs';
-import { COLORS, ELEMENT_COLORS } from '@/content/theme';
 
 // ---------------------------------------------------------------------------------------------
 // Raw palette. Tweak colors here; everything else refers to these.
@@ -66,6 +65,70 @@ export const night = {
   track: 'rgba(248, 241, 231, 0.16)',
   fill: palette.peach,
 } as const;
+
+/** The glow around the character's core once it reaches the element-glow level. */
+export const elementGlow: Record<Element, string> = {
+  fire: '#F2784B',
+  earth: '#7DB46C',
+  air: '#7EC8E3',
+  water: '#3FA7A0',
+};
+
+/** One shape for both, so components can switch with the screen's tone. */
+export interface ToneColors {
+  bg: string;
+  surface: string;
+  /** Selected options, soft fills. */
+  surfaceSoft: string;
+  text: string;
+  textMuted: string;
+  /** Primary button background. */
+  primary: string;
+  onPrimary: string;
+  /** Large text and accents only. */
+  accent: string;
+  /** Icons, stars, checks and small highlights. */
+  highlight: string;
+  line: string;
+  selectedBorder: string;
+  track: string;
+  fill: string;
+}
+
+export const tones: Record<'day' | 'night', ToneColors> = {
+  day: {
+    bg: day.bg,
+    surface: day.surface,
+    surfaceSoft: day.lavenderSoft,
+    text: day.text,
+    textMuted: day.textMuted,
+    primary: day.primary,
+    onPrimary: day.onPrimary,
+    accent: day.accent,
+    highlight: day.primary,
+    line: day.line,
+    selectedBorder: day.primary,
+    track: day.track,
+    fill: day.fill,
+  },
+  night: {
+    bg: night.bg,
+    surface: night.surface,
+    surfaceSoft: 'rgba(230, 194, 126, 0.14)',
+    text: night.text,
+    textMuted: night.textMuted,
+    primary: palette.peach,
+    onPrimary: palette.plumDeep,
+    accent: night.accent,
+    highlight: night.gold,
+    line: night.line,
+    selectedBorder: night.gold,
+    track: night.track,
+    fill: night.fill,
+  },
+};
+
+export type Tone = keyof typeof tones;
 
 /** Arch window placeholders until the illustrations exist: dusk sky, top to bottom. */
 export const archGradient = ['#3B2A4E', '#6E5788', '#B89AB8', '#F0C7A8'] as const;
@@ -128,24 +191,27 @@ export function contrastRatio(a: string, b: string): number {
 }
 
 // ---------------------------------------------------------------------------------------------
-// Legacy dark tokens, still used by screens that haven't been restyled yet. Remove once they are.
+// Short names used across screen stylesheets. They map to the cream daytime palette, since most
+// screens are daytime; night scenes (reveal, rewards) use `night` / `tones.night` directly.
 
 export const C = {
-  ...COLORS,
-  textMuted: '#A9A6C9',
-  lavender: '#B39DDB',
-  grey: '#6E6B8F',
-  card: '#22255A',
-  cardRaised: '#2B2E6B',
-  border: 'rgba(244, 241, 234, 0.12)',
-  goldBorder: 'rgba(232, 194, 106, 0.45)',
-  goldSoft: 'rgba(232, 194, 106, 0.14)',
-  track: 'rgba(244, 241, 234, 0.08)',
+  text: day.text,
+  textMuted: day.textMuted,
+  /** Small accents on cream: plum, so it stays readable. */
+  gold: day.primary,
+  night: day.surface,
+  nightDeep: day.bg,
+  border: day.line,
+  goldBorder: 'rgba(59, 42, 78, 0.28)',
+  goldSoft: day.lavenderSoft,
+  track: day.track,
+  lavender: palette.plumMid,
+  grey: day.textMuted,
 } as const;
 
 export const F = {
-  display: 'Cinzel_700Bold',
-  displayRegular: 'Cinzel_400Regular',
+  display: fonts.serif,
+  displayRegular: fonts.serifMedium,
   body: fonts.sans,
   bodyMedium: fonts.sansMedium,
   bodyBold: fonts.sansBold,
@@ -153,17 +219,9 @@ export const F = {
 
 export const S = { xs: space.xs, sm: space.sm, md: space.md, lg: space.lg, xl: space.xl, xxl: space.xxl } as const;
 
-export function bandColor(band: Band, element: Element): string {
-  switch (band) {
-    case 'Strong':
-      return C.gold;
-    case 'Solid':
-      return ELEMENT_COLORS[element];
-    case 'Developing':
-      return C.lavender;
-    case 'Untrained':
-      return C.grey;
-  }
+/** Stat bar fill: peach for every band; the band itself is shown as a small-caps label. */
+export function bandColor(_band: Band, _element: Element): string {
+  return palette.peach;
 }
 
 export const SIGN_GLYPHS = {
