@@ -1,0 +1,698 @@
+{
+  "events": [
+    {
+      "id": "shared_move",
+      "kind": "life",
+      "stages": [
+        "training",
+        "crossroads"
+      ],
+      "icon": "suitcase",
+      "title": "Moving Cities",
+      "text": "Your best friend is moving to another city and asks you to come along.",
+      "choices": [
+        {
+          "id": "go",
+          "label": "Go with them",
+          "check": {
+            "attribute": "independence",
+            "difficulty": 55
+          },
+          "success": {
+            "text": "New city, new start. It takes a while, but it starts to feel like home.",
+            "effects": {
+              "joy": 10,
+              "energy": -5
+            }
+          },
+          "fail": {
+            "text": "The first year is lonely. It gets better, slowly.",
+            "effects": {
+              "joy": -10,
+              "energy": -5
+            }
+          }
+        },
+        {
+          "id": "stay",
+          "label": "Stay put",
+          "result": {
+            "text": "You stay. Video calls aren't the same, but you make them work.",
+            "effects": {
+              "joy": -5,
+              "energy": 5
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "shared_family",
+      "kind": "life",
+      "stages": [
+        "training",
+        "crossroads"
+      ],
+      "icon": "heart",
+      "title": "Family Needs You",
+      "text": "Someone in your family gets sick and needs help for a few months.",
+      "choices": [
+        {
+          "id": "help",
+          "label": "Step up and help",
+          "result": {
+            "text": "Hard months. You're glad you were there.",
+            "effects": {
+              "energy": -15,
+              "joy": 5,
+              "highlight": "Showed up for your family when it mattered"
+            }
+          }
+        },
+        {
+          "id": "distance",
+          "label": "Help from a distance",
+          "result": {
+            "text": "You call every day and send what you can. It's not the same, and you know it.",
+            "effects": {
+              "energy": -5,
+              "joy": -5,
+              "money": -5
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "shared_referral",
+      "kind": "life",
+      "stages": [
+        "crossroads"
+      ],
+      "icon": "handshake",
+      "title": "Remembered",
+      "text": "An old classmate remembers you and mentions your name to their boss.",
+      "choices": [
+        {
+          "id": "follow",
+          "label": "Follow up right away",
+          "check": {
+            "attribute": "communication",
+            "difficulty": 50
+          },
+          "success": {
+            "text": "One coffee, one call, one offer: a better role with better pay.",
+            "effects": {
+              "money": 12,
+              "mastery": 5,
+              "joy": 5
+            }
+          },
+          "fail": {
+            "text": "They'd already hired someone. Still, it's nice to be remembered.",
+            "effects": {
+              "joy": 3
+            }
+          }
+        },
+        {
+          "id": "ignore",
+          "label": "Let it go",
+          "result": {
+            "text": "You're happy where you are. Probably.",
+            "effects": {
+              "energy": 5
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "shared_layoffs",
+      "kind": "life",
+      "stages": [
+        "crossroads"
+      ],
+      "conditions": {
+        "flagsAll": [
+          "employed"
+        ],
+        "flagsNone": [
+          "studio",
+          "freelance",
+          "pivoted"
+        ]
+      },
+      "icon": "warning",
+      "title": "Layoffs",
+      "text": "Your company announces layoffs. Your name is on the list.",
+      "choices": [
+        {
+          "id": "hunt",
+          "label": "Take the severance and job-hunt",
+          "check": {
+            "attribute": "persistence",
+            "difficulty": 55,
+            "bonus": {
+              "has_portfolio": 5
+            }
+          },
+          "success": {
+            "text": "Two months later, you're somewhere better. Weirdly, it was a gift.",
+            "effects": {
+              "money": 5,
+              "joy": 5
+            }
+          },
+          "fail": {
+            "text": "It takes six long months.",
+            "effects": {
+              "money": -15,
+              "joy": -10,
+              "energy": -10
+            }
+          }
+        },
+        {
+          "id": "freelance",
+          "label": "Try freelancing for a while",
+          "check": {
+            "attribute": "independence",
+            "difficulty": 60
+          },
+          "success": {
+            "text": "Old contacts become clients. You like being your own boss.",
+            "effects": {
+              "money": 5,
+              "joy": 10,
+              "set": [
+                "freelance"
+              ]
+            }
+          },
+          "fail": {
+            "text": "Freelancing is harder than it looks. You take a contract job after a few months.",
+            "effects": {
+              "money": -10,
+              "joy": -5
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "shared_side_project",
+      "kind": "life",
+      "stages": [
+        "training",
+        "crossroads"
+      ],
+      "icon": "palette",
+      "title": "The Weekend Project",
+      "text": "You start making something on weekends, just for you.",
+      "choices": [
+        {
+          "id": "allin",
+          "label": "Go all in",
+          "check": {
+            "attribute": "creativity",
+            "difficulty": 55
+          },
+          "success": {
+            "text": "People start asking where they can buy it. A small, happy second income.",
+            "effects": {
+              "money": 8,
+              "joy": 12,
+              "energy": -10
+            }
+          },
+          "fail": {
+            "text": "It eats your weekends and goes nowhere. Still, you made something.",
+            "effects": {
+              "joy": 3,
+              "energy": -10
+            }
+          }
+        },
+        {
+          "id": "casual",
+          "label": "Keep it casual",
+          "result": {
+            "text": "No pressure, no plans. It's the best part of your week.",
+            "effects": {
+              "joy": 8,
+              "energy": 5
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "shared_course",
+      "kind": "life",
+      "stages": [
+        "training",
+        "crossroads"
+      ],
+      "icon": "books",
+      "title": "A Random Course",
+      "text": "A free online course catches your eye. It has nothing to do with your work.",
+      "choices": [
+        {
+          "id": "take",
+          "label": "Take it",
+          "check": {
+            "attribute": "curiosity",
+            "difficulty": 55
+          },
+          "success": {
+            "text": "It changes how you see your own work. Best decision of the year.",
+            "effects": {
+              "mastery": 6,
+              "joy": 10
+            }
+          },
+          "fail": {
+            "text": "You stop at module three. Classic.",
+            "effects": {
+              "joy": -2
+            }
+          }
+        },
+        {
+          "id": "skip",
+          "label": "Skip it",
+          "result": {
+            "text": "Maybe next year.",
+            "effects": {
+              "energy": 5
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "shared_mentor",
+      "kind": "life",
+      "stages": [
+        "training"
+      ],
+      "conditions": {
+        "flagsNone": [
+          "has_mentor"
+        ]
+      },
+      "icon": "chats",
+      "title": "Coffee With Someone Ahead",
+      "text": "Someone a few years ahead in your field offers to grab coffee once a month.",
+      "choices": [
+        {
+          "id": "yes",
+          "label": "Say yes",
+          "result": {
+            "text": "Monthly coffee, honest advice and someone in your corner.",
+            "effects": {
+              "mastery": 5,
+              "joy": 5,
+              "set": [
+                "has_mentor"
+              ]
+            }
+          }
+        },
+        {
+          "id": "no",
+          "label": "You're fine on your own",
+          "result": {
+            "text": "You figure things out your own way.",
+            "effects": {
+              "energy": 5
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "shared_travel",
+      "kind": "life",
+      "stages": [
+        "training",
+        "crossroads"
+      ],
+      "icon": "airplane",
+      "title": "Three Months Away",
+      "text": "Your friends are going traveling for three months. There's a spot for you.",
+      "choices": [
+        {
+          "id": "go",
+          "label": "Go",
+          "result": {
+            "text": "Night trains, questionable hostels, best months of your life.",
+            "effects": {
+              "money": -15,
+              "joy": 15,
+              "energy": 20,
+              "highlight": "Took three months to travel"
+            }
+          }
+        },
+        {
+          "id": "stay",
+          "label": "Stay and keep working",
+          "result": {
+            "text": "You stay. The photos look amazing. You're doing fine.",
+            "effects": {
+              "mastery": 5,
+              "money": 5,
+              "joy": -3
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "shared_burnout",
+      "kind": "forced",
+      "trigger": {
+        "meterMax": {
+          "energy": 20
+        }
+      },
+      "icon": "battery-low",
+      "title": "Running on Empty",
+      "text": "You wake up and can't make yourself start the day. This has been building for months.",
+      "choices": [
+        {
+          "id": "rest",
+          "label": "Take a real break",
+          "result": {
+            "text": "Three weeks off. You come back slower, but you come back.",
+            "effects": {
+              "energy": 40,
+              "money": -10,
+              "joy": 5,
+              "set": [
+                "burned_out"
+              ]
+            }
+          }
+        },
+        {
+          "id": "push",
+          "label": "Push through",
+          "check": {
+            "attribute": "persistence",
+            "difficulty": 70
+          },
+          "success": {
+            "text": "You make it to the other side. Barely.",
+            "effects": {
+              "energy": 15
+            }
+          },
+          "fail": {
+            "text": "Your body decides for you. Two months off.",
+            "effects": {
+              "energy": 30,
+              "joy": -15,
+              "money": -10,
+              "set": [
+                "burned_out"
+              ]
+            }
+          }
+        },
+        {
+          "id": "talk",
+          "label": "Talk to someone",
+          "result": {
+            "text": "A friend, a doctor, your mom. Saying it out loud helps more than you expected.",
+            "effects": {
+              "energy": 30,
+              "joy": 10,
+              "set": [
+                "burned_out"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "shared_broke",
+      "kind": "forced",
+      "trigger": {
+        "meterMax": {
+          "money": 5
+        }
+      },
+      "icon": "wallet",
+      "title": "Rent Is Due",
+      "text": "Rent is due, and your bank account says no.",
+      "choices": [
+        {
+          "id": "shifts",
+          "label": "Pick up extra shifts",
+          "result": {
+            "text": "Tired, but paid.",
+            "effects": {
+              "money": 20,
+              "energy": -15
+            }
+          }
+        },
+        {
+          "id": "family",
+          "label": "Ask family for help",
+          "result": {
+            "text": "It's humbling. It's also what family is for.",
+            "effects": {
+              "money": 15,
+              "joy": -5
+            }
+          }
+        },
+        {
+          "id": "sell",
+          "label": "Sell something you love",
+          "result": {
+            "text": "Goodbye, good camera. Rent is paid.",
+            "effects": {
+              "money": 15,
+              "joy": -10
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "sign_fire",
+      "kind": "sign",
+      "stages": [
+        "first_job"
+      ],
+      "conditions": {
+        "elements": [
+          "fire"
+        ]
+      },
+      "icon": "fire",
+      "title": "Someone Has to Decide",
+      "text": "Your group has been stuck on a decision for two weeks. Everyone is waiting for someone to just go.",
+      "signLines": {
+        "fire": "{archetype}s don't wait for permission."
+      },
+      "choices": [
+        {
+          "id": "decide",
+          "label": "Make the call",
+          "check": {
+            "attribute": "independence",
+            "difficulty": 60
+          },
+          "success": {
+            "text": "You decide. It's the right call, and people start looking to you.",
+            "effects": {
+              "mastery": 10,
+              "joy": 10,
+              "highlight": "Took charge when everyone else hesitated"
+            }
+          },
+          "fail": {
+            "text": "Too fast. Half of it has to be undone.",
+            "effects": {
+              "joy": -5,
+              "energy": -5
+            }
+          }
+        },
+        {
+          "id": "wait",
+          "label": "Wait for everyone to agree",
+          "result": {
+            "text": "Two more weeks of meetings. It gets decided, eventually.",
+            "effects": {
+              "energy": -5
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "sign_earth",
+      "kind": "sign",
+      "stages": [
+        "first_job"
+      ],
+      "conditions": {
+        "elements": [
+          "earth"
+        ]
+      },
+      "icon": "plant",
+      "title": "The Abandoned Project",
+      "text": "A project everyone gave up on lands in your lap. Fixing it means months of patient work.",
+      "signLines": {
+        "earth": "{archetype}s finish what others start."
+      },
+      "choices": [
+        {
+          "id": "take",
+          "label": "Take it on",
+          "check": {
+            "attribute": "persistence",
+            "difficulty": 60
+          },
+          "success": {
+            "text": "Slowly, steadily, it comes back to life. People notice.",
+            "effects": {
+              "mastery": 15,
+              "energy": -5,
+              "highlight": "Rescued a project everyone gave up on"
+            }
+          },
+          "fail": {
+            "text": "You make progress, but it's a grind.",
+            "effects": {
+              "mastery": 5,
+              "energy": -10
+            }
+          }
+        },
+        {
+          "id": "pass",
+          "label": "Hand it back",
+          "result": {
+            "text": "Not your mess. Fair enough.",
+            "effects": {
+              "energy": 5
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "sign_air",
+      "kind": "sign",
+      "stages": [
+        "first_job"
+      ],
+      "conditions": {
+        "elements": [
+          "air"
+        ]
+      },
+      "icon": "chats-circle",
+      "title": "Nobody's Talking",
+      "text": "Two groups you work with have stopped talking to each other, and everything is slowing down. You know people on both sides.",
+      "signLines": {
+        "air": "{archetype}s are made for moments like this."
+      },
+      "choices": [
+        {
+          "id": "bridge",
+          "label": "Bring them together",
+          "check": {
+            "attribute": "communication",
+            "difficulty": 60
+          },
+          "success": {
+            "text": "One lunch, one shared document, and suddenly things move.",
+            "effects": {
+              "mastery": 10,
+              "joy": 10,
+              "highlight": "Got two stuck teams working together"
+            }
+          },
+          "fail": {
+            "text": "Both sides think you're on the other one's side.",
+            "effects": {
+              "joy": -5
+            }
+          }
+        },
+        {
+          "id": "out",
+          "label": "Stay out of it",
+          "result": {
+            "text": "Not your circus. Things stay slow.",
+            "effects": {
+              "energy": 5
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "sign_water",
+      "kind": "sign",
+      "stages": [
+        "first_job"
+      ],
+      "conditions": {
+        "elements": [
+          "water"
+        ]
+      },
+      "icon": "heart",
+      "title": "The Quiet Struggle",
+      "text": "Someone you work with is clearly struggling but hasn't told anyone. You've noticed.",
+      "signLines": {
+        "water": "{archetype}s notice what others miss."
+      },
+      "choices": [
+        {
+          "id": "checkin",
+          "label": "Check in with them",
+          "check": {
+            "attribute": "empathy",
+            "difficulty": 55
+          },
+          "success": {
+            "text": "They open up. Months later, they tell you it changed everything.",
+            "effects": {
+              "joy": 15,
+              "highlight": "Helped a coworker through a hard time"
+            }
+          },
+          "fail": {
+            "text": "They brush it off. You stay close anyway.",
+            "effects": {
+              "joy": 5
+            }
+          }
+        },
+        {
+          "id": "space",
+          "label": "Give them space",
+          "result": {
+            "text": "You let it be. You wonder about it sometimes.",
+            "effects": {
+              "joy": -3
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

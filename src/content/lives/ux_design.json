@@ -1,0 +1,1586 @@
+{
+  "career": "ux_design",
+  "lifeName": "Designer",
+  "class": "Shaper",
+  "roles": {
+    "byFlag": [
+      {
+        "flag": "studio",
+        "role": "Studio founder"
+      },
+      {
+        "flag": "manager",
+        "role": "Design manager"
+      }
+    ],
+    "byMastery": [
+      {
+        "min": 75,
+        "role": "Lead designer"
+      },
+      {
+        "min": 55,
+        "role": "Senior designer"
+      },
+      {
+        "min": 35,
+        "role": "Product designer"
+      },
+      {
+        "min": 0,
+        "role": "Junior designer"
+      }
+    ]
+  },
+  "endings": [
+    {
+      "id": "ux_end_pivot",
+      "name": "Found a Different Path",
+      "when": {
+        "flagsAll": [
+          "pivoted"
+        ]
+      },
+      "roleOverride": "Took design somewhere new",
+      "text": "Design opened a door you didn't expect. You walked through it, and you still see the world like a designer. You just use it differently now."
+    },
+    {
+      "id": "ux_end_studio",
+      "name": "Started Your Own Studio",
+      "when": {
+        "flagsAll": [
+          "studio"
+        ],
+        "meterMin": {
+          "joy": 40
+        }
+      },
+      "text": "Your name is on the door. Some months are lean, some are great, and every decision is yours."
+    },
+    {
+      "id": "ux_end_rebuilt",
+      "name": "Burned Out, Then Rebuilt",
+      "when": {
+        "flagsAll": [
+          "burned_out"
+        ]
+      },
+      "text": "Somewhere in your twenties it got to be too much. You stepped back, learned your limits and came back on your own terms. Most people learn that much later."
+    },
+    {
+      "id": "ux_end_thriving",
+      "name": "Thriving",
+      "when": {
+        "meterMin": {
+          "mastery": 55,
+          "joy": 65
+        }
+      },
+      "text": "You're good at this, and you still love it. People use things you made every day without knowing your name. You know, though."
+    },
+    {
+      "id": "ux_end_steady",
+      "name": "Steady",
+      "when": {},
+      "text": "A solid design career: good work, good people, a life that fits. Not every life needs fireworks."
+    }
+  ],
+  "events": [
+    {
+      "id": "ux_opener",
+      "kind": "opener",
+      "stages": [
+        "start"
+      ],
+      "icon": "compass",
+      "title": "Where It Starts",
+      "text": "You want to design the apps people use every day. First question: how do you learn?",
+      "choices": [
+        {
+          "id": "degree",
+          "label": "Study design at university",
+          "hint": "4 years · solid foundation · student debt",
+          "result": {
+            "text": "Four years of critiques, all-nighters and one great professor. You graduate knowing why things work, not just how.",
+            "effects": {
+              "money": -15,
+              "mastery": 20,
+              "energy": -5,
+              "set": [
+                "route_degree"
+              ]
+            }
+          }
+        },
+        {
+          "id": "bootcamp",
+          "label": "Do an intensive bootcamp",
+          "hint": "6 months · fast · tougher job hunt",
+          "result": {
+            "text": "Six months of twelve-hour days and one shiny portfolio. You're exhausted, and ready-ish.",
+            "effects": {
+              "money": -10,
+              "mastery": 12,
+              "energy": -15,
+              "set": [
+                "route_bootcamp"
+              ]
+            }
+          }
+        },
+        {
+          "id": "self",
+          "label": "Teach yourself",
+          "hint": "Free · flexible · all on you",
+          "check": {
+            "attribute": "persistence",
+            "difficulty": 60
+          },
+          "success": {
+            "text": "Courses, videos and redesigns of every app on your phone. It works.",
+            "effects": {
+              "mastery": 15,
+              "joy": 5,
+              "set": [
+                "route_self"
+              ],
+              "highlight": "Taught yourself design from scratch"
+            }
+          },
+          "fail": {
+            "text": "Motivation comes and goes. You learn a lot, just slower than you hoped.",
+            "effects": {
+              "mastery": 8,
+              "joy": -5,
+              "set": [
+                "route_self"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "ux_first_critique",
+      "kind": "career",
+      "stages": [
+        "training"
+      ],
+      "icon": "chat-circle",
+      "title": "The First Critique",
+      "text": "Your first project goes up on the wall. Someone calls it \"safe.\" Everyone looks at you.",
+      "choices": [
+        {
+          "id": "defend",
+          "label": "Explain your choices",
+          "check": {
+            "attribute": "communication",
+            "difficulty": 60
+          },
+          "success": {
+            "text": "You walk them through your thinking. The room nods. \"Safe\" turns out to mean \"clear,\" and clear is good.",
+            "effects": {
+              "mastery": 8,
+              "joy": 5
+            }
+          },
+          "fail": {
+            "text": "You get defensive and it shows. Rough afternoon, useful lesson.",
+            "effects": {
+              "mastery": 5,
+              "joy": -5
+            }
+          }
+        },
+        {
+          "id": "listen",
+          "label": "Ask what they'd change",
+          "result": {
+            "text": "You take notes, swallow your pride and redo it. Version two is much better.",
+            "effects": {
+              "mastery": 10
+            }
+          }
+        },
+        {
+          "id": "bold",
+          "label": "Start over with something bold",
+          "check": {
+            "attribute": "creativity",
+            "difficulty": 65
+          },
+          "success": {
+            "text": "The bold version is the best thing you've made so far.",
+            "effects": {
+              "mastery": 12,
+              "joy": 10,
+              "highlight": "Found your bold style early"
+            }
+          },
+          "fail": {
+            "text": "Bold, yes. Usable, no. Back to the middle ground.",
+            "effects": {
+              "mastery": 3,
+              "energy": -10
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "ux_bakery",
+      "kind": "career",
+      "stages": [
+        "training"
+      ],
+      "icon": "storefront",
+      "title": "The Bakery Website",
+      "text": "A friend runs a tiny bakery. Her website has six fonts and a spinning cupcake. She asks if you can help.",
+      "choices": [
+        {
+          "id": "free",
+          "label": "Redesign it for free",
+          "hint": "A real project for your portfolio",
+          "result": {
+            "text": "Your first real client. She cries (the good kind). You have a real case study.",
+            "effects": {
+              "mastery": 6,
+              "joy": 10,
+              "energy": -5,
+              "set": [
+                "has_portfolio"
+              ],
+              "highlight": "Redesigned your first real website"
+            }
+          }
+        },
+        {
+          "id": "fee",
+          "label": "Charge a small fee",
+          "check": {
+            "attribute": "communication",
+            "difficulty": 55
+          },
+          "success": {
+            "text": "She says yes. Your first design paycheck buys one very nice dinner.",
+            "effects": {
+              "money": 8,
+              "mastery": 6,
+              "joy": 5,
+              "set": [
+                "has_portfolio"
+              ]
+            }
+          },
+          "fail": {
+            "text": "Awkward. She finds someone cheaper online. Pricing, it turns out, is a skill too.",
+            "effects": {
+              "joy": -5
+            }
+          }
+        },
+        {
+          "id": "busy",
+          "label": "Say you're too busy",
+          "result": {
+            "text": "You rest instead. Fair, but your portfolio stays thin.",
+            "effects": {
+              "energy": 10,
+              "joy": -5
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "ux_figma",
+      "kind": "career",
+      "stages": [
+        "training"
+      ],
+      "icon": "laptop",
+      "title": "Everyone Knows Figma",
+      "text": "Everyone around you moves through Figma like it's their first language. You're still looking for the align button.",
+      "choices": [
+        {
+          "id": "grind",
+          "label": "Grind tutorials every night",
+          "check": {
+            "attribute": "persistence",
+            "difficulty": 55
+          },
+          "success": {
+            "text": "Three weeks later, you're the fast one.",
+            "effects": {
+              "mastery": 10,
+              "energy": -10
+            }
+          },
+          "fail": {
+            "text": "Tutorial fatigue hits. You pick it up slowly through real projects instead.",
+            "effects": {
+              "mastery": 5,
+              "energy": -10
+            }
+          }
+        },
+        {
+          "id": "pair",
+          "label": "Team up with a classmate",
+          "check": {
+            "attribute": "empathy",
+            "difficulty": 50
+          },
+          "success": {
+            "text": "You trade lessons: their shortcuts for your eye for color. You've made a friend for life.",
+            "effects": {
+              "mastery": 6,
+              "joy": 10,
+              "set": [
+                "design_friend"
+              ]
+            }
+          },
+          "fail": {
+            "text": "They're swamped. You figure it out alone, eventually.",
+            "effects": {
+              "mastery": 5
+            }
+          }
+        },
+        {
+          "id": "later",
+          "label": "Learn it on the job later",
+          "result": {
+            "text": "You focus on ideas over tools. A bit of a gamble.",
+            "effects": {
+              "mastery": 3,
+              "joy": 5
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "ux_internship",
+      "kind": "career",
+      "stages": [
+        "training"
+      ],
+      "icon": "briefcase",
+      "title": "The Internship",
+      "text": "A well-known agency posts a summer internship. Three hundred people apply.",
+      "choices": [
+        {
+          "id": "apply",
+          "label": "Apply with your best work",
+          "check": {
+            "attribute": "creativity",
+            "difficulty": 65,
+            "bonus": {
+              "has_portfolio": 10
+            }
+          },
+          "success": {
+            "text": "You're in. Your first desk, your first client meeting, your first real deadline.",
+            "effects": {
+              "mastery": 10,
+              "money": 5,
+              "joy": 5,
+              "set": [
+                "had_internship"
+              ],
+              "highlight": "Landed an agency internship"
+            }
+          },
+          "fail": {
+            "text": "No reply. You add one more project to your portfolio and keep going.",
+            "effects": {
+              "mastery": 4,
+              "joy": -5
+            }
+          }
+        },
+        {
+          "id": "skip",
+          "label": "Skip it and keep studying",
+          "result": {
+            "text": "A quieter summer. You sharpen your basics.",
+            "effects": {
+              "mastery": 6,
+              "energy": 5
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "ux_job_hunt",
+      "kind": "job_hunt",
+      "stages": [
+        "breaking_in"
+      ],
+      "icon": "magnifying-glass",
+      "title": "The Job Hunt",
+      "text": "Forty applications. Two replies. One of them is an automated rejection.",
+      "realityNote": {
+        "text": "Entry-level design roles are competitive, and employers usually look at your portfolio more than your credentials.",
+        "verified": false
+      },
+      "choices": [
+        {
+          "id": "keep",
+          "label": "Keep applying",
+          "check": {
+            "attribute": "persistence",
+            "difficulty": 60,
+            "bonus": {
+              "has_portfolio": 10,
+              "had_internship": 10
+            }
+          },
+          "success": {
+            "text": "Application 53 gets an interview. Interview three gets an offer. You're a designer.",
+            "effects": {
+              "mastery": 5,
+              "joy": 10,
+              "money": 20,
+              "set": [
+                "employed"
+              ],
+              "highlight": "Landed your first design job"
+            }
+          },
+          "fail": {
+            "text": "Still nothing. You take a café job and design at night.",
+            "effects": {
+              "energy": -15,
+              "money": 5,
+              "joy": -5,
+              "set": [
+                "side_job"
+              ]
+            }
+          }
+        },
+        {
+          "id": "network",
+          "label": "Ask your network for referrals",
+          "check": {
+            "attribute": "communication",
+            "difficulty": 55,
+            "bonus": {
+              "design_friend": 10
+            }
+          },
+          "success": {
+            "text": "A friend of a friend passes your portfolio along. You're hired within a month.",
+            "effects": {
+              "mastery": 3,
+              "joy": 5,
+              "money": 20,
+              "set": [
+                "employed"
+              ]
+            }
+          },
+          "fail": {
+            "text": "Lots of \"I'll keep an eye out.\" Nothing yet.",
+            "effects": {
+              "joy": -10,
+              "energy": -5
+            }
+          }
+        },
+        {
+          "id": "freelance",
+          "label": "Go freelance instead",
+          "hint": "Freedom · unstable income",
+          "check": {
+            "attribute": "independence",
+            "difficulty": 60
+          },
+          "success": {
+            "text": "Three small clients and a lot of invoicing. You're your own boss.",
+            "effects": {
+              "mastery": 5,
+              "joy": 10,
+              "money": 10,
+              "set": [
+                "employed",
+                "freelance"
+              ]
+            }
+          },
+          "fail": {
+            "text": "Clients are hard to find. You're doing it, but only just.",
+            "effects": {
+              "money": -5,
+              "energy": -10,
+              "joy": -5,
+              "set": [
+                "employed",
+                "freelance"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "ux_portfolio_review",
+      "kind": "career",
+      "stages": [
+        "breaking_in"
+      ],
+      "icon": "eye",
+      "title": "The Portfolio Review",
+      "text": "A senior designer offers to review your portfolio. She's famous for being blunt.",
+      "choices": [
+        {
+          "id": "take",
+          "label": "Take the brutal feedback",
+          "check": {
+            "attribute": "empathy",
+            "difficulty": 50
+          },
+          "success": {
+            "text": "You don't flinch. She likes that. \"Send me the next version.\" You have a mentor.",
+            "effects": {
+              "mastery": 10,
+              "joy": 5,
+              "set": [
+                "has_mentor"
+              ],
+              "highlight": "Gained a senior designer as a mentor"
+            }
+          },
+          "fail": {
+            "text": "It stings more than you let on. You fix half of it.",
+            "effects": {
+              "mastery": 5,
+              "joy": -5
+            }
+          }
+        },
+        {
+          "id": "decline",
+          "label": "Politely pass for now",
+          "result": {
+            "text": "Maybe another time. Your portfolio stays as it is.",
+            "effects": {
+              "energy": 5
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "ux_bootcamp_chat",
+      "kind": "career",
+      "stages": [
+        "breaking_in"
+      ],
+      "conditions": {
+        "flagsAll": [
+          "route_bootcamp"
+        ]
+      },
+      "icon": "users",
+      "title": "The Group Chat",
+      "text": "Your bootcamp group chat is half job offers, half panic.",
+      "choices": [
+        {
+          "id": "organize",
+          "label": "Start a weekly job-hunt call",
+          "check": {
+            "attribute": "organization",
+            "difficulty": 55
+          },
+          "success": {
+            "text": "Shared leads, practice interviews, real support. Three of you get hired within a month.",
+            "effects": {
+              "mastery": 3,
+              "joy": 10,
+              "set": [
+                "design_friend"
+              ]
+            }
+          },
+          "fail": {
+            "text": "It fizzles after two weeks. The chat is still nice.",
+            "effects": {
+              "joy": 5
+            }
+          }
+        },
+        {
+          "id": "mute",
+          "label": "Mute it and focus",
+          "result": {
+            "text": "Quiet focus. You polish your portfolio instead.",
+            "effects": {
+              "mastery": 6,
+              "energy": 5,
+              "set": [
+                "has_portfolio"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "ux_grad_show",
+      "kind": "career",
+      "stages": [
+        "breaking_in"
+      ],
+      "conditions": {
+        "flagsAll": [
+          "route_degree"
+        ]
+      },
+      "icon": "graduation-cap",
+      "title": "The Final Project",
+      "text": "Final project: anything you want. The best ones go into the grad show, where recruiters wander around holding coffee.",
+      "choices": [
+        {
+          "id": "safe",
+          "label": "Make it safe and polished",
+          "check": {
+            "attribute": "organization",
+            "difficulty": 55
+          },
+          "success": {
+            "text": "Clean, thorough, on time. Two recruiters take your card.",
+            "effects": {
+              "mastery": 8,
+              "set": [
+                "has_portfolio"
+              ]
+            }
+          },
+          "fail": {
+            "text": "Polished, but forgettable. It still goes in the portfolio.",
+            "effects": {
+              "mastery": 5,
+              "set": [
+                "has_portfolio"
+              ]
+            }
+          }
+        },
+        {
+          "id": "ambitious",
+          "label": "Go ambitious",
+          "check": {
+            "attribute": "creativity",
+            "difficulty": 70
+          },
+          "success": {
+            "text": "Your app for people with low vision wins the grad show.",
+            "effects": {
+              "mastery": 15,
+              "joy": 10,
+              "set": [
+                "has_portfolio"
+              ],
+              "highlight": "Won the grad show"
+            }
+          },
+          "fail": {
+            "text": "Too big for the time you had. Half-finished, but you learned a ton.",
+            "effects": {
+              "mastery": 6,
+              "energy": -10
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "ux_imposter",
+      "kind": "career",
+      "stages": [
+        "breaking_in"
+      ],
+      "conditions": {
+        "flagsAll": [
+          "route_self"
+        ]
+      },
+      "icon": "users",
+      "title": "The Meetup",
+      "text": "At a design meetup, everyone mentions where they studied. You didn't study anywhere.",
+      "choices": [
+        {
+          "id": "talk",
+          "label": "Talk about your work instead",
+          "check": {
+            "attribute": "communication",
+            "difficulty": 55
+          },
+          "success": {
+            "text": "Nobody asks about your degree again. They ask how you made that.",
+            "effects": {
+              "joy": 10,
+              "set": [
+                "design_friend"
+              ]
+            }
+          },
+          "fail": {
+            "text": "You leave early. It's fine. It's not fine.",
+            "effects": {
+              "joy": -10
+            }
+          }
+        },
+        {
+          "id": "cert",
+          "label": "Sign up for an online certificate",
+          "result": {
+            "text": "A certificate won't make you a designer, but it does quiet the voice in your head.",
+            "effects": {
+              "money": -5,
+              "mastery": 5,
+              "joy": 5
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "ux_still_looking",
+      "kind": "career",
+      "stages": [
+        "first_job"
+      ],
+      "priority": 10,
+      "conditions": {
+        "flagsNone": [
+          "employed"
+        ]
+      },
+      "icon": "coffee",
+      "title": "Still Looking",
+      "text": "Six months later. The café knows your order by heart. You still design every night.",
+      "choices": [
+        {
+          "id": "smaller",
+          "label": "Take a smaller design role",
+          "hint": "Not glamorous · still design",
+          "result": {
+            "text": "In-house designer at a furniture company. Not the dream, but it's real design work.",
+            "effects": {
+              "mastery": 5,
+              "money": 15,
+              "set": [
+                "employed"
+              ]
+            }
+          }
+        },
+        {
+          "id": "standout",
+          "label": "Build one standout project",
+          "check": {
+            "attribute": "creativity",
+            "difficulty": 60
+          },
+          "success": {
+            "text": "Your concept redesign of the city transit app spreads online. Messages start arriving.",
+            "effects": {
+              "mastery": 10,
+              "joy": 15,
+              "money": 15,
+              "set": [
+                "employed"
+              ],
+              "highlight": "Your concept project went viral"
+            }
+          },
+          "fail": {
+            "text": "It's good. Nobody notices. Yet.",
+            "effects": {
+              "mastery": 6,
+              "energy": -10
+            }
+          }
+        },
+        {
+          "id": "explore",
+          "label": "Start exploring other careers",
+          "result": {
+            "text": "You read about product management, marketing, research. A door opens a crack.",
+            "effects": {
+              "joy": -5,
+              "set": [
+                "considering_pivot"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "ux_bigger_logo",
+      "kind": "career",
+      "stages": [
+        "first_job"
+      ],
+      "conditions": {
+        "flagsAll": [
+          "employed"
+        ]
+      },
+      "icon": "palette",
+      "title": "Make the Logo Bigger",
+      "text": "The client wants the logo bigger. Again. Also, can it \"pop\" more?",
+      "realityNote": {
+        "text": "Feedback and revisions are a big part of design work. Your favorite ideas often get changed.",
+        "verified": false
+      },
+      "choices": [
+        {
+          "id": "research",
+          "label": "Push back with user research",
+          "check": {
+            "attribute": "communication",
+            "difficulty": 60
+          },
+          "success": {
+            "text": "You show them the data. They actually listen. The logo stays put.",
+            "effects": {
+              "mastery": 10,
+              "joy": 5
+            }
+          },
+          "fail": {
+            "text": "They don't care about the data. Bigger logo.",
+            "effects": {
+              "joy": -10
+            }
+          }
+        },
+        {
+          "id": "understand",
+          "label": "Find out what they're worried about",
+          "check": {
+            "attribute": "empathy",
+            "difficulty": 60
+          },
+          "success": {
+            "text": "Their real fear: nobody remembers the brand. You fix that instead, and the logo stays small. Everyone's happy.",
+            "effects": {
+              "mastery": 10,
+              "joy": 8,
+              "highlight": "Turned a nightmare client into a fan"
+            }
+          },
+          "fail": {
+            "text": "Your compromise makes nobody happy. Bigger logo.",
+            "effects": {
+              "joy": -5
+            }
+          }
+        },
+        {
+          "id": "bigger",
+          "label": "Just make it bigger",
+          "result": {
+            "text": "It's their product. You make it bigger. It pops.",
+            "effects": {
+              "joy": -10,
+              "energy": 5
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "ux_crunch",
+      "kind": "career",
+      "stages": [
+        "first_job"
+      ],
+      "conditions": {
+        "flagsAll": [
+          "employed"
+        ]
+      },
+      "icon": "lightning",
+      "title": "Launch Week",
+      "text": "Launch is Friday. It's Tuesday. Nothing is done.",
+      "choices": [
+        {
+          "id": "late",
+          "label": "Pull late nights",
+          "check": {
+            "attribute": "persistence",
+            "difficulty": 60
+          },
+          "success": {
+            "text": "You ship it. Exhausted and very proud.",
+            "effects": {
+              "mastery": 10,
+              "energy": -20,
+              "joy": 5,
+              "highlight": "Shipped your first big launch"
+            }
+          },
+          "fail": {
+            "text": "You ship it, barely, then get sick the week after.",
+            "effects": {
+              "mastery": 5,
+              "energy": -25
+            }
+          }
+        },
+        {
+          "id": "cut",
+          "label": "Propose cutting scope",
+          "check": {
+            "attribute": "communication",
+            "difficulty": 65
+          },
+          "success": {
+            "text": "You suggest a smaller launch. The product manager looks relieved someone finally said it.",
+            "effects": {
+              "mastery": 10,
+              "energy": -5,
+              "joy": 5
+            }
+          },
+          "fail": {
+            "text": "Nobody wants to hear it. Late nights it is.",
+            "effects": {
+              "energy": -20,
+              "joy": -5
+            }
+          }
+        },
+        {
+          "id": "help",
+          "label": "Ask a teammate for help",
+          "result": {
+            "text": "They take half. You owe them coffee forever.",
+            "effects": {
+              "mastery": 5,
+              "energy": -10,
+              "joy": 5
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "ux_user_test",
+      "kind": "career",
+      "stages": [
+        "first_job"
+      ],
+      "conditions": {
+        "flagsAll": [
+          "employed"
+        ]
+      },
+      "icon": "eye",
+      "title": "Watching Someone Use It",
+      "text": "For the first time, you watch a real person use something you designed. They can't find the checkout button.",
+      "choices": [
+        {
+          "id": "watch",
+          "label": "Watch quietly and take notes",
+          "check": {
+            "attribute": "empathy",
+            "difficulty": 55
+          },
+          "success": {
+            "text": "Painful, and pure gold. You spot five problems in one hour.",
+            "effects": {
+              "mastery": 12,
+              "joy": 8
+            }
+          },
+          "fail": {
+            "text": "You keep wanting to jump in and help. You miss half of it.",
+            "effects": {
+              "mastery": 5
+            }
+          }
+        },
+        {
+          "id": "fix",
+          "label": "Fix it on the spot",
+          "result": {
+            "text": "Fixed. Then the next person can't find the search bar.",
+            "effects": {
+              "mastery": 5,
+              "energy": -5
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "ux_design_system",
+      "kind": "career",
+      "stages": [
+        "first_job"
+      ],
+      "conditions": {
+        "flagsAll": [
+          "employed"
+        ],
+        "flagsNone": [
+          "freelance"
+        ]
+      },
+      "icon": "squares-four",
+      "title": "Fourteen Shades of Blue",
+      "text": "Your team's app uses fourteen slightly different blues. Someone needs to sort it out.",
+      "choices": [
+        {
+          "id": "build",
+          "label": "Volunteer to build a design system",
+          "check": {
+            "attribute": "organization",
+            "difficulty": 65
+          },
+          "success": {
+            "text": "Months of tidy, invisible work. Now everything matches, and the developers adore you.",
+            "effects": {
+              "mastery": 15,
+              "energy": -10,
+              "highlight": "Built your team's design system"
+            }
+          },
+          "fail": {
+            "text": "It's much bigger than you thought. Half-done, but it's a start.",
+            "effects": {
+              "mastery": 5,
+              "energy": -10
+            }
+          }
+        },
+        {
+          "id": "leave",
+          "label": "Leave it to someone else",
+          "result": {
+            "text": "The blues remain. Someone else's problem, for now.",
+            "effects": {
+              "energy": 5
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "ux_freelance_life",
+      "kind": "career",
+      "stages": [
+        "first_job"
+      ],
+      "priority": 5,
+      "conditions": {
+        "flagsAll": [
+          "freelance"
+        ]
+      },
+      "icon": "wallet",
+      "title": "Three Deadlines, One Week",
+      "text": "Three clients, three deadlines, same week. One of them is paying late. Again.",
+      "choices": [
+        {
+          "id": "rates",
+          "label": "Raise your rates and use proper contracts",
+          "check": {
+            "attribute": "communication",
+            "difficulty": 60
+          },
+          "success": {
+            "text": "Two clients accept. One leaves. You earn more and work less.",
+            "effects": {
+              "money": 15,
+              "energy": 5,
+              "joy": 5
+            }
+          },
+          "fail": {
+            "text": "All three push back. You keep the old rates for now.",
+            "effects": {
+              "money": -5,
+              "joy": -5
+            }
+          }
+        },
+        {
+          "id": "more",
+          "label": "Take on even more clients",
+          "check": {
+            "attribute": "persistence",
+            "difficulty": 65
+          },
+          "success": {
+            "text": "Your bank account is happy. Your sleep schedule is not.",
+            "effects": {
+              "money": 20,
+              "energy": -20
+            }
+          },
+          "fail": {
+            "text": "You miss a deadline and lose a client.",
+            "effects": {
+              "money": -5,
+              "energy": -20,
+              "joy": -10
+            }
+          }
+        },
+        {
+          "id": "parttime",
+          "label": "Add a part-time job for stability",
+          "result": {
+            "text": "Steady money, less freedom. A fair trade for now.",
+            "effects": {
+              "money": 10,
+              "joy": -5,
+              "mastery": 3
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "ux_startup_offer",
+      "kind": "crossroads",
+      "stages": [
+        "crossroads"
+      ],
+      "conditions": {
+        "flagsAll": [
+          "employed"
+        ],
+        "flagsNone": [
+          "freelance"
+        ]
+      },
+      "icon": "rocket",
+      "title": "The Startup Offer",
+      "text": "A startup offers you a lead designer role: more money, more say, much longer hours. Your current team is small and kind.",
+      "signLines": {
+        "fire": "Part of you already said yes.",
+        "earth": "You run the numbers twice before you even reply.",
+        "air": "Mostly, you're curious what you'd learn there.",
+        "water": "Your team feels like family, and {archetype}s don't leave family easily."
+      },
+      "choices": [
+        {
+          "id": "leap",
+          "label": "Take the leap",
+          "check": {
+            "attribute": "independence",
+            "difficulty": 60
+          },
+          "success": {
+            "text": "Chaotic, exhausting, thrilling. You learn more in one year than in the last three.",
+            "effects": {
+              "mastery": 15,
+              "money": 15,
+              "energy": -15,
+              "set": [
+                "at_startup"
+              ],
+              "highlight": "Became lead designer at a startup"
+            }
+          },
+          "fail": {
+            "text": "The startup runs out of money after ten months. You land on your feet, with great stories.",
+            "effects": {
+              "mastery": 10,
+              "money": -5,
+              "joy": -5
+            }
+          }
+        },
+        {
+          "id": "stay",
+          "label": "Stay with your team",
+          "result": {
+            "text": "You stay. Two years later, you're the one welcoming the new hires.",
+            "effects": {
+              "mastery": 6,
+              "joy": 10,
+              "set": [
+                "loyal"
+              ]
+            }
+          }
+        },
+        {
+          "id": "raise",
+          "label": "Ask for a raise instead",
+          "check": {
+            "attribute": "communication",
+            "difficulty": 65
+          },
+          "success": {
+            "text": "Your manager doesn't want to lose you. Raise approved.",
+            "effects": {
+              "money": 15,
+              "joy": 5
+            }
+          },
+          "fail": {
+            "text": "\"Not this year.\" Hm.",
+            "effects": {
+              "joy": -8
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "ux_studio",
+      "kind": "crossroads",
+      "stages": [
+        "crossroads"
+      ],
+      "conditions": {
+        "flagsAll": [
+          "employed"
+        ]
+      },
+      "icon": "door-open",
+      "title": "Your Own Studio",
+      "text": "Two past clients ask if you'd work with them directly. You could open your own studio.",
+      "choices": [
+        {
+          "id": "open",
+          "label": "Open the studio",
+          "check": {
+            "attribute": "independence",
+            "difficulty": 65,
+            "bonus": {
+              "freelance": 10,
+              "has_portfolio": 5
+            }
+          },
+          "success": {
+            "text": "A name, a website, three clients. It's yours.",
+            "effects": {
+              "money": 10,
+              "joy": 15,
+              "energy": -10,
+              "set": [
+                "studio"
+              ],
+              "highlight": "Opened your own design studio"
+            }
+          },
+          "fail": {
+            "text": "After a lean year, you close the studio and take a senior role somewhere else. No regrets, lots of lessons.",
+            "effects": {
+              "money": -5,
+              "mastery": 8,
+              "joy": -5,
+              "set": [
+                "tried_studio"
+              ]
+            }
+          }
+        },
+        {
+          "id": "stay",
+          "label": "Stay where you are",
+          "result": {
+            "text": "Security wins. You file the idea away for later.",
+            "effects": {
+              "money": 5
+            }
+          }
+        }
+      ],
+      "weight": 0.6
+    },
+    {
+      "id": "ux_manager",
+      "kind": "crossroads",
+      "stages": [
+        "crossroads"
+      ],
+      "conditions": {
+        "flagsAll": [
+          "employed"
+        ],
+        "flagsNone": [
+          "freelance"
+        ],
+        "meterMin": {
+          "mastery": 35
+        }
+      },
+      "icon": "users-three",
+      "title": "Manager or Maker?",
+      "text": "Your manager asks: do you want to lead a team of designers, or keep designing yourself?",
+      "choices": [
+        {
+          "id": "lead",
+          "label": "Become a design manager",
+          "check": {
+            "attribute": "empathy",
+            "difficulty": 65
+          },
+          "success": {
+            "text": "Turns out you're good at this. Your team grows, and so do they.",
+            "effects": {
+              "mastery": 10,
+              "joy": 8,
+              "set": [
+                "manager"
+              ],
+              "highlight": "Became a design manager"
+            }
+          },
+          "fail": {
+            "text": "You miss designing. Meetings swallow your weeks.",
+            "effects": {
+              "joy": -15,
+              "energy": -5,
+              "set": [
+                "manager"
+              ]
+            }
+          }
+        },
+        {
+          "id": "make",
+          "label": "Keep designing",
+          "check": {
+            "attribute": "creativity",
+            "difficulty": 65
+          },
+          "success": {
+            "text": "You go deep and become the designer people bring the hard problems to.",
+            "effects": {
+              "mastery": 15,
+              "joy": 10
+            }
+          },
+          "fail": {
+            "text": "You stay hands-on. Comfortable, maybe a little too comfortable.",
+            "effects": {
+              "mastery": 5
+            }
+          }
+        },
+        {
+          "id": "pm",
+          "label": "Switch to product management",
+          "result": {
+            "text": "You move to product. You still draw on whiteboards, just less often.",
+            "effects": {
+              "money": 10,
+              "mastery": 5,
+              "set": [
+                "pivoted"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "ux_one_more_year",
+      "kind": "crossroads",
+      "stages": [
+        "crossroads"
+      ],
+      "priority": 10,
+      "conditions": {
+        "flagsNone": [
+          "employed"
+        ]
+      },
+      "icon": "path",
+      "title": "One More Year?",
+      "text": "You've been trying to break into design for years. Something has to change.",
+      "choices": [
+        {
+          "id": "more",
+          "label": "Give it one more year",
+          "check": {
+            "attribute": "persistence",
+            "difficulty": 65,
+            "bonus": {
+              "has_mentor": 10
+            }
+          },
+          "success": {
+            "text": "This is the year. A product team takes a chance on you, and you don't waste it.",
+            "effects": {
+              "mastery": 10,
+              "joy": 15,
+              "money": 15,
+              "set": [
+                "employed"
+              ],
+              "highlight": "Broke into design after years of trying"
+            }
+          },
+          "fail": {
+            "text": "Still nothing. You start to wonder what else is out there.",
+            "effects": {
+              "joy": -10,
+              "set": [
+                "considering_pivot"
+              ]
+            }
+          }
+        },
+        {
+          "id": "adjacent",
+          "label": "Move into something next to design",
+          "hint": "Marketing, research, product",
+          "result": {
+            "text": "You take a marketing role that uses your design eye. It fits better than you expected.",
+            "effects": {
+              "joy": 10,
+              "money": 15,
+              "set": [
+                "pivoted"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "ux_big_project",
+      "kind": "finale",
+      "stages": [
+        "thirty"
+      ],
+      "conditions": {
+        "flagsAll": [
+          "employed"
+        ],
+        "flagsNone": [
+          "pivoted"
+        ]
+      },
+      "icon": "sparkle",
+      "title": "The Big One",
+      "text": "The biggest project of your career lands on your desk: a redesign of an app a million people use.",
+      "choices": [
+        {
+          "id": "lead",
+          "label": "Lead it",
+          "check": {
+            "attribute": "communication",
+            "difficulty": 65,
+            "bonus": {
+              "has_mentor": 10,
+              "manager": 10
+            }
+          },
+          "success": {
+            "text": "It launches. Your mom uses it without knowing you made it.",
+            "effects": {
+              "mastery": 15,
+              "joy": 10,
+              "highlight": "Led a redesign used by a million people"
+            }
+          },
+          "fail": {
+            "text": "It launches late and over budget, but it launches.",
+            "effects": {
+              "mastery": 10,
+              "energy": -15
+            }
+          }
+        },
+        {
+          "id": "support",
+          "label": "Support the person leading it",
+          "result": {
+            "text": "You do your best work in the background. It feels good to make someone else shine.",
+            "effects": {
+              "mastery": 6,
+              "joy": 5,
+              "energy": 5
+            }
+          }
+        },
+        {
+          "id": "pass",
+          "label": "Pass on it",
+          "hint": "Protect your energy",
+          "result": {
+            "text": "You say no. Somebody else gets the stress, and the credit.",
+            "effects": {
+              "energy": 15,
+              "joy": -5
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "ux_new_path",
+      "kind": "finale",
+      "stages": [
+        "thirty"
+      ],
+      "priority": 10,
+      "conditions": {
+        "anyOf": [
+          {
+            "flagsNone": [
+              "employed"
+            ]
+          },
+          {
+            "flagsAll": [
+              "pivoted"
+            ]
+          }
+        ]
+      },
+      "icon": "path",
+      "title": "Looking Back",
+      "text": "You're 29. Your path bent away from design. Still, you catch yourself rearranging every menu you see.",
+      "choices": [
+        {
+          "id": "hobby",
+          "label": "Keep designing for fun",
+          "result": {
+            "text": "Design stays yours: weekend projects, no clients, no logo requests.",
+            "effects": {
+              "joy": 10,
+              "set": [
+                "pivoted"
+              ]
+            }
+          }
+        },
+        {
+          "id": "bring",
+          "label": "Bring design into your new work",
+          "result": {
+            "text": "Turns out a designer's eye is a superpower almost anywhere.",
+            "effects": {
+              "mastery": 5,
+              "joy": 5,
+              "set": [
+                "pivoted"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
