@@ -74,6 +74,28 @@ export const elementGlow: Record<Element, string> = {
   water: '#3FA7A0',
 };
 
+/**
+ * The life sim's living sky (Life Sim Spec §11): sky colors by age, top to bottom. Colors between
+ * keyframes are interpolated.
+ */
+export const lifeSky = {
+  keyframes: [
+    { age: 18, top: '#B8A6D9', bottom: '#F6C9B0' }, // dawn: lavender → soft peach
+    { age: 22, top: '#AEBDE4', bottom: '#E8E1F2' }, // morning: pale blue-lavender
+    { age: 25, top: '#A9D0EC', bottom: '#F8F1E7' }, // midday: soft light blue → cream
+    { age: 28, top: '#F0B08E', bottom: '#F2D38E' }, // golden hour: peach → warm gold
+    { age: 30, top: '#3B2A4E', bottom: '#E9A889' }, // dusk: deep plum → peach glow
+  ],
+  sun: '#FFF6E6',
+  star: '#E6C27E',
+  farMountains: '#8C76A6',
+  nearMountains: '#3B2A4E',
+  path: '#F8F1E7',
+  mist: '#FFFFFF',
+  glow: '#F0A57E',
+  outline: '#C9A15E',
+} as const;
+
 /** One shape for both, so components can switch with the screen's tone. */
 export interface ToneColors {
   bg: string;

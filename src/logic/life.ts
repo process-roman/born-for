@@ -413,6 +413,17 @@ export function mostCheckedAttributes(life: CareerLife, count = 3): AttributeId[
     .map(([a]) => a);
 }
 
+/**
+ * The user's odds on a typical check of this attribute in this career (its average difficulty),
+ * for the life intro. Null when the career never checks it.
+ */
+export function typicalOdds(life: CareerLife, attribute: AttributeId, stats: Stats): number | null {
+  const difficulties = life.events.flatMap((e) => e.choices.flatMap((c) => (c.check?.attribute === attribute ? [c.check.difficulty] : [])));
+  if (difficulties.length === 0) return null;
+  const difficulty = difficulties.reduce((a, b) => a + b, 0) / difficulties.length;
+  return oddsFor(stats, { attribute, difficulty }, []);
+}
+
 export interface LifeTokens {
   archetype: string;
   sign: string;

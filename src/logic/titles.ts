@@ -12,11 +12,16 @@ export interface Title {
   starred: boolean;
 }
 
+/** "The Gentle Shaper": archetype adjective + career class, before any stars. */
+export function hybridTitle(sign: SignId, careerId: CareerId): string {
+  return `The ${SIGNS[sign].adjective} ${CAREERS[careerId].className}`;
+}
+
 /** Unlocks once a Try star (3 or 4) is lit; starred once all five are lit. */
 export function titleFor(sign: SignId, careerId: CareerId, lit: readonly StarNumber[]): Title | null {
   const tryLit = CAREERS[careerId].quests.some((q) => q.tier === 'try' && lit.includes(q.star));
   if (!tryLit) return null;
   const starred = isConstellationComplete(lit);
-  const base = `The ${SIGNS[sign].adjective} ${CAREERS[careerId].className}`;
+  const base = hybridTitle(sign, careerId);
   return { careerId, text: starred ? STARRED_PREFIX + base : base, starred };
 }

@@ -8,6 +8,7 @@ import { CAREER_IDS, CAREERS, type CareerId } from '@/content/careers';
 import { SIGNS } from '@/content/signs';
 import { WORLDS } from '@/content/worlds';
 import { litStarNumbers, rankingFor, statsOf } from '@/logic/character';
+import { lifeFor } from '@/content/life';
 import { isConstellationComplete } from '@/logic/constellation';
 import { canStartQuest } from '@/logic/game';
 import type { PathInterest } from '@/logic/ranking';
@@ -64,6 +65,11 @@ export default function PathDetail() {
         <PathConstellation career={career} lit={lit} size={220} />
         <Text style={styles.count}>{lit.length} of 5 stars lit</Text>
       </PlumCard>
+      {lifeFor(careerId) ? (
+        <Button title="Live this life" onPress={() => router.push({ pathname: '/life/[career]', params: { career: careerId } })} />
+      ) : (
+        <Text style={styles.comingSoon}>Life coming soon</Text>
+      )}
       <Body>{career.oneLiner}</Body>
       <View style={styles.worlds}>
         {career.worlds.map((w) => (
@@ -178,6 +184,7 @@ export default function PathDetail() {
 
 const styles = StyleSheet.create({
   sky: { alignItems: 'center' },
+  comingSoon: { ...type.label, color: C.textMuted, textAlign: 'center' },
   count: { ...type.label, color: night.gold },
   interest: { flexDirection: 'row', gap: S.sm, justifyContent: 'center' },
   worlds: { flexDirection: 'row', flexWrap: 'wrap', gap: S.sm, justifyContent: 'center' },

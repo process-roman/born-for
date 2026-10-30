@@ -7,6 +7,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useCallback, useEffect } from 'react';
 
 import { GameProvider, useGame } from '@/state/game';
+import { LivesProvider } from '@/state/lives';
 import { OnboardingProvider } from '@/state/onboarding';
 import { configureNotifications, useCheckInTap } from '@/storage/notifications';
 import { day } from '@/ui/theme';
@@ -41,11 +42,13 @@ export default function RootLayout() {
 
   return (
     <GameProvider>
-      <OnboardingProvider>
-        <CheckInTapHandler />
-        <StatusBar style="dark" />
-        <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: day.bg }, animation: 'fade' }} />
-      </OnboardingProvider>
+      <LivesProvider>
+        <OnboardingProvider>
+          <CheckInTapHandler />
+          <StatusBar style="dark" />
+          <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: day.bg }, animation: 'fade' }} />
+        </OnboardingProvider>
+      </LivesProvider>
     </GameProvider>
   );
 }

@@ -8,6 +8,8 @@ import {
   endingFor,
   eventById,
   fillTokens,
+  mostCheckedAttributes,
+  typicalOdds,
   LIFE_SLOTS,
   lifeAsks,
   meets,
@@ -227,6 +229,14 @@ describe('Life at 30 details', () => {
     ]);
     expect(result.powerUp).toBe('communication');
     expect(lifeAsks(run([])).powerUp).toBeNull();
+  });
+
+  it('intro odds use the career’s most-checked attributes at their average difficulty', () => {
+    const top = mostCheckedAttributes(designer);
+    expect(top).toHaveLength(3);
+    expect(top).toContain('communication');
+    expect(typicalOdds(designer, 'communication', statsAll(60))).toBeGreaterThan(typicalOdds(designer, 'communication', statsAll(50))!);
+    expect(typicalOdds(designer, 'hands_on', statsAll(60))).toBeNull();
   });
 
   it('tokens', () => {

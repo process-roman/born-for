@@ -7,12 +7,14 @@ import { StyleSheet, Switch, Text, View } from 'react-native';
 import { SIGNS } from '@/content/signs';
 import { remindersOn } from '@/logic/game';
 import { useGame } from '@/state/game';
+import { useLives } from '@/state/lives';
 import { remindersSupported } from '@/storage/notifications';
 import { Body, Button, Card, Label, Screen, Title } from '@/ui/components';
 import { C, F, glyph, palette, S } from '@/ui/theme';
 
 export default function Settings() {
   const { game, switchCuspSign, setReminders, reset } = useGame();
+  const lives = useLives();
   const [confirmDelete, setConfirmDelete] = useState(false);
   if (!game) return <Redirect href="/" />;
   const { character } = game;
@@ -81,6 +83,7 @@ export default function Settings() {
           onPress={() => {
             if (!confirmDelete) return setConfirmDelete(true);
             reset();
+            lives.reset();
             router.replace('/');
           }}
         />
