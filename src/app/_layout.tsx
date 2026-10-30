@@ -1,4 +1,5 @@
 import { Cinzel_400Regular, Cinzel_700Bold } from '@expo-google-fonts/cinzel';
+import { CormorantGaramond_500Medium, CormorantGaramond_500Medium_Italic, CormorantGaramond_600SemiBold } from '@expo-google-fonts/cormorant-garamond';
 import { DMSans_400Regular, DMSans_500Medium, DMSans_700Bold } from '@expo-google-fonts/dm-sans';
 import { useFonts } from 'expo-font';
 import { router, Stack } from 'expo-router';
@@ -24,7 +25,16 @@ function CheckInTapHandler() {
 }
 
 export default function RootLayout() {
-  const [loaded, error] = useFonts({ Cinzel_400Regular, Cinzel_700Bold, DMSans_400Regular, DMSans_500Medium, DMSans_700Bold });
+  const [loaded, error] = useFonts({
+    Cinzel_400Regular,
+    Cinzel_700Bold,
+    CormorantGaramond_500Medium,
+    CormorantGaramond_500Medium_Italic,
+    CormorantGaramond_600SemiBold,
+    DMSans_400Regular,
+    DMSans_500Medium,
+    DMSans_700Bold,
+  });
 
   useEffect(() => {
     if (loaded || error) SplashScreen.hideAsync();

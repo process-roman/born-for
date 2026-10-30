@@ -9,7 +9,7 @@ import { ELEMENT_COLORS } from '@/content/theme';
 import { WORLDS } from '@/content/worlds';
 import { avatarLayers } from '@/logic/avatar';
 import type { Character } from '@/logic/character';
-import { C, F, glyph } from './theme';
+import { C, F, glyph, palette } from './theme';
 
 const AURA_STARS = 10;
 
@@ -54,7 +54,7 @@ export function CharacterAvatar({ character, size }: { character: Character; siz
             borderColor: layers.frame ? C.gold : layers.glow ? element : C.goldBorder,
             borderWidth: layers.frame ? 3 : 1,
           },
-          layers.glow && { shadowColor: element, shadowOpacity: 0.9, shadowRadius: size * 0.18, shadowOffset: { width: 0, height: 0 }, backgroundColor: C.cardRaised },
+          layers.glow && { shadowColor: element, shadowOpacity: 0.9, shadowRadius: size * 0.18, shadowOffset: { width: 0, height: 0 }, backgroundColor: palette.plum },
         ]}
       >
         <Text style={{ fontSize: core * 0.5, color: C.gold }}>{glyph(character.sign)}</Text>
@@ -88,7 +88,7 @@ export function CharacterAvatar({ character, size }: { character: Character; siz
 }
 
 const styles = StyleSheet.create({
-  core: { alignItems: 'center', justifyContent: 'center', backgroundColor: C.night },
+  core: { alignItems: 'center', justifyContent: 'center', backgroundColor: palette.plumDeep },
   spark: { position: 'absolute', color: C.gold, fontFamily: F.body },
   item: {
     position: 'absolute',
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: C.nightDeep,
+    backgroundColor: palette.plumDeep,
     borderWidth: 1,
     borderColor: C.gold,
   },
