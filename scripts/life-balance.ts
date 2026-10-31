@@ -5,15 +5,16 @@
 //   npm run life:balance                    ux_design with the app's sign stats
 //   npm run life:balance -- ux_design --reference   the profiles from balance_check.py
 //   npm run life:balance -- --runs 200
+//   npm run life:balance -- --age 34          a career-change life starting at 34
 //
 // Exits with 1 when content is invalid or a target is missed.
 
 import type { AttributeId, Stats } from '../src/content/attributes';
 import { ATTRIBUTE_IDS } from '../src/content/attributes';
 import type { CareerId } from '../src/content/careers';
-import { LIVES, METERS, SHARED_EVENTS, type Choice, type Meter } from '../src/content/life';
+import { LIVES, METERS, SHARED_EVENTS, type Choice, type LifeEvent, type Meter } from '../src/content/life';
 import { SIGN_IDS, SIGNS, type Element, type SignId } from '../src/content/signs';
-import { createRng, oddsFor, playLife, type LifeRun } from '../src/logic/life';
+import { createRng, lifeStart, oddsFor, playLife, TRACK_FLAGS, type LifeRun } from '../src/logic/life';
 import { validateLife } from '../src/logic/lifeValidate';
 
 /** The 8-trait profiles balance_check.py uses, for comparing against the reference numbers. */
@@ -41,9 +42,10 @@ const option = (name: string) => {
   const i = args.indexOf(`--${name}`);
   return i >= 0 ? args[i + 1] : undefined;
 };
-const career = (args.find((a, i) => !a.startsWith('--') && args[i - 1] !== '--runs') ?? 'ux_design') as CareerId;
+const career = (args.find((a, i) => !a.startsWith('--') && args[i - 1] !== '--runs' && args[i - 1] !== '--age') ?? 'ux_design') as CareerId;
 const runsPer = Number(option('runs') ?? 1000);
 const reference = flag('reference');
+const age = option('age') ? Number(option('age')) : null;
 
 const life = LIVES[career];
 if (!life) {
@@ -100,7 +102,7 @@ for (const strategy of STRATEGIES) {
     const { stats, element } = profile(sign);
     for (let i = 0; i < runsPer; i++) {
       const seed = Math.floor(rng() * 4294967296);
-      const { run, skipped: skips } = playLife(life, SHARED_EVENTS, { id: `${total}`, career, seed, startedAt: '2026-10-30T00:00:00Z', stats, element }, chooser(strategy));
+      const { run, skipped: skips } = playLife(life, SHARED_EVENTS, { id: `${total}`, career, seed, startedAt: '2026-10-30T00:00:00Z', stats, element, age }, chooser(strategy));
       total += 1;
       const ending = run.completed!.endingId;
       bump(endings[strategy], ending);
@@ -128,7 +130,7 @@ const perStrategy = runsPer * SIGN_IDS.length;
 const pct = (n: number, of: number) => (100 * n) / of;
 const fmt = (n: number) => `${n.toFixed(1)}%`;
 
-console.log(`\nCareer: ${career} · ${total} lives (12 signs × 3 strategies × ${runsPer}) · ${reference ? 'reference profiles' : 'app sign stats'}\n`);
+console.log(`\nCareer: ${career} · ${total} lives (12 signs × 3 strategies × ${runsPer}) · ${reference ? 'reference profiles' : 'app sign stats'} · ${age === null ? 'starts at 18' : `starts at ${age}`}\n`);
 console.log('Endings by strategy (%):');
 console.log(`  ${'ending'.padEnd(18)}${STRATEGIES.map((s) => s.padStart(9)).join('')}`);
 for (const id of endingIds) console.log(`  ${id.padEnd(18)}${STRATEGIES.map((s) => fmt(pct(endings[s].get(id) ?? 0, perStrategy)).padStart(9)).join('')}`);
@@ -148,8 +150,13 @@ console.log(`Average final meters: ${METERS.map((m) => `${m} ${Math.round(finals
 console.log(`Average events per life: ${eventsPerLife.toFixed(1)}`);
 console.log(`Skipped slots: ${skipped.size ? JSON.stringify(Object.fromEntries(skipped)) : 'none'}`);
 
-const allIds = [...life.events, ...SHARED_EVENTS].map((e) => e.id);
-console.log('\nEvent appearance (% of lives):');
+// Scenes written for the other track (first career vs career change) can't appear here.
+const trackFlag = TRACK_FLAGS[lifeStart(age).track];
+const otherFlag = Object.values(TRACK_FLAGS).find((f) => f !== trackFlag)!;
+const onTrack = (e: LifeEvent) => !e.conditions?.flagsAll?.includes(otherFlag) && !e.conditions?.flagsNone?.includes(trackFlag);
+const offTrack = [...life.events, ...SHARED_EVENTS].filter((e) => !onTrack(e)).map((e) => e.id);
+const allIds = [...life.events, ...SHARED_EVENTS].filter(onTrack).map((e) => e.id);
+console.log(`\nEvent appearance (% of lives)${offTrack.length ? `, skipping the other track's ${offTrack.join(', ')}` : ''}:`);
 for (const id of allIds) console.log(`  ${id.padEnd(22)} ${fmt(pct(eventCounts.get(id) ?? 0, total)).padStart(6)}`);
 const rarest = allIds.reduce((a, b) => ((eventCounts.get(a) ?? 0) <= (eventCounts.get(b) ?? 0) ? a : b));
 

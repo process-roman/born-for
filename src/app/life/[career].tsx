@@ -8,8 +8,8 @@ import { ATTRIBUTE_LABELS, type Stats } from '@/content/attributes';
 import { CAREER_IDS, CAREERS, type CareerId } from '@/content/careers';
 import { lifeFor, SHARED_EVENTS, type CareerLife } from '@/content/life';
 import { SIGNS, type Element } from '@/content/signs';
-import { statsOf } from '@/logic/character';
-import { LIFE_SLOTS, mostCheckedAttributes, START_METERS, startLife, typicalOdds, type LifeRun } from '@/logic/life';
+import { ageOf, statsOf } from '@/logic/character';
+import { LIFE_SLOTS, lifeStart, mostCheckedAttributes, realAge, START_METERS, startLife, typicalOdds, type LifeRun } from '@/logic/life';
 import { useGame } from '@/state/game';
 import { canPlayLife } from '@/logic/lifeAccess';
 import { activeRun, latestCompleted, useLives } from '@/state/lives';
@@ -18,7 +18,7 @@ import { LifeSky } from '@/ui/LifeSky';
 import { day, S, type } from '@/ui/theme';
 
 /** A fresh run with a random seed, starting now. Only called from button handlers. */
-function newRun(life: CareerLife, careerId: CareerId, stats: Stats, element: Element): LifeRun {
+function newRun(life: CareerLife, careerId: CareerId, stats: Stats, element: Element, age: number | null): LifeRun {
   const now = new Date();
   return startLife(life, SHARED_EVENTS, {
     id: `${careerId}-${now.getTime()}`,
@@ -27,6 +27,7 @@ function newRun(life: CareerLife, careerId: CareerId, stats: Stats, element: Ele
     startedAt: now.toISOString(),
     stats,
     element,
+    age,
   }).run;
 }
 
@@ -46,11 +47,13 @@ export default function LifeIntro() {
   const previous = latestCompleted(runs, careerId);
   const attributes = mostCheckedAttributes(life);
   const allowed = canPlayLife(game, runs, careerId);
+  const age = ageOf(character);
+  const { startAge, track } = lifeStart(age);
   const play = () => router.push({ pathname: '/life/play', params: { career: careerId } });
 
   /** Saving a new run replaces the career's unfinished one, so this also restarts. */
   const start = () => {
-    save(newRun(life, careerId, stats, element));
+    save(newRun(life, careerId, stats, element, age));
     play();
   };
 
@@ -74,11 +77,12 @@ export default function LifeIntro() {
     >
       <LifeSky age={18} meters={START_METERS} element={element} variant="card" />
       <View style={{ alignItems: 'center', gap: S.xs }}>
-        <Label>Live it first</Label>
+        <Label>{track === 'change' ? `A career change at ${startAge}` : 'Live it first'}</Label>
         <Title>{life.lifeName} life</Title>
         <Body muted>
-          {CAREERS[careerId].name}, from 18 to 30. About 5 minutes · your real stats set the odds.
+          {CAREERS[careerId].name}, from {startAge} to {startAge + 12}. About 5 minutes · your real stats set the odds.
         </Body>
+        {age === null ? <Text style={styles.small}>Add your birth year in Settings to start this life at your own age.</Text> : null}
       </View>
 
       {!allowed ? (
@@ -94,7 +98,7 @@ export default function LifeIntro() {
         <Card>
           <Label>In progress</Label>
           <Text style={styles.body}>
-            You stopped at age {LIFE_SLOTS[Math.min(active.slotIndex, LIFE_SLOTS.length - 1)]!.age}. Pick up exactly where you left off.
+            You stopped at age {realAge(active, LIFE_SLOTS[Math.min(active.slotIndex, LIFE_SLOTS.length - 1)]!.age)}. Pick up exactly where you left off.
           </Text>
         </Card>
       ) : null}

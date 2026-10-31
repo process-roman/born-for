@@ -38,7 +38,7 @@ export default function Explore() {
       <Card>
         <Label>Live it first</Label>
         <Body muted style={{ textAlign: 'left' }}>
-          Play a career from 18 to 30 in about 5 minutes. Your real stats set the odds.
+          Play twelve years of a career, starting at your age, in about 5 minutes. Your real stats set the odds.
         </Body>
         <Button title="See all lives" variant="secondary" onPress={() => router.push('/lives')} />
       </Card>

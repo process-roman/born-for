@@ -65,7 +65,7 @@
           "burned_out"
         ]
       },
-      "text": "Somewhere in your twenties it got to be too much. You stepped back, learned your limits and came back on your own terms. Most people learn that much later."
+      "text": "Somewhere along the way it got to be too much. You stepped back, learned your limits and came back on your own terms. Most people learn that much later."
     },
     {
       "id": "ux_end_thriving",
@@ -151,6 +151,117 @@
             "text": "Motivation comes and goes. You learn a lot, just slower than you hoped.",
             "effects": {
               "mastery": 8,
+              "joy": -5,
+              "set": [
+                "route_self"
+              ]
+            }
+          }
+        }
+      ],
+      "conditions": {
+        "flagsNone": [
+          "track_changer"
+        ]
+      }
+    },
+    {
+      "id": "ux_change_opener",
+      "kind": "opener",
+      "stages": [
+        "start"
+      ],
+      "conditions": {
+        "flagsAll": [
+          "track_changer"
+        ]
+      },
+      "priority": 1,
+      "icon": "compass",
+      "title": "A Second Start",
+      "text": "You're {age}, years into another job, and you keep redesigning your company's clunky tools in your head. Time to do it for real. First question: how do you retrain?",
+      "signLines": {
+        "fire": "{archetype}s would rather start late than never.",
+        "earth": "You make a plan with a budget before you make a single screen.",
+        "air": "Mostly, you want to know if the itch is real.",
+        "water": "You think about who depends on you before you decide anything."
+      },
+      "choices": [
+        {
+          "id": "bootcamp",
+          "label": "Quit and do a bootcamp",
+          "hint": "6 months · fast · burns savings",
+          "result": {
+            "text": "Six intense months on your savings, with classmates ten years younger and twice as tired. You come out with a portfolio and a much smaller bank balance.",
+            "effects": {
+              "money": -18,
+              "mastery": 15,
+              "energy": -10,
+              "set": [
+                "route_bootcamp"
+              ]
+            }
+          }
+        },
+        {
+          "id": "evenings",
+          "label": "Learn in the evenings, keep your job",
+          "hint": "Slow · safe · exhausting",
+          "check": {
+            "attribute": "persistence",
+            "difficulty": 60
+          },
+          "success": {
+            "text": "Courses after dinner, projects on weekends. A year later you have real work to show and you never missed rent.",
+            "effects": {
+              "mastery": 12,
+              "joy": 5,
+              "energy": -10,
+              "set": [
+                "route_self"
+              ],
+              "highlight": "Retrained in the evenings while working full time"
+            }
+          },
+          "fail": {
+            "text": "Some weeks you manage, most weeks work wins. You learn, just slower than you hoped.",
+            "effects": {
+              "mastery": 6,
+              "energy": -15,
+              "set": [
+                "route_self"
+              ]
+            }
+          }
+        },
+        {
+          "id": "sideways",
+          "label": "Move sideways inside your company",
+          "hint": "Use what they already know about you",
+          "check": {
+            "attribute": "communication",
+            "difficulty": 65,
+            "bonus": {
+              "track_changer": 10
+            }
+          },
+          "success": {
+            "text": "You pitch a redesign of the internal tool everyone hates. Your boss says yes, and suddenly design is part of your job.",
+            "effects": {
+              "mastery": 10,
+              "money": 5,
+              "joy": 10,
+              "set": [
+                "route_internal",
+                "has_portfolio"
+              ],
+              "highlight": "Talked your way into your first design project at work"
+            }
+          },
+          "fail": {
+            "text": "They like the idea but there's no budget. You start learning on your own instead.",
+            "effects": {
+              "mastery": 5,
               "joy": -5,
               "set": [
                 "route_self"
@@ -412,7 +523,97 @@
             }
           }
         }
-      ]
+      ],
+      "conditions": {
+        "flagsNone": [
+          "track_changer"
+        ]
+      }
+    },
+    {
+      "id": "ux_change_evenings",
+      "kind": "career",
+      "stages": [
+        "training"
+      ],
+      "conditions": {
+        "flagsAll": [
+          "track_changer"
+        ]
+      },
+      "icon": "laptop",
+      "title": "Bills and Breakpoints",
+      "text": "Rent, bills, maybe people who depend on you, and a design course that wants your evenings too.",
+      "choices": [
+        {
+          "id": "protect",
+          "label": "Protect three evenings a week",
+          "check": {
+            "attribute": "persistence",
+            "difficulty": 60
+          },
+          "success": {
+            "text": "Three evenings, every week, no excuses. Your portfolio slowly turns into something you are proud of.",
+            "effects": {
+              "mastery": 12,
+              "energy": -10,
+              "set": [
+                "has_portfolio"
+              ]
+            }
+          },
+          "fail": {
+            "text": "Life keeps winning. You get some projects done, just not the ones you planned.",
+            "effects": {
+              "mastery": 5,
+              "energy": -15
+            }
+          }
+        },
+        {
+          "id": "use_job",
+          "label": "Turn your current job into a project",
+          "hint": "Redesign something you already use",
+          "check": {
+            "attribute": "creativity",
+            "difficulty": 60,
+            "bonus": {
+              "track_changer": 10
+            }
+          },
+          "success": {
+            "text": "You redesign the ordering form your team hates. Your old career just became your first case study.",
+            "effects": {
+              "mastery": 10,
+              "joy": 8,
+              "set": [
+                "has_portfolio"
+              ],
+              "highlight": "Turned your old job into your first case study"
+            }
+          },
+          "fail": {
+            "text": "Nobody has time to look at it. Still, you learned a lot making it.",
+            "effects": {
+              "mastery": 5,
+              "joy": -5
+            }
+          }
+        },
+        {
+          "id": "unpaid",
+          "label": "Take a few weeks unpaid to focus",
+          "result": {
+            "text": "Three weeks of nothing but design. Scary for your savings, great for your skills.",
+            "effects": {
+              "money": -15,
+              "mastery": 12,
+              "energy": 5
+            }
+          }
+        }
+      ],
+      "weight": 2
     },
     {
       "id": "ux_job_hunt",
@@ -522,6 +723,112 @@
                 "employed",
                 "freelance"
               ]
+            }
+          }
+        }
+      ],
+      "conditions": {
+        "flagsNone": [
+          "track_changer"
+        ]
+      }
+    },
+    {
+      "id": "ux_change_job_hunt",
+      "kind": "job_hunt",
+      "stages": [
+        "breaking_in"
+      ],
+      "conditions": {
+        "flagsAll": [
+          "track_changer"
+        ]
+      },
+      "priority": 1,
+      "icon": "briefcase",
+      "title": "Junior at {age}",
+      "text": "Most junior design roles were written with 22-year-olds in mind. Your CV has years of work they do not quite know how to read.",
+      "choices": [
+        {
+          "id": "pitch",
+          "label": "Pitch your past as a strength",
+          "hint": "You know a whole industry from the inside",
+          "check": {
+            "attribute": "communication",
+            "difficulty": 65,
+            "bonus": {
+              "has_portfolio": 10,
+              "route_internal": 10
+            }
+          },
+          "success": {
+            "text": "One interviewer gets it right away: a designer who already understands their customers. You are hired.",
+            "effects": {
+              "mastery": 8,
+              "joy": 10,
+              "money": 15,
+              "set": [
+                "employed"
+              ],
+              "highlight": "Turned your old career into your edge"
+            }
+          },
+          "fail": {
+            "text": "Lots of polite interest, no offers yet. You keep your old job a little longer.",
+            "effects": {
+              "joy": -10,
+              "energy": -5,
+              "set": [
+                "side_job"
+              ]
+            }
+          }
+        },
+        {
+          "id": "junior",
+          "label": "Take a junior role and a pay cut",
+          "hint": "A real design job · less money for a while",
+          "result": {
+            "text": "Your first design title, and a salary lower than your old one. It stings, and it is also exactly what you wanted.",
+            "effects": {
+              "money": -10,
+              "mastery": 8,
+              "joy": 8,
+              "set": [
+                "employed"
+              ]
+            }
+          }
+        },
+        {
+          "id": "freelance",
+          "label": "Freelance for your old industry",
+          "hint": "You know their problems already",
+          "check": {
+            "attribute": "independence",
+            "difficulty": 60,
+            "bonus": {
+              "track_changer": 10
+            }
+          },
+          "success": {
+            "text": "Two former colleagues become your first clients. You are a designer, and your old network is your pipeline.",
+            "effects": {
+              "money": 10,
+              "joy": 10,
+              "mastery": 5,
+              "set": [
+                "employed",
+                "freelance"
+              ]
+            }
+          },
+          "fail": {
+            "text": "People say they will call. Few do. You keep a part-time job to cover the gap.",
+            "effects": {
+              "money": -5,
+              "energy": -10,
+              "joy": -5
             }
           }
         }
@@ -639,6 +946,9 @@
       "conditions": {
         "flagsAll": [
           "route_degree"
+        ],
+        "flagsNone": [
+          "track_changer"
         ]
       },
       "icon": "graduation-cap",
@@ -1154,6 +1464,82 @@
       ]
     },
     {
+      "id": "ux_change_young_boss",
+      "kind": "career",
+      "stages": [
+        "first_job"
+      ],
+      "conditions": {
+        "flagsAll": [
+          "track_changer",
+          "employed"
+        ],
+        "flagsNone": [
+          "freelance"
+        ]
+      },
+      "icon": "users",
+      "title": "Your Manager Is Younger",
+      "text": "Your new design lead is several years younger than you, and a little nervous about it.",
+      "choices": [
+        {
+          "id": "support",
+          "label": "Offer what you know, quietly",
+          "check": {
+            "attribute": "empathy",
+            "difficulty": 55
+          },
+          "success": {
+            "text": "You help with the client side, they help with the craft. Within months you are the team everyone wants on hard projects.",
+            "effects": {
+              "mastery": 8,
+              "joy": 8,
+              "highlight": "Became the steady one on a young team"
+            }
+          },
+          "fail": {
+            "text": "It comes across as advice nobody asked for. You both get a little more careful.",
+            "effects": {
+              "joy": -5
+            }
+          }
+        },
+        {
+          "id": "learn",
+          "label": "Keep your head down and learn",
+          "result": {
+            "text": "You soak it all up. Being the new person again is humbling, and it works.",
+            "effects": {
+              "mastery": 8,
+              "energy": 5
+            }
+          }
+        },
+        {
+          "id": "push",
+          "label": "Push back when they are wrong",
+          "check": {
+            "attribute": "communication",
+            "difficulty": 60
+          },
+          "success": {
+            "text": "You disagree well, with reasons. They start asking for your opinion before decisions.",
+            "effects": {
+              "mastery": 10,
+              "joy": 5
+            }
+          },
+          "fail": {
+            "text": "You were right, but the way you said it was not. Awkward weeks follow.",
+            "effects": {
+              "joy": -10,
+              "energy": -5
+            }
+          }
+        }
+      ]
+    },
+    {
       "id": "ux_startup_offer",
       "kind": "crossroads",
       "stages": [
@@ -1551,7 +1937,7 @@
       },
       "icon": "path",
       "title": "Looking Back",
-      "text": "You're 29. Your path bent away from design. Still, you catch yourself rearranging every menu you see.",
+      "text": "You're {age}. Your path bent away from design. Still, you catch yourself rearranging every menu you see.",
       "choices": [
         {
           "id": "hobby",

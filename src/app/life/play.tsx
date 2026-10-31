@@ -1,5 +1,5 @@
 // Playing a life (Life Sim Spec §12 screens 2–5): event (cream) → roll → outcome → stage
-// transition (night) → … → Life at 30 (night). The run is saved after every choice and resumes
+// transition (night) → … → Life at {end age} (night). The run is saved after every choice and resumes
 // exactly where the user left off.
 
 import { Redirect, router, useLocalSearchParams } from 'expo-router';
@@ -8,12 +8,26 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { ATTRIBUTE_LABELS } from '@/content/attributes';
 import { CAREER_IDS, type CareerId } from '@/content/careers';
-import { lifeFor, SHARED_EVENTS, STAGE_NAMES, type Stage } from '@/content/life';
+import { lifeFor, SHARED_EVENTS, type Stage } from '@/content/life';
 import { SIGNS } from '@/content/signs';
 import { powerUpQuest } from '@/logic/game';
-import { ageFor, choose, eventById, fillTokens, lifeAsks, stageFor, visibleChoices, type LifeRun, type LifeTokens, type Resolution } from '@/logic/life';
+import {
+  ageFor,
+  choose,
+  endAge,
+  eventById,
+  fillTokens,
+  lifeAsks,
+  realAge,
+  stageFor,
+  stageName,
+  visibleChoices,
+  type LifeRun,
+  type LifeTokens,
+  type Resolution,
+} from '@/logic/life';
 import { lifeWithEnding } from '@/logic/lifeDev';
-import { statsOf } from '@/logic/character';
+import { ageOf, statsOf } from '@/logic/character';
 import { hybridTitle } from '@/logic/titles';
 import { useGame } from '@/state/game';
 import { activeRun, latestCompleted, useLives } from '@/state/lives';
@@ -33,8 +47,9 @@ type Phase =
 
 const TRANSITION_MS = 1500;
 
-function ageLabel(age: number, stage: Stage) {
-  return `Age ${age}  ·  ${STAGE_NAMES[stage]}`;
+/** "Age 36 · Breaking In", from a point on the 18–30 scale. */
+function ageLabel(run: LifeRun, scaleAge: number, stage: Stage) {
+  return `Age ${realAge(run, scaleAge)}  ·  ${stageName(stage, run)}`;
 }
 
 function TopBar({ label, onMenu }: { label: string; onMenu: () => void }) {
@@ -70,11 +85,16 @@ function Transition({ stage, age, run, onDone }: { stage: Stage; age: number; ru
   }, [onDone]);
   return (
     <Screen tone="night" scroll={false}>
-      <Pressable accessibilityRole="button" accessibilityLabel={`${STAGE_NAMES[stage]}, age ${age}. Tap to continue.`} onPress={onDone} style={styles.transition}>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={`${stageName(stage, run)}, age ${realAge(run, age)}. Tap to continue.`}
+        onPress={onDone}
+        style={styles.transition}
+      >
         <LifeSky age={age} meters={run.meters} element={run.element} variant="full" />
         <View style={styles.transitionText} pointerEvents="none">
-          <Text style={styles.transitionAge}>Age {age}</Text>
-          <Text style={styles.transitionStage}>{STAGE_NAMES[stage]}</Text>
+          <Text style={styles.transitionAge}>Age {realAge(run, age)}</Text>
+          <Text style={styles.transitionStage}>{stageName(stage, run)}</Text>
         </View>
       </Pressable>
     </Screen>
@@ -99,7 +119,7 @@ export default function LifePlay() {
   const [preview, setPreview] = useState<LifeRun | null>(() => {
     if (!__DEV__ || !devEnding || !game || !life) return null;
     const { sign } = game.character;
-    return lifeWithEnding(life, SHARED_EVENTS, { id: 'preview', career: careerId, startedAt: new Date().toISOString(), stats: statsOf(game.character), element: SIGNS[sign].element }, devEnding);
+    return lifeWithEnding(life, SHARED_EVENTS, { id: 'preview', career: careerId, startedAt: new Date().toISOString(), stats: statsOf(game.character), element: SIGNS[sign].element, age: ageOf(game.character) }, devEnding);
   });
 
   if (!game || !life) return <Redirect href="/" />;
@@ -162,8 +182,8 @@ export default function LifePlay() {
       else setPhase({ kind: 'event' });
     };
     return (
-      <Screen footer={phase.kind === 'outcome' ? <Button title={res.run.completed ? 'See your life at 30' : 'Continue'} onPress={next} /> : undefined}>
-        <TopBar label={ageLabel(age, stage)} onMenu={() => setMenu(!menu)} />
+      <Screen footer={phase.kind === 'outcome' ? <Button title={res.run.completed ? `See your life at ${endAge(res.run)}` : 'Continue'} onPress={next} /> : undefined}>
+        <TopBar label={ageLabel(before, age, stage)} onMenu={() => setMenu(!menu)} />
         <View>
           <LifeSky age={age} meters={meters} element={before.element} variant="card" />
           {phase.kind === 'rolling' ? <RollStar success={res.check!.success} onDone={rolled} /> : null}
@@ -179,7 +199,7 @@ export default function LifePlay() {
           ) : null}
           {phase.kind === 'outcome' ? (
             <>
-              <Text style={styles.body}>{fillTokens(res.outcome.text, tokens)}</Text>
+              <Text style={styles.body}>{fillTokens(res.outcome.text, { ...tokens, age: realAge(before, age) })}</Text>
               <MeterDeltas deltas={res.deltas} />
               {res.outcome.effects.highlight ? (
                 <View style={styles.toast}>
@@ -199,6 +219,7 @@ export default function LifePlay() {
   const age = ageFor(active, event);
   const stage = stageFor(active, event);
   const signLine = event.signLines?.[active.element];
+  const eventTokens = { ...tokens, age: realAge(active, age) };
 
   const pick = (choiceId: string) => {
     const res = choose(life, SHARED_EVENTS, active, choiceId);
@@ -210,7 +231,7 @@ export default function LifePlay() {
 
   return (
     <Screen>
-      <TopBar label={ageLabel(age, stage)} onMenu={() => setMenu(!menu)} />
+      <TopBar label={ageLabel(active, age, stage)} onMenu={() => setMenu(!menu)} />
       {menu ? (
         <Menu
           onClose={() => setMenu(false)}
@@ -224,10 +245,10 @@ export default function LifePlay() {
       <MetersBar meters={active.meters} />
       <View style={styles.eventHead}>
         <LifeIcon name={event.icon} color={day.gold} size={30} />
-        <Text style={styles.title}>{event.title}</Text>
+        <Text style={styles.title}>{fillTokens(event.title, eventTokens)}</Text>
       </View>
-      <Text style={styles.body}>{fillTokens(event.text, tokens)}</Text>
-      {signLine ? <Text style={styles.signLine}>{fillTokens(signLine, tokens)}</Text> : null}
+      <Text style={styles.body}>{fillTokens(event.text, eventTokens)}</Text>
+      {signLine ? <Text style={styles.signLine}>{fillTokens(signLine, eventTokens)}</Text> : null}
       {event.realityNote ? <RealityNote note={event.realityNote} /> : null}
       <View style={{ gap: S.sm }}>
         {visibleChoices(event, active).map((c) => (

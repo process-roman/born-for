@@ -4,7 +4,7 @@
 import { ATTRIBUTE_IDS } from '../content/attributes';
 import { CAREER_IDS, CAREERS } from '../content/careers';
 import { EVENT_KINDS, METERS, STAGES, type CareerLife, type Condition, type LifeEvent, type Outcome } from '../content/life';
-import { LIFE_SLOTS } from './life';
+import { LIFE_SLOTS, TRACK_FLAGS } from './life';
 
 const ELEMENTS = ['fire', 'earth', 'air', 'water'];
 
@@ -24,7 +24,8 @@ export function validateLife(life: CareerLife, shared: LifeEvent[], iconNames?: 
     errors.push(`${life.career}: class "${life.class}" doesn't match the title system ("${CAREERS[life.career].className}")`);
   }
 
-  const setFlags = new Set<string>();
+  // The engine sets the track flags at the start of every life.
+  const setFlags = new Set<string>(Object.values(TRACK_FLAGS));
   const usedFlags = new Map<string, string>(); // flag → where it's used
   const noteFlags = (flags: string[] | undefined, where: string) => flags?.forEach((f) => usedFlags.has(f) || usedFlags.set(f, where));
 

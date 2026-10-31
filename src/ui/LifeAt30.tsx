@@ -7,7 +7,7 @@ import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { ATTRIBUTE_LABELS } from '@/content/attributes';
 import type { CareerLife } from '@/content/life';
-import { AGE_AT_END, fillTokens, highlightsFor, lifeAsks, NO_HIGHLIGHTS_LINE, type LifeRun, type LifeTokens } from '@/logic/life';
+import { AGE_AT_END, endAge, fillTokens, highlightsFor, lifeAsks, noHighlightsLine, type LifeRun, type LifeTokens } from '@/logic/life';
 import { shareViewAsImage } from '@/storage/shareImage';
 import { Button, Card, Label, Screen } from './components';
 import { MetersBar } from './lifeParts';
@@ -27,10 +27,12 @@ function Headline({ life, run, tokens }: { life: CareerLife; run: LifeRun; token
   const ending = life.endings.find((e) => e.id === run.completed!.endingId)!;
   return (
     <View style={styles.headline}>
-      <Label>Life at 30 · {life.lifeName}</Label>
+      <Label>
+        Life at {endAge(run)} · {life.lifeName}
+      </Label>
       <Text style={styles.title}>{tokens.title}</Text>
       <Text style={styles.ending}>{ending.name}</Text>
-      <Text style={styles.endingText}>{fillTokens(ending.text, tokens)}</Text>
+      <Text style={styles.endingText}>{fillTokens(ending.text, { ...tokens, age: endAge(run) })}</Text>
       <View style={styles.rolePill}>
         <Text style={styles.role}>{run.completed!.role}</Text>
       </View>
@@ -50,7 +52,7 @@ function Highlights({ run }: { run: LifeRun }) {
           </View>
         ))
       ) : (
-        <Text style={styles.highlightText}>{NO_HIGHLIGHTS_LINE}</Text>
+        <Text style={styles.highlightText}>{noHighlightsLine(run)}</Text>
       )}
     </View>
   );
@@ -64,15 +66,17 @@ function ShareCard({ life, run, tokens }: { life: CareerLife; run: LifeRun; toke
     <View style={styles.shareCard}>
       <LifeSky age={AGE_AT_END} meters={run.meters} element={run.element} variant="card" style={{ aspectRatio: 1.7 }} />
       <View style={styles.headline}>
-        <Text style={styles.shareLabel}>Life at 30 · {life.lifeName}</Text>
+        <Text style={styles.shareLabel}>
+          Life at {endAge(run)} · {life.lifeName}
+        </Text>
         <Text style={styles.shareTitle}>{tokens.title}</Text>
         <Text style={styles.shareEnding}>{ending.name}</Text>
-        <Text style={styles.shareText}>{fillTokens(ending.text, tokens)}</Text>
+        <Text style={styles.shareText}>{fillTokens(ending.text, { ...tokens, age: endAge(run) })}</Text>
         <Text style={styles.role}>{run.completed!.role}</Text>
       </View>
       <MetersBar meters={run.meters} tone="night" />
       <View style={{ gap: 4 }}>
-        {(highlights.length ? highlights : [NO_HIGHLIGHTS_LINE]).map((h) => (
+        {(highlights.length ? highlights : [noHighlightsLine(run)]).map((h) => (
           <Text key={h} style={styles.shareHighlight}>
             {highlights.length ? '★  ' : ''}
             {h}
@@ -118,7 +122,7 @@ export function LifeAt30({
 
   const share = async () => {
     try {
-      const ok = await shareViewAsImage(shareRef, `My ${life.lifeName} life at 30`);
+      const ok = await shareViewAsImage(shareRef, `My ${life.lifeName} life at ${endAge(run)}`);
       if (!ok) setShareNote('Sharing isn’t available on this device.');
       else setSharing(false);
     } catch {

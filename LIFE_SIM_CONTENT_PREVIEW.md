@@ -8,7 +8,7 @@ Readable version of the JSON content files, for reviewing tone and story. Edit t
 ### Endings (checked in this order)
 - **Found a Different Path** — needs pivoted: Design opened a door you didn't expect. You walked through it, and you still see the world like a designer. You just use it differently now.
 - **Started Your Own Studio** — needs studio; joy ≥ 40: Your name is on the door. Some months are lean, some are great, and every decision is yours.
-- **Burned Out, Then Rebuilt** — needs burned_out: Somewhere in your twenties it got to be too much. You stepped back, learned your limits and came back on your own terms. Most people learn that much later.
+- **Burned Out, Then Rebuilt** — needs burned_out: Somewhere along the way it got to be too much. You stepped back, learned your limits and came back on your own terms. Most people learn that much later.
 - **Thriving** — mastery ≥ 55, joy ≥ 65: You're good at this, and you still love it. People use things you made every day without knowing your name. You know, though.
 - **Steady** — default: A solid design career: good work, good people, a life that fits. Not every life needs fireworks.
 
@@ -312,12 +312,80 @@ The biggest project of your career lands on your desk: a redesign of an app a mi
 ### Looking Back
 `ux_new_path` · finale · Thirty (29) · (not if employed) OR (needs pivoted)
 
-You're 29. Your path bent away from design. Still, you catch yourself rearranging every menu you see.
+You're {age}. Your path bent away from design. Still, you catch yourself rearranging every menu you see.
 
 - **Keep designing for fun**
   - Design stays yours: weekend projects, no clients, no logo requests. *(+10 Joy)*
 - **Bring design into your new work**
   - Turns out a designer's eye is a superpower almost anywhere. *(+5 Mastery, +5 Joy)*
+
+
+## Career change track (23 and up)
+Lives start at the user's age. From 23 they are career changes: these scenes replace the opener and job hunt, and the training scene joins the shared ones. Ages are shown as {age}.
+
+### A Second Start
+`ux_change_opener` · opener · Start · needs track_changer
+
+You're {age}, years into another job, and you keep redesigning your company's clunky tools in your head. Time to do it for real. First question: how do you retrain?
+
+*Fire signs:* _{archetype}s would rather start late than never._
+
+*Earth signs:* _You make a plan with a budget before you make a single screen._
+
+*Air signs:* _Mostly, you want to know if the itch is real._
+
+*Water signs:* _You think about who depends on you before you decide anything._
+
+- **Quit and do a bootcamp** — 6 months · fast · burns savings
+  - Six intense months on your savings, with classmates ten years younger and twice as tired. You come out with a portfolio and a much smaller bank balance. *(-10 Energy, -18 Money, +15 Mastery)*
+- **Learn in the evenings, keep your job** — Slow · safe · exhausting · `Persistence check, difficulty 60`
+  - ✓ Courses after dinner, projects on weekends. A year later you have real work to show and you never missed rent. *(+5 Joy, -10 Energy, +12 Mastery · ★ "Retrained in the evenings while working full time")*
+  - ✗ Some weeks you manage, most weeks work wins. You learn, just slower than you hoped. *(-15 Energy, +6 Mastery)*
+- **Move sideways inside your company** — Use what they already know about you · `Communication check, difficulty 65` (bonus: track_changer +10)
+  - ✓ You pitch a redesign of the internal tool everyone hates. Your boss says yes, and suddenly design is part of your job. *(+10 Joy, +5 Money, +10 Mastery · ★ "Talked your way into your first design project at work")*
+  - ✗ They like the idea but there's no budget. You start learning on your own instead. *(-5 Joy, +5 Mastery)*
+
+### Bills and Breakpoints
+`ux_change_evenings` · career · Training · needs track_changer
+
+Rent, bills, maybe people who depend on you, and a design course that wants your evenings too.
+
+- **Protect three evenings a week** · `Persistence check, difficulty 60`
+  - ✓ Three evenings, every week, no excuses. Your portfolio slowly turns into something you are proud of. *(-10 Energy, +12 Mastery)*
+  - ✗ Life keeps winning. You get some projects done, just not the ones you planned. *(-15 Energy, +5 Mastery)*
+- **Turn your current job into a project** — Redesign something you already use · `Creativity check, difficulty 60` (bonus: track_changer +10)
+  - ✓ You redesign the ordering form your team hates. Your old career just became your first case study. *(+8 Joy, +10 Mastery · ★ "Turned your old job into your first case study")*
+  - ✗ Nobody has time to look at it. Still, you learned a lot making it. *(-5 Joy, +5 Mastery)*
+- **Take a few weeks unpaid to focus**
+  - Three weeks of nothing but design. Scary for your savings, great for your skills. *(+5 Energy, -15 Money, +12 Mastery)*
+
+### Junior at {age}
+`ux_change_job_hunt` · job_hunt · Breaking In · needs track_changer
+
+Most junior design roles were written with 22-year-olds in mind. Your CV has years of work they do not quite know how to read.
+
+- **Pitch your past as a strength** — You know a whole industry from the inside · `Communication check, difficulty 65` (bonus: has_portfolio +10, route_internal +10)
+  - ✓ One interviewer gets it right away: a designer who already understands their customers. You are hired. *(+10 Joy, +15 Money, +8 Mastery · ★ "Turned your old career into your edge")*
+  - ✗ Lots of polite interest, no offers yet. You keep your old job a little longer. *(-10 Joy, -5 Energy)*
+- **Take a junior role and a pay cut** — A real design job · less money for a while
+  - Your first design title, and a salary lower than your old one. It stings, and it is also exactly what you wanted. *(+8 Joy, -10 Money, +8 Mastery)*
+- **Freelance for your old industry** — You know their problems already · `Independence check, difficulty 60` (bonus: track_changer +10)
+  - ✓ Two former colleagues become your first clients. You are a designer, and your old network is your pipeline. *(+10 Joy, +10 Money, +5 Mastery)*
+  - ✗ People say they will call. Few do. You keep a part-time job to cover the gap. *(-5 Joy, -10 Energy, -5 Money)*
+
+### Your Manager Is Younger
+`ux_change_young_boss` · career · First Job · needs track_changer; needs employed; not if freelance
+
+Your new design lead is several years younger than you, and a little nervous about it.
+
+- **Offer what you know, quietly** · `Empathy check, difficulty 55`
+  - ✓ You help with the client side, they help with the craft. Within months you are the team everyone wants on hard projects. *(+8 Joy, +8 Mastery · ★ "Became the steady one on a young team")*
+  - ✗ It comes across as advice nobody asked for. You both get a little more careful. *(-5 Joy)*
+- **Keep your head down and learn**
+  - You soak it all up. Being the new person again is humbling, and it works. *(+5 Energy, +8 Mastery)*
+- **Push back when they are wrong** · `Communication check, difficulty 60`
+  - ✓ You disagree well, with reasons. They start asking for your opinion before decisions. *(+5 Joy, +10 Mastery)*
+  - ✗ You were right, but the way you said it was not. Awkward weeks follow. *(-10 Joy, -5 Energy)*
 
 
 ## Shared events (all careers)

@@ -135,4 +135,6 @@ export const BONUS_LABELS: Record<string, string> = {
   has_mentor: 'your mentor',
   freelance: 'your freelance experience',
   manager: 'your management experience',
+  track_changer: 'your work experience',
+  route_internal: 'your inside track at work',
 };

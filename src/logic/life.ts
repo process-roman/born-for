@@ -5,7 +5,7 @@
 import { ATTRIBUTE_IDS, type AttributeId, type Stats } from '../content/attributes';
 import type { CareerId } from '../content/careers';
 import type { CareerLife, Check, Choice, Condition, Effects, Ending, EventKind, LifeEvent, Meter, Meters, Outcome, Stage } from '../content/life';
-import { METERS } from '../content/life';
+import { METERS, STAGE_NAMES } from '../content/life';
 import type { Element } from '../content/signs';
 
 export interface Slot {
@@ -32,9 +32,13 @@ export const START_METERS: Meters = { joy: 50, energy: 65, money: 30, mastery: 0
 export const MAX_FORCED_PER_LIFE = 2;
 export const ODDS_FLOOR = 15;
 export const ODDS_CEILING = 90;
+/** The end of the 18–30 scale the slots and the sky use; real ages are shifted by the start age. */
 export const AGE_AT_END = 30;
+/** Lives start at the user's age. From this age they're career changes, with their own scenes. */
+export const CAREER_CHANGE_AGE = 23;
+/** Set by the engine at the start of every life, so content can branch on the track. */
+export const TRACK_FLAGS = { first: 'track_first', change: 'track_changer' } as const;
 export const MAX_HIGHLIGHTS = 3;
-export const NO_HIGHLIGHTS_LINE = 'Made it to 30 your own way.';
 /** Quest XP for finishing a career's life the first time (§13). */
 export const LIFE_XP = 25;
 
@@ -51,6 +55,8 @@ export interface LifeRun {
   startedAt: string;
   statsSnapshot: Stats;
   element: Element;
+  /** Real age at the first scene. Missing in runs from before lives followed the user's age (18). */
+  startAge?: number;
   /** Slots finished (played or skipped); the index of the next slot. */
   slotIndex: number;
   meters: Meters;
@@ -180,6 +186,14 @@ export interface NewLife {
   startedAt: string;
   stats: Stats;
   element: Element;
+  /** The user's age; null or missing starts a first-career life at 18. */
+  age?: number | null;
+}
+
+/** Where a life starts: at the user's age (18 at the earliest), as a career change from 23. */
+export function lifeStart(age: number | null | undefined): { startAge: number; track: keyof typeof TRACK_FLAGS } {
+  if (age === null || age === undefined || age < 18) return { startAge: 18, track: 'first' };
+  return { startAge: age, track: age >= CAREER_CHANGE_AGE ? 'change' : 'first' };
 }
 
 export interface Advance {
@@ -189,6 +203,7 @@ export interface Advance {
 }
 
 export function startLife(life: CareerLife, shared: readonly LifeEvent[], params: NewLife): Advance {
+  const { startAge, track } = lifeStart(params.age);
   const run: LifeRun = {
     id: params.id,
     career: params.career,
@@ -196,9 +211,10 @@ export function startLife(life: CareerLife, shared: readonly LifeEvent[], params
     startedAt: params.startedAt,
     statsSnapshot: { ...params.stats },
     element: params.element,
+    startAge,
     slotIndex: 0,
     meters: { ...START_METERS },
-    flags: [],
+    flags: [TRACK_FLAGS[track]],
     usedEventIds: [],
     forcedCount: 0,
     log: [],
@@ -402,7 +418,29 @@ export function endingsFound(life: CareerLife, runs: readonly LifeRun[]): { endi
 // ---------------------------------------------------------------------------------------------
 // Helpers for screens.
 
-/** Age shown for the event on screen; forced events use the previous slot's age (§6). */
+/** Real age for a point on the 18–30 scale. */
+export function realAge(run: LifeRun, scaleAge: number): number {
+  return scaleAge + (run.startAge ?? 18) - 18;
+}
+
+/** The real age the life ends at: twelve years after it starts. */
+export function endAge(run: LifeRun): number {
+  return realAge(run, AGE_AT_END);
+}
+
+export function noHighlightsLine(run: LifeRun): string {
+  return `Made it to ${endAge(run)} your own way.`;
+}
+
+/** Stage name for screens; the last stage is named for the end age ("Turning 30"). */
+export function stageName(stage: Stage, run: LifeRun): string {
+  return stage === 'thirty' ? `Turning ${endAge(run)}` : STAGE_NAMES[stage];
+}
+
+/**
+ * Where the event on screen sits on the 18–30 scale (forced events use the previous slot's, §6).
+ * The sky uses this directly; labels show realAge(run, ageFor(…)).
+ */
 export function ageFor(run: LifeRun, event: LifeEvent): number {
   if (run.completed) return AGE_AT_END;
   const index = event.kind === 'forced' ? run.slotIndex - 1 : run.slotIndex;
@@ -439,9 +477,11 @@ export interface LifeTokens {
   archetype: string;
   sign: string;
   title: string;
+  /** Real age at this point in the life, for {age}. */
+  age?: number;
 }
 
-/** Replaces {archetype}, {sign} and {title} in event text, sign lines and endings (§10). */
+/** Replaces {archetype}, {sign}, {title} and {age} in event text, sign lines and endings (§10). */
 export function fillTokens(text: string, tokens: LifeTokens): string {
-  return text.replace(/\{(archetype|sign|title)\}/g, (_, key: keyof LifeTokens) => tokens[key]);
+  return text.replace(/\{(archetype|sign|title|age)\}/g, (match, key: keyof LifeTokens) => String(tokens[key] ?? match));
 }

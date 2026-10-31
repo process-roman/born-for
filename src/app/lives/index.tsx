@@ -5,7 +5,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { CAREERS } from '@/content/careers';
 import { LIFE_CAREER_IDS, LIVES } from '@/content/life';
-import { endingsFound, LIFE_SLOTS } from '@/logic/life';
+import { endingsFound, LIFE_SLOTS, realAge } from '@/logic/life';
 import { canPlayLife } from '@/logic/lifeAccess';
 import { useGame } from '@/state/game';
 import { activeRun, latestCompleted, useLives } from '@/state/lives';
@@ -21,7 +21,7 @@ export default function LivesHub() {
   return (
     <Screen footer={<Button title="Back" variant="ghost" onPress={() => (router.canGoBack() ? router.back() : router.replace('/explore'))} />}>
       <Title>Lives</Title>
-      <Body muted>Live a career from 18 to 30 before you try it for real. Your real stats set the odds.</Body>
+      <Body muted>Live twelve years of a career, starting at your age, before you try it for real. Your real stats set the odds.</Body>
 
       {LIFE_CAREER_IDS.map((id) => {
         const life = LIVES[id]!;
@@ -31,7 +31,7 @@ export default function LivesHub() {
         const status = locked
           ? 'Locked: unlock to play'
           : active
-            ? `In progress · age ${LIFE_SLOTS[Math.min(active.slotIndex, LIFE_SLOTS.length - 1)]!.age}`
+            ? `In progress · age ${realAge(active, LIFE_SLOTS[Math.min(active.slotIndex, LIFE_SLOTS.length - 1)]!.age)}`
             : found
               ? `${found} of ${life.endings.length} endings found`
               : 'Not lived yet';

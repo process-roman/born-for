@@ -64,6 +64,11 @@ Then the ending is calculated and shown as **Life at 30**.
 
 **Forced events** (`kind: "forced"`) can be inserted after any slot (section 6). A life has at most 2 forced events.
 
+**Decided Oct 31, 2026: lives start at the user's age.** The ages above are the 18–30 scale the slots and the sky use; real ages are shifted by the start age, and a life always spans 12 years ("Life at {end age}", last stage "Turning {end age}"). Without a known age a life starts at 18.
+- **18–22: first career.** The engine sets the flag `track_first`; the content above plays as written.
+- **23 and up: career change.** The engine sets `track_changer`. Career files add scenes with `conditions: { flagsAll: ["track_changer"] }` (and `priority: 1` where they replace a slot, like the opener and job hunt), and mark first-career-only scenes with `flagsNone: ["track_changer"]`. `{age}` in text is the real age at that scene. The balance script checks a track with `--age N` and skips the other track's scenes in its coverage check.
+- This lifts "Lives beyond age 30" from section 17.
+
 ---
 
 ## 4. Life meters

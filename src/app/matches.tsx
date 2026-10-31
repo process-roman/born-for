@@ -1,5 +1,5 @@
 // End of onboarding (Life Sim Spec §2): career matches, then "Live it first" on the top match that
-// has a life, free. The paywall comes after the free Life at 30 card.
+// has a life, free. The paywall comes after the free life's Life at {age} card.
 
 import { Redirect, router } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
@@ -8,8 +8,8 @@ import { CAREERS } from '@/content/careers';
 import { lifeFor } from '@/content/life';
 import type { IntentId } from '@/content/preferences';
 import { SIGNS } from '@/content/signs';
-import { rankingFor } from '@/logic/character';
-import { START_METERS } from '@/logic/life';
+import { ageOf, rankingFor } from '@/logic/character';
+import { lifeStart, START_METERS } from '@/logic/life';
 import { freeLifeCareer } from '@/logic/lifeAccess';
 import { useGame } from '@/state/game';
 import { useOnboarding } from '@/state/onboarding';
@@ -36,6 +36,8 @@ export default function Matches() {
   const freeCareer = freeLifeCareer(character);
   const life = freeCareer ? lifeFor(freeCareer) : null;
   const topHasLife = freeCareer === ranked[0]?.careerId;
+  const { startAge, track } = lifeStart(ageOf(character));
+  const span = `from ${startAge} to ${startAge + 12}`;
 
   /** The game starts here, unpaid, so the free life and its card have somewhere to live. */
   const ensureGame = () => {
@@ -70,8 +72,8 @@ export default function Matches() {
           <Text style={styles.lifeTitle}>{life.lifeName} life</Text>
           <Text style={styles.body}>
             {topHasLife
-              ? `Before you decide anything, live your top match from 18 to 30. About 5 minutes, and your real stats set the odds.`
-              : `Lives are coming to more careers. Start with ${CAREERS[freeCareer].name}: about 5 minutes from 18 to 30, and your real stats set the odds.`}
+              ? `Before you decide anything, live your top match ${span}${track === 'change' ? ' as a career change' : ''}. About 5 minutes, and your real stats set the odds.`
+              : `Lives are coming to more careers. Start with ${CAREERS[freeCareer].name}: about 5 minutes ${span}, and your real stats set the odds.`}
           </Text>
         </Card>
       ) : null}
