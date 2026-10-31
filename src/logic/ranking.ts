@@ -54,6 +54,8 @@ export interface MatchInput {
   picks: readonly CareerId[];
   workStyle: WorkStyleId;
   feedback?: FeedbackMap;
+  /** For age-aware difficulty; difficulty never changes the ranking. */
+  age?: number | null;
 }
 
 export type MatchSource = 'picked' | 'world' | 'near_pick' | 'other';
@@ -177,7 +179,7 @@ export function matchCareer(career: Career, input: MatchInput): CareerMatch {
   const fit = attributeFit(career, input.stats);
   const work = workStyleScore(career, input.workStyle);
   const score = 100 * (WEIGHTS.interest * interest + WEIGHTS.attributes * fit + WEIGHTS.workStyle * work);
-  const difficulty = difficultyFor(career, input.stats);
+  const difficulty = difficultyFor(career, input.stats, input.age ?? null);
   return {
     careerId: career.id,
     score,

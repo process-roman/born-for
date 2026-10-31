@@ -5,6 +5,7 @@
 import { writeFileSync } from 'node:fs';
 
 import { ATTRIBUTE_LABELS } from '../src/content/attributes';
+import { CAREER_TRAINING } from '../src/content/careerTraining';
 import { CAREER_IDS, CAREERS, type QuestStep } from '../src/content/careers';
 import { WORK_STYLE_LABELS } from '../src/content/preferences';
 import { WORLDS } from '../src/content/worlds';
@@ -18,6 +19,15 @@ const STEP_LABELS: Record<QuestStep, string> = {
 };
 
 const TIER_LABELS = { taste: 'Taste', try: 'Try', test: 'Test' } as const;
+
+/** For age-aware difficulty: years before paid work in the role, apprenticeships, usual start age. */
+function trainingLine(id: (typeof CAREER_IDS)[number]): string {
+  const t = CAREER_TRAINING[id];
+  const parts = [`${t.years[0]}–${t.years[1]} years`];
+  if (t.paidApprenticeship) parts.push(`paid apprenticeship, ${t.paidApprenticeship[0]}–${t.paidApprenticeship[1]} years to qualify`);
+  if (t.usualStartBy) parts.push(`most start before ${t.usualStartBy}`);
+  return parts.join('; ');
+}
 
 const cell = (s: string) => s.replace(/\|/g, '\\|');
 const list = (items: string[]) => items.map((i) => `- ${i}`).join('\n');
@@ -54,6 +64,8 @@ CAREER_IDS.forEach((id, i) => {
     list(c.downsides),
     '',
     `**Education & training:** ${c.education}`,
+    '',
+    `**Time to start from scratch:** ${trainingLine(c.id)}`,
     '',
     '**Key traits:**',
     '| Trait | Required | Weight |',

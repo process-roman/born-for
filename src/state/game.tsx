@@ -6,7 +6,7 @@ import type { BadgeId } from '@/content/badges';
 import { CAREERS, type CareerId, type StarNumber } from '@/content/careers';
 import type { SignId } from '@/content/signs';
 import type { Character, Reflection } from '@/logic/character';
-import { setPathInterest } from '@/logic/character';
+import { setBirthYear, setPathInterest } from '@/logic/character';
 import * as G from '@/logic/game';
 import type { PathInterest } from '@/logic/ranking';
 import type { PollAnswers } from '@/logic/stats';
@@ -46,6 +46,7 @@ interface GameContextValue {
   /** First-time life XP; returns the XP given (0 on later completions). */
   finishLife: (careerId: CareerId) => number;
   setLifeWant: (careerId: CareerId, answer: 'yes' | 'maybe' | 'no') => void;
+  setBirthYear: (birthYear: number | null) => void;
   reset: () => void;
 }
 
@@ -125,6 +126,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
         return result.xp;
       },
       setLifeWant: (careerId, answer) => update((g) => G.setLifeWant(g, careerId, answer)),
+      setBirthYear: (birthYear) => update((g) => ({ ...g, character: setBirthYear(g.character, birthYear) })),
       reset: () => {
         void cancelCheckIn(game?.activeQuest?.notificationId ?? null);
         setLastResult(null);

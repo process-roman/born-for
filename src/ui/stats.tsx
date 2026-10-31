@@ -118,12 +118,21 @@ export function TraitSheet(props: Omit<Parameters<typeof StatList>[0], 'attribut
 /** Soft tint per level; text stays plum so it reads at small size. */
 const DIFFICULTY_TINTS = { 1: palette.plumSoft, 2: palette.goldSoft, 3: palette.peachSoft } as const;
 
+/** The level as a pill, with the age reason underneath when age made it harder. */
 export function DifficultyPill({ difficulty }: { difficulty: Difficulty }) {
-  return (
+  const t = useToneColors();
+  const pill = (
     <View style={[styles.difficulty, { backgroundColor: DIFFICULTY_TINTS[difficulty.level] }]}>
       <Text style={styles.difficultyText}>
         {'★'.repeat(difficulty.level)}  {difficulty.label}
       </Text>
+    </View>
+  );
+  if (!difficulty.ageNote) return pill;
+  return (
+    <View style={{ gap: S.xs }}>
+      {pill}
+      <Text style={[styles.ageNote, { color: t.textMuted }]}>{difficulty.ageNote}</Text>
     </View>
   );
 }
@@ -138,6 +147,7 @@ const styles = StyleSheet.create({
   track: { height: 6, borderRadius: radius.pill, overflow: 'hidden' },
   fill: { position: 'absolute', left: 0, top: 0, bottom: 0, borderRadius: radius.pill },
   tick: { position: 'absolute', top: -3, width: 2, height: 12, marginLeft: -1, borderRadius: 1 },
+  ageNote: { ...type.small, fontSize: 13, lineHeight: 18 },
   legend: { flexDirection: 'row', alignItems: 'center', gap: S.sm },
   legendTick: { width: 2, height: 12, borderRadius: 1 },
   legendText: { ...type.small, fontSize: 12, lineHeight: 16, flex: 1 },

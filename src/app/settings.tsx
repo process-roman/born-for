@@ -1,19 +1,79 @@
-// Settings: sign, reminders, recalibrate, delete data (Blueprint §12 screen 15).
+// Settings: sign, birth year, reminders, recalibrate, delete data (Blueprint §12 screen 15).
 
 import { Redirect, router } from 'expo-router';
 import { useState } from 'react';
-import { StyleSheet, Switch, Text, View } from 'react-native';
+import { StyleSheet, Switch, Text, TextInput, View } from 'react-native';
 
 import { SIGNS } from '@/content/signs';
+import { ageOf } from '@/logic/character';
 import { remindersOn } from '@/logic/game';
 import { useGame } from '@/state/game';
 import { useLives } from '@/state/lives';
 import { remindersSupported } from '@/storage/notifications';
 import { Body, Button, Card, Label, Screen, Title } from '@/ui/components';
-import { C, F, glyph, palette, S } from '@/ui/theme';
+import { C, F, glyph, palette, radius, S } from '@/ui/theme';
+
+const OLDEST_YEAR = 1920;
+
+/** Birth year, so paths can show how long a route takes to start at your age. */
+function BirthYearCard({ birthYear, age, onSave }: { birthYear: number | undefined; age: number | null; onSave: (year: number | null) => void }) {
+  const [editing, setEditing] = useState(!birthYear);
+  const [value, setValue] = useState(birthYear ? String(birthYear) : '');
+  const [error, setError] = useState<string | null>(null);
+  const save = () => {
+    const year = Number(value);
+    if (!Number.isInteger(year) || year < OLDEST_YEAR || year > new Date().getFullYear()) return setError('Try a four-digit year, like 1998.');
+    setError(null);
+    setEditing(false);
+    onSave(year);
+  };
+  return (
+    <Card>
+      <Label>Your age</Label>
+      {!editing && birthYear ? (
+        <>
+          <Text style={styles.value}>
+            Born in {birthYear} · about {age}
+          </Text>
+          <Text style={styles.hint}>Used to show how long each path takes to start at your age. Never shared.</Text>
+          <View style={{ flexDirection: 'row', gap: S.sm }}>
+            <Button title="Change" variant="secondary" style={{ flex: 1 }} onPress={() => setEditing(true)} />
+            <Button
+              title="Remove"
+              variant="ghost"
+              style={{ flex: 1 }}
+              onPress={() => {
+                setValue('');
+                setEditing(true);
+                onSave(null);
+              }}
+            />
+          </View>
+        </>
+      ) : (
+        <>
+          <Text style={styles.hint}>Add your birth year so paths can account for your age, like how long retraining takes. Only the year is kept.</Text>
+          <TextInput
+            value={value}
+            onChangeText={(t) => setValue(t.replace(/\D/g, '').slice(0, 4))}
+            placeholder="YYYY"
+            placeholderTextColor={C.grey}
+            keyboardType="number-pad"
+            maxLength={4}
+            accessibilityLabel="Birth year"
+            onSubmitEditing={save}
+            style={styles.input}
+          />
+          {error ? <Text style={styles.error}>{error}</Text> : null}
+          <Button title="Save" variant="secondary" disabled={value.length < 4} onPress={save} />
+        </>
+      )}
+    </Card>
+  );
+}
 
 export default function Settings() {
-  const { game, switchCuspSign, setReminders, reset } = useGame();
+  const { game, switchCuspSign, setReminders, setBirthYear, reset } = useGame();
   const lives = useLives();
   const [confirmDelete, setConfirmDelete] = useState(false);
   if (!game) return <Redirect href="/" />;
@@ -33,7 +93,7 @@ export default function Settings() {
             <Text style={styles.value}>
               {sign.name}, {sign.archetype}
             </Text>
-            <Text style={styles.hint}>We kept only your sign, not your birth date.</Text>
+            <Text style={styles.hint}>We keep your sign and birth year, never your full birth date.</Text>
           </View>
         </View>
         {otherCuspSign ? (
@@ -46,6 +106,8 @@ export default function Settings() {
           </>
         ) : null}
       </Card>
+
+      <BirthYearCard birthYear={character.birthYear} age={ageOf(character)} onSave={setBirthYear} />
 
       <Card>
         <Label>Your stats</Label>
@@ -98,4 +160,16 @@ const styles = StyleSheet.create({
   value: { fontFamily: F.bodyMedium, fontSize: 15, color: C.text },
   hint: { fontFamily: F.body, fontSize: 13, lineHeight: 19, color: C.textMuted },
   toggle: { flexDirection: 'row', alignItems: 'center', gap: S.md },
+  input: {
+    height: 52,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    borderColor: C.border,
+    backgroundColor: C.night,
+    color: C.text,
+    fontFamily: F.bodyMedium,
+    fontSize: 20,
+    textAlign: 'center',
+  },
+  error: { fontFamily: F.body, fontSize: 13, color: '#9C3D2B' },
 });

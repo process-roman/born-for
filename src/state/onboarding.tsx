@@ -1,5 +1,5 @@
-// Onboarding answers, held in memory until the character is created. Only the sign is kept,
-// never the birth date (Blueprint §13, privacy).
+// Onboarding answers, held in memory until the character is created. Only the sign and birth
+// year are kept, never the full birth date (Blueprint §13, privacy).
 
 import { createContext, useContext, useMemo, useReducer, type ReactNode } from 'react';
 
@@ -15,6 +15,8 @@ export interface OnboardingState {
   intent: IntentId | null;
   sign: SignId | null;
   cuspSigns: [SignId, SignId] | null;
+  /** Null when the sign was picked by hand. */
+  birthYear: number | null;
   answers: PollAnswers;
   worlds: WorldId[];
   picks: CareerId[];
@@ -23,14 +25,14 @@ export interface OnboardingState {
 
 type Action =
   | { type: 'intent'; intent: IntentId }
-  | { type: 'sign'; sign: SignId; cuspSigns: [SignId, SignId] | null }
+  | { type: 'sign'; sign: SignId; cuspSigns: [SignId, SignId] | null; birthYear: number | null }
   | { type: 'answer'; attribute: AttributeId; answer: PollAnswer }
   | { type: 'resetAnswers' }
   | { type: 'toggleWorld'; world: WorldId }
   | { type: 'togglePick'; careerId: CareerId }
   | { type: 'workStyle'; workStyle: WorkStyleId };
 
-const initial: OnboardingState = { intent: null, sign: null, cuspSigns: null, answers: {}, worlds: [], picks: [], workStyle: null };
+const initial: OnboardingState = { intent: null, sign: null, cuspSigns: null, birthYear: null, answers: {}, worlds: [], picks: [], workStyle: null };
 
 function reducer(state: OnboardingState, action: Action): OnboardingState {
   switch (action.type) {
@@ -38,7 +40,7 @@ function reducer(state: OnboardingState, action: Action): OnboardingState {
       return { ...state, intent: action.intent };
     case 'sign':
       // A new sign means the poll is about a different prediction, so start it over.
-      return { ...state, sign: action.sign, cuspSigns: action.cuspSigns, answers: action.sign === state.sign ? state.answers : {} };
+      return { ...state, sign: action.sign, cuspSigns: action.cuspSigns, birthYear: action.birthYear, answers: action.sign === state.sign ? state.answers : {} };
     case 'answer':
       return { ...state, answers: { ...state.answers, [action.attribute]: action.answer } };
     case 'resetAnswers':
@@ -86,6 +88,7 @@ export function useOnboarding() {
           intent: state.intent ?? undefined,
           sign: state.sign,
           cuspSigns: state.cuspSigns ?? undefined,
+          birthYear: state.birthYear ?? undefined,
           answers: state.answers,
           worlds: state.worlds,
           picks: state.picks,

@@ -53,22 +53,26 @@ export interface Character {
   recalibrations?: number;
   /** Careers whose simulated life was finished at least once (for the one-time life XP). */
   livesCompleted?: CareerId[];
+  /** Kept from the birthday (never the full date) so paths can account for age. Missing when unknown. */
+  birthYear?: number;
 }
 
 export interface OnboardingInput {
   intent?: IntentId;
   sign: SignId;
   cuspSigns?: [SignId, SignId];
+  birthYear?: number;
   answers: PollAnswers;
   worlds: WorldId[];
   picks: CareerId[];
   workStyle: WorkStyleId;
 }
 
-export function createCharacter({ intent, sign, cuspSigns, answers, worlds, picks, workStyle }: OnboardingInput): Character {
+export function createCharacter({ intent, sign, cuspSigns, birthYear, answers, worlds, picks, workStyle }: OnboardingInput): Character {
   if (cuspSigns && !cuspSigns.includes(sign)) throw new Error(`${sign} is not one of the cusp signs`);
   const confirmed = confirmStats(sign, answers);
   return {
+    ...(birthYear ? { birthYear } : {}),
     sign,
     cuspSigns: cuspSigns ?? null,
     intent: intent ?? null,
@@ -84,6 +88,17 @@ export function createCharacter({ intent, sign, cuspSigns, answers, worlds, pick
     stars: {},
     feedback: {},
   };
+}
+
+/** Age this year (within a year, since only the birth year is kept). Null when unknown. */
+export function ageOf(character: Character, now: Date = new Date()): number | null {
+  return character.birthYear ? now.getFullYear() - character.birthYear : null;
+}
+
+/** Sets or removes the birth year (Settings). */
+export function setBirthYear(character: Character, birthYear: number | null): Character {
+  const { birthYear: _old, ...rest } = character;
+  return birthYear ? { ...rest, birthYear } : rest;
 }
 
 /** Reruns the poll: updates the confirmed base, keeps earned XP. */
@@ -135,6 +150,7 @@ export function rankingFor(character: Character): Ranking {
     picks: character.picks,
     workStyle: character.workStyle,
     feedback: character.feedback,
+    age: ageOf(character),
   });
 }
 

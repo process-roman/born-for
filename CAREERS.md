@@ -26,6 +26,8 @@
 
 **Education & training:** No specific degree is required. Many designers come from design, psychology, computer science or human-computer interaction, and others switch through certificates or bootcamps. A portfolio of 2–3 real case studies is the main thing employers look at.
 
+**Time to start from scratch:** 0.5–2 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -71,6 +73,8 @@
 - Entry-level pay is modest, and many florists build their own business to earn more
 
 **Education & training:** No degree required. Many florists learn on the job in a shop; short floristry courses and certificates help, and some go on to open their own studio.
+
+**Time to start from scratch:** 0–1 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -118,6 +122,8 @@
 
 **Education & training:** A computer science degree is common but not required. Many developers are self-taught or come from bootcamps. Employers mostly look at projects you've built and how you solve problems in interviews.
 
+**Time to start from scratch:** 1–3 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -163,6 +169,8 @@
 - Small mistakes can lead to wrong decisions, so attention to detail is essential
 
 **Education & training:** Degrees in statistics, economics, math, computer science or business are common. Many analysts switch in with certificates. Strong spreadsheet and SQL skills plus 2–3 portfolio projects are what employers look for.
+
+**Time to start from scratch:** 0.5–2 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -210,6 +218,8 @@
 
 **Education & training:** A degree in marketing, communications or business is common but not always required. Free certifications and a portfolio of real campaigns or social accounts you've grown can open doors.
 
+**Time to start from scratch:** 0.5–2 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -255,6 +265,8 @@
 - When things go wrong, you're often the one who has to tell people
 
 **Education & training:** No specific degree is required, though business degrees are common. Experience organizing events, clubs or group projects counts. Entry-level certificates like the Google Project Management Certificate or PMI's CAPM can help.
+
+**Time to start from scratch:** 0.5–1 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -302,6 +314,8 @@
 
 **Education & training:** In most of Canada and the US, teaching in public K–12 schools requires a bachelor's degree, a teacher education program (e.g. a B.Ed. in Canada) and provincial or state certification. Other routes need less: tutoring, ESL teaching (with a TESL/TESOL certificate), corporate training and coaching.
 
+**Time to start from scratch:** 4–6 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -347,6 +361,8 @@
 - Caseloads can be high and progress can feel slow
 
 **Education & training:** Social workers usually need a bachelor's in social work (BSW), and many roles ask for a master's (MSW), plus registration or licensing where you live. Support worker and community roles are open with less training.
+
+**Time to start from scratch:** 4–6 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -394,6 +410,8 @@
 
 **Education & training:** Registered nurses need a nursing degree or diploma and must pass a licensing exam (the NCLEX in the US and Canada). Practical nurse programs are shorter, and personal support or nursing assistant roles are a common first step.
 
+**Time to start from scratch:** 2–4 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -439,6 +457,8 @@
 - Physically demanding on your own body
 
 **Education & training:** Physiotherapists (physical therapists) need a master's or doctoral degree in physiotherapy and a licence. Physio assistant roles need a shorter college program and are a good way in.
+
+**Time to start from scratch:** 6–7 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -488,6 +508,8 @@
 
 **Education & training:** There's no degree route. Players usually come through club academies, school or college teams and scholarships. Most athletes study something alongside, because careers are short.
 
+**Time to start from scratch:** 0–0 years; most start before 18
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -533,6 +555,8 @@
 - On your feet and "on" all day
 
 **Education & training:** No degree needed. Trainers get certified through programs like ACE or NASM (US) or CSEP (Canada); a kinesiology degree opens more doors.
+
+**Time to start from scratch:** 0–1 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -580,6 +604,8 @@
 
 **Education & training:** Veterinary technicians usually complete a 2–3 year veterinary technology program and pass a credential exam (the VTNE in the US and Canada). Kennel and vet assistant jobs need less training.
 
+**Time to start from scratch:** 2–3 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -625,6 +651,8 @@
 - Work can be seasonal in colder places
 
 **Education & training:** No degree needed. Many start as a laborer or apprentice; horticulture certificates and landscape design courses help you move up or start your own business.
+
+**Time to start from scratch:** 0–1 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -672,6 +700,8 @@
 
 **Education & training:** Electricians train through an apprenticeship (usually 4–5 years) that combines paid work with classes, then get licensed (e.g. Red Seal in Canada, state licensing in the US). No university degree needed.
 
+**Time to start from scratch:** 0–1 years; paid apprenticeship, 4–5 years to qualify
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -717,6 +747,8 @@
 - Work can depend on the building season
 
 **Education & training:** Carpenters train through an apprenticeship (usually about 4 years) with paid work and classes, leading to certification (e.g. Red Seal in Canada). Furniture makers often learn in workshops and design programs.
+
+**Time to start from scratch:** 0–1 years; paid apprenticeship, 4–4 years to qualify
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -764,6 +796,8 @@
 
 **Education & training:** Culinary school is optional. Many chefs start as a prep or line cook and learn on the job; apprenticeships and certifications (e.g. Red Seal Cook in Canada) help you move up.
 
+**Time to start from scratch:** 0–1 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -809,6 +843,8 @@
 - Lots of negotiating and phone calls
 
 **Education & training:** No degree required, though event management or hospitality diplomas are common. Many planners start as assistants, coordinators or volunteers at events.
+
+**Time to start from scratch:** 0–1 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -858,6 +894,8 @@
 
 **Education & training:** No degree required. Many musicians take lessons and build skills through practice and performing; music college or a degree helps for teaching, theory and studio work.
 
+**Time to start from scratch:** 0–2 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -903,6 +941,8 @@
 - Long solo hours at a desk
 
 **Education & training:** No specific degree required. English, journalism or communications degrees are common; a portfolio of published writing (even a blog) matters most.
+
+**Time to start from scratch:** 0–1 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -950,6 +990,8 @@
 
 **Education & training:** Lab technicians usually have a college diploma or bachelor's in a science like biology or chemistry. Research scientists typically go on to a master's or PhD.
 
+**Time to start from scratch:** 2–4 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -995,6 +1037,8 @@
 - Progress on environmental problems can feel slow
 
 **Education & training:** Most roles need a bachelor's in environmental science, biology, geography or a related field. Field technician jobs are a common first step; senior roles often ask for a master's.
+
+**Time to start from scratch:** 3–4 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -1042,6 +1086,8 @@
 
 **Education & training:** No degree required, but hiring is competitive. You'll typically need a high school diploma, firefighter certification, emergency medical training (often EMR or EMT), and to pass physical and written tests.
 
+**Time to start from scratch:** 1–2 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -1087,6 +1133,8 @@
 - High pressure, and adversarial at times
 
 **Education & training:** Lawyers need an undergraduate degree, law school (a JD in the US and Canada) and a bar exam. Paralegal and legal assistant programs take 1–2 years and are a faster way into the field.
+
+**Time to start from scratch:** 6–7 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -1136,6 +1184,8 @@
 
 **Education & training:** No degree required. Business, design or tech skills all help; many founders learn by doing, through accelerators, online courses and working at a startup first.
 
+**Time to start from scratch:** 0–1 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -1181,6 +1231,8 @@
 - Customer service never really stops
 
 **Education & training:** No degree required. Platforms like Shopify, Etsy and others have free guides; marketing and basic bookkeeping skills matter most.
+
+**Time to start from scratch:** 0–1 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -1228,6 +1280,8 @@
 
 **Education & training:** No degree required for many roles. Retail and customer service experience is a common way in; business degrees help for some companies.
 
+**Time to start from scratch:** 0–0.5 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -1273,6 +1327,8 @@
 - Hiring slows down when the economy does
 
 **Education & training:** No specific degree required; business, psychology or HR degrees are common. Many recruiters start in agencies as junior recruiters or coordinators.
+
+**Time to start from scratch:** 0–1 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -1320,6 +1376,8 @@
 
 **Education & training:** Usually a degree in accounting, finance or business, then a professional designation (e.g. CPA in Canada and the US). Bookkeeping roles need shorter college programs.
 
+**Time to start from scratch:** 3–5 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -1365,6 +1423,8 @@
 - The market goes up and down
 
 **Education & training:** You need a licence, which usually means a short pre-licensing course and an exam set by your province or state. No degree required.
+
+**Time to start from scratch:** 0–0.5 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -1412,6 +1472,8 @@
 
 **Education & training:** Most designers study fashion design at college or university and build a portfolio. Sewing and pattern-making skills matter as much as drawing.
 
+**Time to start from scratch:** 2–4 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -1457,6 +1519,8 @@
 - Lots of carrying, steaming and returns behind the glamour
 
 **Education & training:** No degree required, though fashion courses help. Most stylists start by assisting an established stylist and building a portfolio.
+
+**Time to start from scratch:** 0–1 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -1504,6 +1568,8 @@
 
 **Education & training:** No degree required. Many artists take a makeup course or certificate; some areas need a licence for certain services. A portfolio matters most.
 
+**Time to start from scratch:** 0–1 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -1549,6 +1615,8 @@
 - Chemicals and repetitive movements can be hard on your body
 
 **Education & training:** Usually a cosmetology or hairstyling program or apprenticeship, then a licence or certification where you live (e.g. Red Seal in Canada).
+
+**Time to start from scratch:** 1–2 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -1596,6 +1664,8 @@
 
 **Education & training:** Degrees in fashion business, marketing or business are common. Many buyers start as merchandising or buying assistants.
 
+**Time to start from scratch:** 2–4 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -1641,6 +1711,8 @@
 - Fumes mean good ventilation matters
 
 **Education & training:** Usually a short nail technician course and, in many places, a licence. A strong portfolio of designs helps you stand out.
+
+**Time to start from scratch:** 0–1 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -1690,6 +1762,8 @@
 
 **Education & training:** No degree required. Reputable agencies never charge to sign you; a few natural photos are enough to apply.
 
+**Time to start from scratch:** 0–0 years; most start before 25
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -1737,6 +1811,8 @@
 - Public criticism comes with the job
 
 **Education & training:** No degree required. Video editing, storytelling and marketing skills matter most; many creators learn from free tutorials and practice.
+
+**Time to start from scratch:** 0–1 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -1786,6 +1862,8 @@
 
 **Education & training:** No degree required. Basic audio, video and editing skills plus a consistent schedule matter most.
 
+**Time to start from scratch:** 0–1 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -1833,6 +1911,8 @@
 - Your life becomes public content
 
 **Education & training:** No degree required. Content creation, photography and marketing skills matter; brand deals reward a clear niche and an engaged audience.
+
+**Time to start from scratch:** 0–1 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -1882,6 +1962,8 @@
 
 **Education & training:** No degree required. Journalism, communications or audio courses help; free tools like Audacity are enough to start.
 
+**Time to start from scratch:** 0–1 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -1927,6 +2009,8 @@
 - Handling negative comments for a brand
 
 **Education & training:** No degree required, though marketing or communications degrees are common. A portfolio of accounts you have grown matters most.
+
+**Time to start from scratch:** 0–1 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -1974,6 +2058,8 @@
 
 **Education & training:** No degree required. A strong showreel matters most; film school or courses help for TV and film work.
 
+**Time to start from scratch:** 0–1 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -2019,6 +2105,8 @@
 - Editing takes far longer than shooting
 
 **Education & training:** No degree required. Photography courses help, but a strong portfolio and business skills matter most.
+
+**Time to start from scratch:** 0–1 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -2066,6 +2154,8 @@
 
 **Education & training:** Computer science or game development degrees are common, but many developers are self-taught. A portfolio of small finished games matters most.
 
+**Time to start from scratch:** 1–3 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -2112,6 +2202,8 @@
 
 **Education & training:** No single route. Game design degrees exist, but a portfolio of prototypes, mods or board games matters most.
 
+**Time to start from scratch:** 1–3 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -2157,6 +2249,8 @@
 - Crunch periods at some studios
 
 **Education & training:** Art, animation or game art programs are common, but a strong portfolio is what studios hire on.
+
+**Time to start from scratch:** 1–3 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -2206,6 +2300,8 @@
 
 **Education & training:** No degree route. Players rise through ranked ladders, amateur leagues and college esports programs; some colleges offer esports scholarships.
 
+**Time to start from scratch:** 0–1 years; most start before 22
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -2254,6 +2350,8 @@
 
 **Education & training:** No degree required. Broadcasting or communications courses help; most casters build a reel by casting community tournaments.
 
+**Time to start from scratch:** 0–1 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -2300,6 +2398,8 @@
 
 **Education & training:** No degree required for many roles. Attention to detail and clear writing matter most; QA is a common way into the games and software industry.
 
+**Time to start from scratch:** 0–0.5 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -2345,6 +2445,8 @@
 - Tight deadlines
 
 **Education & training:** Graphic design diplomas or degrees are common, but a strong portfolio is what gets you hired.
+
+**Time to start from scratch:** 1–3 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -2394,6 +2496,8 @@
 
 **Education & training:** Illustration or fine art programs help, but a strong portfolio and a recognizable style matter most.
 
+**Time to start from scratch:** 1–3 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -2439,6 +2543,8 @@
 - Crunch near deadlines
 
 **Education & training:** Animation diplomas or degrees are common; a demo reel is what studios look at.
+
+**Time to start from scratch:** 2–3 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -2486,6 +2592,8 @@
 
 **Education & training:** Most artists learn through an apprenticeship at a studio. Many places require bloodborne pathogens training and a licence. A drawing portfolio gets you the apprenticeship.
 
+**Time to start from scratch:** 1–3 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -2532,6 +2640,8 @@
 
 **Education & training:** Interior design diplomas or degrees are common; some regions regulate the title "interior designer". Decorators can start with shorter courses.
 
+**Time to start from scratch:** 2–4 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -2577,6 +2687,8 @@
 - Projects take years to finish
 
 **Education & training:** Architects usually need an accredited architecture degree (often a master’s), several years of supervised experience and licensing exams. Architectural technologist programs are shorter.
+
+**Time to start from scratch:** 7–10 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -2626,6 +2738,8 @@
 
 **Education & training:** No degree required. Free software and tutorials go a long way; audio production programs help for studio work.
 
+**Time to start from scratch:** 0–2 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -2673,6 +2787,8 @@
 - Long, odd hours on set or in theater
 
 **Education & training:** No degree required, though drama school and classes help a lot. Experience in community theater, student films and self-tapes builds your reel.
+
+**Time to start from scratch:** 0–2 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -2722,6 +2838,8 @@
 
 **Education & training:** No single route. Training at dance studios and schools from an early age is common; dance degrees and teaching certificates help.
 
+**Time to start from scratch:** 0–2 years; most start before 20
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -2767,6 +2885,8 @@
 - Problems happen live, in front of everyone
 
 **Education & training:** Audio engineering diplomas are common; many engineers also learn by assisting at venues and studios.
+
+**Time to start from scratch:** 1–2 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -2814,6 +2934,8 @@
 
 **Education & training:** Journalism or communications degrees are common, but clips (published work) matter most. Student media is a great start.
 
+**Time to start from scratch:** 1–4 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -2859,6 +2981,8 @@
 - AI tools are changing entry-level work
 
 **Education & training:** No specific degree required. A portfolio of sample ads and real projects gets you hired.
+
+**Time to start from scratch:** 0–1 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -2908,6 +3032,8 @@
 
 **Education & training:** No degree required, though film or screenwriting programs help. Finished scripts and contest results open doors.
 
+**Time to start from scratch:** 0–2 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -2953,6 +3079,8 @@
 - Competitive top roles
 
 **Education & training:** Usually a degree in computer science, math, statistics or engineering; many roles ask for a master’s. Strong Python and project portfolios matter.
+
+**Time to start from scratch:** 4–6 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -3000,6 +3128,8 @@
 
 **Education & training:** Degrees in IT or computer science are common, but certifications (e.g. CompTIA Security+) and hands-on labs are widely accepted. Many start in IT support.
 
+**Time to start from scratch:** 1–2 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -3045,6 +3175,8 @@
 - Entry-level market is competitive
 
 **Education & training:** Computer science degrees are common, but many app developers are self-taught or bootcamp-trained. Published apps are your portfolio.
+
+**Time to start from scratch:** 1–2 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -3092,6 +3224,8 @@
 
 **Education & training:** No degree required. Certificates like CompTIA A+ or the Google IT Support Certificate are common entry routes.
 
+**Time to start from scratch:** 0–1 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -3137,6 +3271,8 @@
 - Pressure from results
 
 **Education & training:** Coaching certifications from national sport bodies are the usual route; a kinesiology or physical education degree helps for higher levels.
+
+**Time to start from scratch:** 0–1 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -3184,6 +3320,8 @@
 
 **Education & training:** Degrees in sports science, data science or statistics help; many start by doing their own analysis online and with local clubs.
 
+**Time to start from scratch:** 1–3 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -3229,6 +3367,8 @@
 - Early mornings and evenings
 
 **Education & training:** Usually a 200-hour yoga teacher training (e.g. Yoga Alliance registered). No degree required.
+
+**Time to start from scratch:** 0–0.5 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -3276,6 +3416,8 @@
 
 **Education & training:** Usually an undergraduate degree, then medical school (4 years in Canada and the US), then residency (2–7 years). Entry is very competitive.
 
+**Time to start from scratch:** 10–14 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -3321,6 +3463,8 @@
 - Physically demanding
 
 **Education & training:** Paramedic programs at colleges (often 2–3 years) plus licensing; many start as EMRs or EMTs.
+
+**Time to start from scratch:** 2–3 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -3368,6 +3512,8 @@
 
 **Education & training:** Psychologists usually need a master’s or doctorate in psychology plus supervised hours and registration. Related roles (counsellor, mental health worker) need less.
 
+**Time to start from scratch:** 6–8 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -3413,6 +3559,8 @@
 - Long study path
 
 **Education & training:** A pharmacy degree (PharmD in Canada and the US) and a licensing exam. Pharmacy technician programs are shorter.
+
+**Time to start from scratch:** 6–8 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -3460,6 +3608,8 @@
 
 **Education & training:** Registered dietitians need an accredited nutrition degree, supervised practice and registration. "Nutritionist" rules vary by place; check what is regulated where you live.
 
+**Time to start from scratch:** 4–5 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -3505,6 +3655,8 @@
 - Lots of noise and constant attention
 
 **Education & training:** Usually an early childhood education diploma and registration or certification where you live. Assistant roles need less.
+
+**Time to start from scratch:** 1–2 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -3552,6 +3704,8 @@
 
 **Education & training:** Usually a master’s in counselling or a related field plus registration or licensing where you live. School and career counsellors may have specific routes.
 
+**Time to start from scratch:** 6–7 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -3597,6 +3751,8 @@
 - Evenings and weekends
 
 **Education & training:** Youth work or child and youth care diplomas help; many start as volunteers and grow into paid roles. Background checks are required.
+
+**Time to start from scratch:** 1–2 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -3644,6 +3800,8 @@
 
 **Education & training:** A Doctor of Veterinary Medicine (DVM) degree after undergraduate study, then a licensing exam. Entry is competitive; animal experience matters.
 
+**Time to start from scratch:** 7–8 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -3689,6 +3847,8 @@
 - Lots of time at a computer, not in the sea
 
 **Education & training:** A degree in marine biology, biology or oceanography; research roles usually need a master’s or PhD. Diving certification helps.
+
+**Time to start from scratch:** 4–6 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -3736,6 +3896,8 @@
 
 **Education & training:** Diplomas or degrees in conservation, natural resources or environmental studies are common; first aid and outdoor skills help. Many start in seasonal roles.
 
+**Time to start from scratch:** 2–4 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -3781,6 +3943,8 @@
 - Land and equipment are expensive to start
 
 **Education & training:** No degree required; many learn on family farms or as farm workers. Agriculture diplomas and degrees help with modern techniques and business.
+
+**Time to start from scratch:** 0–2 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -3828,6 +3992,8 @@
 
 **Education & training:** Culinary or baking programs help but are optional; many learn as bakery assistants. Apprenticeships and certifications exist in many places.
 
+**Time to start from scratch:** 0–1 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -3873,6 +4039,8 @@
 - Café margins are thin for owners
 
 **Education & training:** No degree required. Barista courses help; café owners benefit from business and food safety training.
+
+**Time to start from scratch:** 0–0.5 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -3922,6 +4090,8 @@
 
 **Education & training:** No degree required. Responsible beverage service certification is usually required; bartending courses help.
 
+**Time to start from scratch:** 0–0.5 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -3967,6 +4137,8 @@
 - Busy holiday seasons
 
 **Education & training:** Hospitality management diplomas or degrees are common; many managers start at the front desk and work up.
+
+**Time to start from scratch:** 2–4 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -4014,6 +4186,8 @@
 
 **Education & training:** Usually an apprenticeship or automotive service program, then certification (e.g. Red Seal in Canada, ASE in the US).
 
+**Time to start from scratch:** 0–1 years; paid apprenticeship, 3–4 years to qualify
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -4059,6 +4233,8 @@
 - Physically demanding
 
 **Education & training:** A plumbing apprenticeship (usually 4–5 years) with paid work and classes, then licensing. No degree required, and plumbers are in demand in many places.
+
+**Time to start from scratch:** 0–1 years; paid apprenticeship, 4–5 years to qualify
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -4106,6 +4282,8 @@
 
 **Education & training:** Welding programs at trade colleges and apprenticeships, then certification tests. No degree required.
 
+**Time to start from scratch:** 0.5–1 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -4151,6 +4329,8 @@
 - Gear is expensive
 
 **Education & training:** Commercial drone flying needs a certificate in most places (e.g. Transport Canada advanced certificate, FAA Part 107 in the US). No degree required.
+
+**Time to start from scratch:** 0–0.5 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -4198,6 +4378,8 @@
 
 **Education & training:** A commercial pilot licence through a flight school or aviation college, plus medical certificates and many flight hours; airlines need more. Some programs offer sponsorships.
 
+**Time to start from scratch:** 2–3 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -4244,6 +4426,8 @@
 
 **Education & training:** No degree required. Airlines train you in their own program; customer service experience, languages and first aid help.
 
+**Time to start from scratch:** 0–0.5 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -4289,6 +4473,8 @@
 - Repeating the same tour many times
 
 **Education & training:** No degree required. Some cities require a guide licence; history, languages and first aid help.
+
+**Time to start from scratch:** 0–0.5 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -4338,6 +4524,8 @@
 
 **Education & training:** No degree required. Photography, video, writing and marketing skills matter most.
 
+**Time to start from scratch:** 0–1 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -4386,6 +4574,8 @@
 
 **Education & training:** A physics or astronomy degree, then usually a PhD for research. Engineering, data science and technician roles in the space industry need less.
 
+**Time to start from scratch:** 8–10 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -4431,6 +4621,8 @@
 - Research roles may need advanced degrees
 
 **Education & training:** A chemistry degree for most roles; research often needs a master’s or PhD. Chemical technician diplomas are shorter.
+
+**Time to start from scratch:** 4–6 years
 
 **Key traits:**
 | Trait | Required | Weight |
@@ -4478,6 +4670,8 @@
 
 **Education & training:** Requirements vary: usually a high school diploma (often some college), fitness and written tests, background checks and a police academy.
 
+**Time to start from scratch:** 1–2 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -4524,6 +4718,8 @@
 
 **Education & training:** Usually a degree (international relations, law, economics, languages) and a competitive foreign service exam. Languages are a big advantage.
 
+**Time to start from scratch:** 4–6 years
+
 **Key traits:**
 | Trait | Required | Weight |
 |---|---|---|
@@ -4569,6 +4765,8 @@
 - Deadlines driven by politics
 
 **Education & training:** Usually a degree in political science, economics, law or public policy; many senior roles ask for a master’s.
+
+**Time to start from scratch:** 4–6 years
 
 **Key traits:**
 | Trait | Required | Weight |

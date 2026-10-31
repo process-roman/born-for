@@ -24,8 +24,9 @@ export default function Birthday() {
   const monthRef = useRef<ComponentRef<typeof TextInput>>(null);
   const yearRef = useRef<ComponentRef<typeof TextInput>>(null);
 
-  const choose = (sign: SignId, cuspSigns: [SignId, SignId] | null = null) => {
-    dispatch({ type: 'sign', sign, cuspSigns });
+  /** From the birthday (directly or via the cusp question) the year is kept; a hand-picked sign has none. */
+  const choose = (sign: SignId, cuspSigns: [SignId, SignId] | null, birthYear: number | null) => {
+    dispatch({ type: 'sign', sign, cuspSigns, birthYear });
     router.push('/reveal');
   };
 
@@ -38,7 +39,7 @@ export default function Birthday() {
     }
     setError(null);
     const result = signFromBirthday(date);
-    if (result.kind === 'sign') choose(result.sign);
+    if (result.kind === 'sign') choose(result.sign, null, date.year);
     else setMode({ kind: 'cusp', signs: result.signs });
   };
 
@@ -59,7 +60,7 @@ export default function Birthday() {
               emoji={glyph(s)}
               label={`${SIGNS[s].name}, ${SIGNS[s].archetype}`}
               detail={SIGNS[s].revealLine}
-              onPress={() => choose(s, mode.signs)}
+              onPress={() => choose(s, mode.signs, Number(year))}
             />
           ))}
         </View>
@@ -74,7 +75,7 @@ export default function Birthday() {
         <Title>Choose your sign</Title>
         <View style={styles.grid}>
           {SIGN_IDS.map((s) => (
-            <Pressable key={s} accessibilityRole="button" onPress={() => choose(s)} style={({ pressed }) => [styles.signTile, pressed && { borderColor: C.gold }]}>
+            <Pressable key={s} accessibilityRole="button" onPress={() => choose(s, null, null)} style={({ pressed }) => [styles.signTile, pressed && { borderColor: C.gold }]}>
               <Text style={styles.signGlyph}>{glyph(s)}</Text>
               <Text style={styles.signName}>{SIGNS[s].name}</Text>
             </Pressable>
@@ -95,7 +96,7 @@ export default function Birthday() {
     >
       <Step index={1} total={9} />
       <Title>When were you born?</Title>
-      <Body muted>We only use it to find your sign. We don’t keep your birth date.</Body>
+      <Body muted>We use it to find your sign. We keep only the year, so your paths can account for your age, never the full date.</Body>
       <View style={{ gap: S.sm, marginTop: S.lg }}>
         <View style={styles.inputLabels}>
           <Label style={{ flex: 2 }}>Day</Label>
