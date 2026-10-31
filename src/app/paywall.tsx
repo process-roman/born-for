@@ -1,8 +1,9 @@
-// Paywall stub with the free-tier teaser (Blueprint §4.1, §10). No real purchase yet.
-// Shown at the end of onboarding, after the free quest ("second moment") and from locked screens.
+// Paywall stub (Blueprint §4.1, §10). No real purchase yet. Shown after the free life ("You've
+// lived one life", Life Sim Spec §2), after the free quest ("second moment"), from the end of
+// onboarding and from locked screens.
 
 import { Redirect, router, useLocalSearchParams } from 'expo-router';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 
 import { CAREERS } from '@/content/careers';
 import type { IntentId } from '@/content/preferences';
@@ -11,7 +12,7 @@ import { useGame } from '@/state/game';
 import { useOnboarding } from '@/state/onboarding';
 import { Body, Button, Card, Label, Screen, Step, Title } from '@/ui/components';
 import { DifficultyPill } from '@/ui/stats';
-import { C, F, S } from '@/ui/theme';
+import { C, F } from '@/ui/theme';
 
 const HEADLINES: Record<IntentId, { title: string; body: string }> = {
   career: { title: 'Your career paths are ready.', body: 'Ranked for the worlds and jobs you picked, and the stats you confirmed.' },
@@ -21,6 +22,7 @@ const HEADLINES: Record<IntentId, { title: string; body: string }> = {
 };
 
 const UNLOCKS = [
+  'Every life, unlimited replays, and compare lives side by side',
   'All your career paths, with why each one fits',
   'Every constellation and its five quests',
   'Hybrid titles and an evolving character',
@@ -28,15 +30,19 @@ const UNLOCKS = [
 ];
 
 const SECOND_MOMENT = { title: 'Your first star is lit.', body: 'Unlock the full constellation, and every other path waiting in your sky.' };
+const AFTER_LIFE = {
+  title: 'You’ve lived one life. More are waiting.',
+  body: 'Replay it with better odds, live other careers, and start real quests that raise your stats for real.',
+};
 
 export default function Paywall() {
-  const { second } = useLocalSearchParams<{ second?: string }>();
+  const { second, life } = useLocalSearchParams<{ second?: string; life?: string }>();
   const onboarding = useOnboarding();
   const { game, begin, unlock } = useGame();
   const character = game?.character ?? onboarding.character;
   if (!character) return <Redirect href="/" />;
   const top = rankingFor(character).ranked[0]!;
-  const copy = second === '1' ? SECOND_MOMENT : HEADLINES[character.intent ?? 'career'];
+  const copy = life === '1' ? AFTER_LIFE : second === '1' ? SECOND_MOMENT : HEADLINES[character.intent ?? 'career'];
 
   const finish = (paid: boolean) => {
     if (game) {
@@ -46,14 +52,15 @@ export default function Paywall() {
     }
     if (router.canDismiss()) router.dismissAll();
     if (paid) router.replace('/paths');
-    else router.replace(game ? '/home' : { pathname: '/paths', params: { free: '1' } });
+    // New players, and those who just finished their free life, get the free quest next.
+    else router.replace(game && life !== '1' ? '/home' : { pathname: '/paths', params: { free: '1' } });
   };
 
   return (
     <Screen
       footer={
         <>
-          <Button title="Unlock your paths" onPress={() => finish(true)} />
+          <Button title="Unlock everything" onPress={() => finish(true)} />
           <Text style={styles.stub}>Test build: no payment is taken.</Text>
           <Button title="Not now" variant="ghost" onPress={() => finish(false)} />
         </>
@@ -65,9 +72,7 @@ export default function Paywall() {
 
       <Card>
         <Label>Your top path</Label>
-        <View style={styles.blurred} accessibilityLabel="Hidden career name">
-          <Text style={styles.blurredText}>{CAREERS[top.careerId].name.replace(/\S/g, '•')}</Text>
-        </View>
+        <Text style={styles.topName}>{CAREERS[top.careerId].name}</Text>
         <DifficultyPill difficulty={top.difficulty} />
         {top.reasons[0] ? <Text style={styles.reason}>✦ {top.reasons[0]}</Text> : null}
       </Card>
@@ -86,8 +91,7 @@ export default function Paywall() {
 }
 
 const styles = StyleSheet.create({
-  blurred: { paddingVertical: S.xs },
-  blurredText: { fontFamily: F.display, fontSize: 28, letterSpacing: 2, color: C.textMuted, opacity: 0.6 },
+  topName: { fontFamily: F.display, fontSize: 26, lineHeight: 30, color: C.text },
   reason: { fontFamily: F.body, fontSize: 15, color: C.text },
   unlock: { fontFamily: F.body, fontSize: 15, lineHeight: 22, color: C.text },
   stub: { fontFamily: F.body, fontSize: 12, color: C.textMuted, textAlign: 'center' },

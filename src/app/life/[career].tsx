@@ -11,6 +11,7 @@ import { SIGNS, type Element } from '@/content/signs';
 import { statsOf } from '@/logic/character';
 import { LIFE_SLOTS, mostCheckedAttributes, START_METERS, startLife, typicalOdds, type LifeRun } from '@/logic/life';
 import { useGame } from '@/state/game';
+import { canPlayLife } from '@/logic/lifeAccess';
 import { activeRun, latestCompleted, useLives } from '@/state/lives';
 import { Body, Button, Card, Label, Screen, Title } from '@/ui/components';
 import { LifeSky } from '@/ui/LifeSky';
@@ -44,6 +45,7 @@ export default function LifeIntro() {
   const active = activeRun(runs, careerId);
   const previous = latestCompleted(runs, careerId);
   const attributes = mostCheckedAttributes(life);
+  const allowed = canPlayLife(game, runs, careerId);
   const play = () => router.push({ pathname: '/life/play', params: { career: careerId } });
 
   /** Saving a new run replaces the career's unfinished one, so this also restarts. */
@@ -56,13 +58,15 @@ export default function LifeIntro() {
     <Screen
       footer={
         <>
-          {active ? (
+          {!allowed ? (
+            <Button title="Unlock every life" onPress={() => router.push({ pathname: '/paywall', params: { life: '1' } })} />
+          ) : active ? (
             <>
               <Button title="Resume your life" onPress={play} />
               <Button title="Restart life" variant="ghost" onPress={start} />
             </>
           ) : (
-            <Button title={previous ? 'Live it again' : 'Start'} onPress={start} />
+            <Button title={previous ? 'Live it again' : game.paid ? 'Start' : 'Start my free life'} onPress={start} />
           )}
           <Button title="Back" variant="ghost" onPress={() => (router.canGoBack() ? router.back() : router.replace({ pathname: '/path/[id]', params: { id: careerId } }))} />
         </>
@@ -76,6 +80,15 @@ export default function LifeIntro() {
           {CAREERS[careerId].name}, from 18 to 30. About 5 minutes · your real stats set the odds.
         </Body>
       </View>
+
+      {!allowed ? (
+        <Card>
+          <Label>Locked</Label>
+          <Text style={styles.body}>
+            {previous ? 'You’ve lived your free life. Unlock to replay it with better odds and live other careers.' : 'Your free life is the one on your top match. Unlock to live every career.'}
+          </Text>
+        </Card>
+      ) : null}
 
       {active ? (
         <Card>

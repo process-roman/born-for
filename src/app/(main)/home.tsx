@@ -13,7 +13,13 @@ import { homeSuggestion, isStale, type Game, type SuggestionKind } from '@/logic
 import { topTraits } from '@/logic/ranking';
 import { bandFor } from '@/logic/stats';
 import { LEVEL_THRESHOLDS, QUEST_XP, REFLECTION_XP, xpToNextLevel } from '@/logic/xp';
+import { LIVES } from '@/content/life';
+import type { Element } from '@/content/signs';
+import { LIFE_SLOTS, START_METERS, type LifeRun } from '@/logic/life';
+import { unplayedLife } from '@/logic/lifeAccess';
 import { useGame } from '@/state/game';
+import { activeRun, useLives } from '@/state/lives';
+import { LifeSky } from '@/ui/LifeSky';
 import { CharacterAvatar } from '@/ui/CharacterAvatar';
 import { equippedTitleText } from '@/ui/CharacterHeader';
 import { ArchWindow, DayScreen, PillButton, PlumCard, SectionLabel, SlimBar, SurfaceCard, Tag } from '@/ui/kit';
@@ -44,13 +50,13 @@ function levelProgress(totalXp: number, level: number): number {
   return ceiling === undefined ? 1 : (totalXp - floor) / (ceiling - floor);
 }
 
-function QuestCard({ game, careerId, star, kicker, children }: { game: Game; careerId: CareerId; star: StarNumber; kicker: string; children?: React.ReactNode }) {
+function QuestCard({ careerId, star, kicker, children }: { careerId: CareerId; star: StarNumber; kicker: string; children?: React.ReactNode }) {
   const quest = getQuest(careerId, star);
   return (
     <SurfaceCard>
       <SectionLabel>{kicker}</SectionLabel>
       <Text style={styles.questName}>{quest.name}</Text>
-      <Tag parts={[TIER_LABELS[quest.tier], quest.time, `+${QUEST_XP[quest.tier] + REFLECTION_XP} XP`, ...(game.paid ? [CAREERS[careerId].name] : [])]} />
+      <Tag parts={[TIER_LABELS[quest.tier], quest.time, `+${QUEST_XP[quest.tier] + REFLECTION_XP} XP`, CAREERS[careerId].name]} />
       <Text style={styles.body}>{quest.instructions}</Text>
       {children}
     </SurfaceCard>
@@ -110,9 +116,25 @@ function CharacterCard({ game }: { game: Game }) {
   );
 }
 
+/** The main card while there's a life the user hasn't lived yet (Life Sim Spec §2). */
+function LifeCard({ careerId, run, element }: { careerId: CareerId; run: LifeRun | null; element: Element }) {
+  const life = LIVES[careerId]!;
+  return (
+    <SurfaceCard>
+      <LifeSky age={run ? (LIFE_SLOTS[Math.min(run.slotIndex, LIFE_SLOTS.length - 1)]?.age ?? 18) : 18} meters={run?.meters ?? START_METERS} element={element} variant="card" style={{ aspectRatio: 2.2 }} />
+      <SectionLabel>{run ? 'Your life in progress' : 'Live it first'}</SectionLabel>
+      <Text style={styles.questName}>{life.lifeName} life</Text>
+      <Tag parts={['18 to 30', 'About 5 min', 'Your real stats']} />
+      <PillButton title={run ? 'Resume your life' : 'Live it first'} arrow onPress={() => router.push({ pathname: '/life/[career]', params: { career: careerId } })} />
+    </SurfaceCard>
+  );
+}
+
 export default function Home() {
   const { game, snooze, resume, tooHard, notForMe } = useGame();
+  const { runs } = useLives();
   if (!game) return null;
+  const lifeCareer = unplayedLife(game, runs);
   const { character } = game;
   const sign = SIGNS[character.sign];
   const active = game.activeQuest;
@@ -147,8 +169,10 @@ export default function Home() {
         </ArchWindow>
       </View>
 
+      {lifeCareer ? <LifeCard careerId={lifeCareer} run={activeRun(runs, lifeCareer)} element={sign.element} /> : null}
+
       {active && !active.snoozed ? (
-        <QuestCard game={game} careerId={active.careerId} star={active.star} kicker="Your active quest">
+        <QuestCard careerId={active.careerId} star={active.star} kicker="Your active quest">
           <Text style={styles.due}>☾ {isStale(active, new Date()) ? 'Still on it? No pressure, pick what fits.' : dueText(active.dueAt)}</Text>
           <PillButton title="Done, reflect" arrow onPress={() => router.push('/quest/reflect')} />
           <View style={styles.actions}>
@@ -160,7 +184,7 @@ export default function Home() {
       ) : null}
 
       {suggestion ? (
-        <QuestCard game={game} careerId={suggestion.careerId} star={suggestion.star} kicker={SUGGESTION_KICKERS[suggestion.kind]}>
+        <QuestCard careerId={suggestion.careerId} star={suggestion.star} kicker={SUGGESTION_KICKERS[suggestion.kind]}>
           {suggestion.reason ? <Text style={styles.small}>✦ {suggestion.reason}</Text> : null}
           <PillButton title="Start this quest" arrow onPress={() => startQuest(suggestion.careerId, suggestion.star)} />
         </QuestCard>

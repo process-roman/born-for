@@ -89,6 +89,9 @@ export function LifeAt30({
   run,
   tokens,
   onAnswer,
+  onPowerUp,
+  free,
+  xp,
   preview,
 }: {
   life: CareerLife;
@@ -96,6 +99,12 @@ export function LifeAt30({
   tokens: LifeTokens;
   /** Saves the "Would you want this life?" answer on the run. */
   onAnswer: (answer: WouldWant) => void;
+  /** Opens a real quest that trains the power-up attribute. */
+  onPowerUp: () => void;
+  /** A free user's one free life: the card leads to the paywall. */
+  free?: boolean;
+  /** Quest XP from this life (first completion only). */
+  xp?: number;
   /** Dev preview of a forced ending: nothing is saved. */
   preview?: boolean;
 }) {
@@ -121,19 +130,25 @@ export function LifeAt30({
     <Screen
       tone="night"
       footer={
-        answered ? (
+        !answered ? undefined : free ? (
+          <>
+            <Button title="Share" variant="secondary" onPress={() => setSharing(true)} />
+            <Button title="Continue" onPress={() => router.replace({ pathname: '/paywall', params: { life: '1' } })} />
+          </>
+        ) : (
           <>
             <View style={styles.row}>
               <Button title="Share" variant="secondary" style={styles.half} onPress={() => setSharing(true)} />
-              <Button title="Power up" variant="secondary" style={styles.half} onPress={() => router.push({ pathname: '/path/[id]', params: { id: run.career } })} />
+              <Button title="Power up" variant="secondary" style={styles.half} onPress={onPowerUp} />
             </View>
-            <Button title="Live another life" onPress={() => router.replace('/explore')} />
+            <Button title="Live another life" onPress={() => router.replace('/lives')} />
             <Button title="Replay" variant="ghost" onPress={() => router.replace({ pathname: '/life/[career]', params: { career: run.career } })} />
           </>
-        ) : undefined
+        )
       }
     >
       {preview ? <Text style={styles.preview}>Dev preview: nothing here is saved.</Text> : null}
+      {xp ? <Text style={styles.preview}>+{xp} XP for your first {life.lifeName} life</Text> : null}
       <LifeSky age={AGE_AT_END} meters={run.meters} element={run.element} variant="card" />
       <Headline life={life} run={run} tokens={tokens} />
       <MetersBar meters={run.meters} tone="night" />

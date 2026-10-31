@@ -24,6 +24,8 @@ export const MAX_WILDCARDS = 2;
 
 export const FEEDBACK_EFFECTS = {
   interested: 10,
+  /** "Would you want this life?" Yes, after a simulated life (Life Sim Spec §13). */
+  wantedLife: 10,
   enjoyedQuest: 5,
   dislikedQuest: -10,
 } as const;
@@ -34,6 +36,12 @@ export interface CareerFeedback {
   interest?: PathInterest;
   /** Enjoyment (1–5) from each reflected quest on this path. */
   questEnjoyment?: number[];
+  /** "Would you want this life?" from the latest simulated life. No counts as "Not for me". */
+  lifeWant?: 'yes' | 'maybe' | 'no';
+}
+
+export function isNotForMe(feedback: CareerFeedback | undefined): boolean {
+  return feedback?.interest === 'not_for_me' || feedback?.lifeWant === 'no';
 }
 
 export type FeedbackMap = Partial<Record<CareerId, CareerFeedback>>;
@@ -110,6 +118,7 @@ export function workStyleScore(career: Career, workStyle: WorkStyleId): number {
 export function feedbackAdjustment(feedback: CareerFeedback | undefined): number {
   if (!feedback) return 0;
   let adjustment = feedback.interest === 'interested' ? FEEDBACK_EFFECTS.interested : 0;
+  if (feedback.lifeWant === 'yes') adjustment += FEEDBACK_EFFECTS.wantedLife;
   for (const enjoyment of feedback.questEnjoyment ?? []) {
     if (enjoyment >= 4) adjustment += FEEDBACK_EFFECTS.enjoyedQuest;
     else if (enjoyment <= 2) adjustment += FEEDBACK_EFFECTS.dislikedQuest;
@@ -196,10 +205,10 @@ export function compareMatches(a: CareerMatch, b: CareerMatch): number {
 
 export function rankCareers(input: MatchInput, careers: readonly Career[] = CAREER_IDS.map((id) => CAREERS[id])): Ranking {
   const matches = careers.map((c) => matchCareer(c, input)).sort(compareMatches);
-  const isNotForMe = (m: CareerMatch) => input.feedback?.[m.careerId]?.interest === 'not_for_me';
+  const notForMe = (m: CareerMatch) => isNotForMe(input.feedback?.[m.careerId]);
   return {
-    ranked: matches.filter((m) => !isNotForMe(m)),
-    notForMe: matches.filter(isNotForMe),
+    ranked: matches.filter((m) => !notForMe(m)),
+    notForMe: matches.filter(notForMe),
   };
 }
 

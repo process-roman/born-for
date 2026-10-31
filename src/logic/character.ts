@@ -51,6 +51,8 @@ export interface Character {
   feedback: FeedbackMap;
   /** How many times the poll was rerun. Missing in saves from before recalibration existed. */
   recalibrations?: number;
+  /** Careers whose simulated life was finished at least once (for the one-time life XP). */
+  livesCompleted?: CareerId[];
 }
 
 export interface OnboardingInput {

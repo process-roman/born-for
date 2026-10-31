@@ -26,7 +26,7 @@ export default function Work() {
             selected={state.workStyle === o.id}
             onPress={() => {
               dispatch({ type: 'workStyle', workStyle: o.id });
-              router.push('/paywall');
+              router.push('/matches');
             }}
           />
         ))}

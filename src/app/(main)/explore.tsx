@@ -28,12 +28,20 @@ export default function Explore() {
       ) : (
         <Card>
           <Label>Your top path</Label>
-          <Text style={styles.hidden}>{CAREERS[top.careerId].name.replace(/\S/g, '•')}</Text>
+          <Text style={styles.topName}>{CAREERS[top.careerId].name}</Text>
           <DifficultyPill difficulty={top.difficulty} />
           {top.reasons[0] ? <Text style={styles.reason}>✦ {top.reasons[0]}</Text> : null}
           <Button title="Unlock your paths" onPress={() => router.push('/paywall')} />
         </Card>
       )}
+
+      <Card>
+        <Label>Live it first</Label>
+        <Body muted style={{ textAlign: 'left' }}>
+          Play a career from 18 to 30 in about 5 minutes. Your real stats set the odds.
+        </Body>
+        <Button title="See all lives" variant="secondary" onPress={() => router.push('/lives')} />
+      </Card>
 
       <Label>Browse worlds</Label>
       <Body muted style={{ textAlign: 'left' }}>
@@ -71,7 +79,7 @@ export default function Explore() {
 }
 
 const styles = StyleSheet.create({
-  hidden: { fontFamily: F.display, fontSize: 19, color: C.textMuted },
+  topName: { fontFamily: F.display, fontSize: 22, color: C.text },
   reason: { fontFamily: F.body, fontSize: 14, lineHeight: 20, color: C.textMuted },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: S.sm },
   world: {

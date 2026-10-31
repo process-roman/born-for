@@ -43,6 +43,9 @@ interface GameContextValue {
   recalibrate: (answers: PollAnswers) => BadgeId[];
   switchCuspSign: (sign: SignId) => void;
   setReminders: (on: boolean) => void;
+  /** First-time life XP; returns the XP given (0 on later completions). */
+  finishLife: (careerId: CareerId) => number;
+  setLifeWant: (careerId: CareerId, answer: 'yes' | 'maybe' | 'no') => void;
   reset: () => void;
 }
 
@@ -115,6 +118,13 @@ export function GameProvider({ children }: { children: ReactNode }) {
           activeQuest: !on && g.activeQuest ? { ...g.activeQuest, notificationId: null } : g.activeQuest,
         }));
       },
+      finishLife: (careerId) => {
+        if (!game) return 0;
+        const result = G.finishLife(game, careerId);
+        if (result.xp) commit(result.game);
+        return result.xp;
+      },
+      setLifeWant: (careerId, answer) => update((g) => G.setLifeWant(g, careerId, answer)),
       reset: () => {
         void cancelCheckIn(game?.activeQuest?.notificationId ?? null);
         setLastResult(null);

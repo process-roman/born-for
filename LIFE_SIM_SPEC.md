@@ -38,6 +38,7 @@ Intent → birthday → reveal → confirm poll → preferences → **career mat
 - **Paywall moment:** directly after the free Life at 30 card: *"You've lived one life. More are waiting."* This replaces the blurred career teaser from the blueprint.
 - **Entry points:** a primary "Live this life" button on each career detail page, and the main card on Home when the user has a life not yet played. Don't restructure the navigation without asking.
 - Careers without life content show "Life coming soon" and keep working as before.
+- **Decided Oct 31, 2026:** free users see their career matches by name before the paywall (the blurred teaser is gone everywhere), and they keep the one free Taste quest on their top path after the free life, so they can feel quest → better odds before paying.
 
 ---
 

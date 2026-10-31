@@ -10,6 +10,7 @@ import { CAREER_IDS, CAREERS, type Career, type CareerId, type Quest } from '../
 import { WORLDS } from '../content/worlds';
 import { litStarNumbers, rankingFor, type Character, type Reflection } from './character';
 import { isConstellationComplete, nextQuest } from './constellation';
+import { isNotForMe } from './ranking';
 import { careerSimilarity } from './similarity';
 
 /** How much one "felt natural" / "felt hard" attribute moves a candidate, times its requirement weight. */
@@ -41,7 +42,7 @@ function candidates(character: Character, fromCareerId: CareerId): CareerId[] {
   return CAREER_IDS.filter(
     (id) =>
       id !== fromCareerId &&
-      character.feedback[id]?.interest !== 'not_for_me' &&
+      !isNotForMe(character.feedback[id]) &&
       !isConstellationComplete(litStarNumbers(character, id)),
   );
 }

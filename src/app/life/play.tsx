@@ -10,7 +10,8 @@ import { ATTRIBUTE_LABELS } from '@/content/attributes';
 import { CAREER_IDS, type CareerId } from '@/content/careers';
 import { lifeFor, SHARED_EVENTS, STAGE_NAMES, type Stage } from '@/content/life';
 import { SIGNS } from '@/content/signs';
-import { ageFor, choose, eventById, fillTokens, stageFor, visibleChoices, type LifeRun, type LifeTokens, type Resolution } from '@/logic/life';
+import { powerUpQuest } from '@/logic/game';
+import { ageFor, choose, eventById, fillTokens, lifeAsks, stageFor, visibleChoices, type LifeRun, type LifeTokens, type Resolution } from '@/logic/life';
 import { lifeWithEnding } from '@/logic/lifeDev';
 import { statsOf } from '@/logic/character';
 import { hybridTitle } from '@/logic/titles';
@@ -82,7 +83,7 @@ function Transition({ stage, age, run, onDone }: { stage: Stage; age: number; ru
 
 export default function LifePlay() {
   const { career, devEnding } = useLocalSearchParams<{ career: string; devEnding?: string }>();
-  const { game } = useGame();
+  const { game, finishLife, setLifeWant } = useGame();
   const { runs, save, discard } = useLives();
   const careerId = career as CareerId;
   const life = CAREER_IDS.includes(careerId) ? lifeFor(careerId) : null;
@@ -90,6 +91,8 @@ export default function LifePlay() {
   const latest = life ? latestCompleted(runs, careerId) : null;
   const [phase, setPhase] = useState<Phase>(() => (active ? { kind: 'event' } : latest ? { kind: 'done', runId: latest.id } : { kind: 'event' }));
   const [menu, setMenu] = useState(false);
+  /** Quest XP from finishing this life, shown on the card (first completion only). */
+  const [lifeXp, setLifeXp] = useState(0);
   const toEvent = useCallback(() => setPhase({ kind: 'event' }), []);
   const rolled = useCallback(() => setPhase((p) => (p.kind === 'rolling' ? { kind: 'outcome', res: p.res, before: p.before } : p)), []);
   // Dev only: a real life that reached the requested ending, never saved.
@@ -103,14 +106,43 @@ export default function LifePlay() {
   const sign = SIGNS[game.character.sign];
   const tokens: LifeTokens = { archetype: sign.archetype.replace(/^The /, ''), sign: sign.name, title: hybridTitle(game.character.sign, careerId) };
 
+  const powerUp = (run: LifeRun) => {
+    const star = powerUpQuest(game, careerId, lifeAsks(run).powerUp);
+    if (star) router.push({ pathname: '/quest/start', params: { career: careerId, star: String(star) } });
+    else router.push({ pathname: '/path/[id]', params: { id: careerId } });
+  };
+
   if (preview?.completed) {
-    return <LifeAt30 life={life} run={preview} tokens={tokens} preview onAnswer={(wouldWant) => setPreview({ ...preview, completed: { ...preview.completed!, wouldWant } })} />;
+    return (
+      <LifeAt30
+        life={life}
+        run={preview}
+        tokens={tokens}
+        preview
+        free={!game.paid}
+        onPowerUp={() => powerUp(preview)}
+        onAnswer={(wouldWant) => setPreview({ ...preview, completed: { ...preview.completed!, wouldWant } })}
+      />
+    );
   }
 
   if (phase.kind === 'done') {
     const run = runs.find((r) => r.id === phase.runId);
     if (!run?.completed) return <Redirect href={{ pathname: '/life/[career]', params: { career: careerId } }} />;
-    return <LifeAt30 life={life} run={run} tokens={tokens} onAnswer={(wouldWant) => save({ ...run, completed: { ...run.completed!, wouldWant } })} />;
+    return (
+      <LifeAt30
+        life={life}
+        run={run}
+        tokens={tokens}
+        free={!game.paid}
+        xp={lifeXp}
+        onPowerUp={() => powerUp(run)}
+        onAnswer={(wouldWant) => {
+          save({ ...run, completed: { ...run.completed!, wouldWant } });
+          setLifeWant(careerId, wouldWant);
+        }}
+      />
+    );
   }
 
   if (phase.kind === 'transition') {
@@ -171,6 +203,7 @@ export default function LifePlay() {
   const pick = (choiceId: string) => {
     const res = choose(life, SHARED_EVENTS, active, choiceId);
     save(res.run);
+    if (res.run.completed) setLifeXp(finishLife(careerId));
     setMenu(false);
     setPhase(res.check ? { kind: 'rolling', res, before: active } : { kind: 'outcome', res, before: active });
   };

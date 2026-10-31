@@ -53,7 +53,7 @@ export default function QuestStart() {
       }
     >
       <Title>Your quest awaits</Title>
-      <QuestCard careerId={careerId} quest={quest} hideCareer={!game.paid} />
+      <QuestCard careerId={careerId} quest={quest} />
       {game.activeQuest ? <Body muted>This replaces your current quest. Its star stays dim until you come back to it.</Body> : null}
 
       <Label>When will you do it?</Label>

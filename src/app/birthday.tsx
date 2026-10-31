@@ -106,7 +106,7 @@ export default function Birthday() {
           <TextInput
             value={day}
             onChangeText={(t) => {
-              const digits = t.replace(/D/g, '').slice(0, 2);
+              const digits = t.replace(/\D/g, '').slice(0, 2);
               setDay(digits);
               if (digits.length === 2) monthRef.current?.focus();
             }}

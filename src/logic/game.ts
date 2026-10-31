@@ -19,6 +19,8 @@ import {
   type Reflection,
 } from './character';
 import { easierQuest, isStarAvailable, nextQuest } from './constellation';
+import { LIFE_XP } from './life';
+import { isNotForMe } from './ranking';
 import { nextRecommendation, suggestDifferentPath, type NextStep } from './recommend';
 import type { PollAnswers } from './stats';
 
@@ -196,10 +198,41 @@ export function isStale(active: ActiveQuest, now: Date): boolean {
   return now.getTime() - Date.parse(active.startedAt) >= STALE_AFTER_DAYS * 86_400_000;
 }
 
+// ---------------------------------------------------------------------------------------------
+// Simulated lives (Life Sim Spec §13). Lives never change stats or titles; they give 25 quest XP
+// the first time a career's life is finished, and their "Would you want this life?" answer
+// feeds the matching.
+
+/** Gives the first-completion XP for a career's life; later completions give nothing. */
+export function finishLife(game: Game, careerId: CareerId): { game: Game; xp: number } {
+  const done = game.character.livesCompleted ?? [];
+  if (done.includes(careerId)) return { game, xp: 0 };
+  const character = { ...game.character, totalXp: game.character.totalXp + LIFE_XP, livesCompleted: [...done, careerId] };
+  return { game: { ...game, character }, xp: LIFE_XP };
+}
+
+export function setLifeWant(game: Game, careerId: CareerId, lifeWant: 'yes' | 'maybe' | 'no'): Game {
+  const feedback = { ...game.character.feedback, [careerId]: { ...game.character.feedback[careerId], lifeWant } };
+  return { ...game, character: { ...game.character, feedback } };
+}
+
+/**
+ * The real quest behind "Power up": the next available quest on this career that trains the
+ * attribute, else its first unlit Taste quest, else null.
+ */
+export function powerUpQuest(game: Game, careerId: CareerId, attribute: AttributeId | null): StarNumber | null {
+  const lit = litStarNumbers(game.character, careerId);
+  const open = CAREERS[careerId].quests.filter((q) => !lit.includes(q.star) && canStartQuest(game, careerId, q.star));
+  const trains = attribute ? open.find((q) => q.attributes.includes(attribute)) : undefined;
+  if (trains) return trains.star;
+  const taste = CAREERS[careerId].quests.find((q) => q.tier === 'taste' && !lit.includes(q.star));
+  return taste && canStartQuest(game, careerId, taste.star) ? taste.star : null;
+}
+
 /** What home recommends when there's no active quest. */
 export function homeSuggestion(game: Game): Suggestion | null {
   const s = game.suggestion;
-  if (s && canStartQuest(game, s.careerId, s.star) && game.character.feedback[s.careerId]?.interest !== 'not_for_me') return s;
+  if (s && canStartQuest(game, s.careerId, s.star) && !isNotForMe(game.character.feedback[s.careerId])) return s;
   const top = topCareer(game);
   const quest = nextQuest(CAREERS[top], litStarNumbers(game.character, top));
   if (quest && canStartQuest(game, top, quest.star)) return { careerId: top, star: quest.star, kind: 'start', reason: null };

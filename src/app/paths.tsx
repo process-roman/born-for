@@ -58,15 +58,15 @@ export default function Paths() {
         <View style={{ alignItems: 'center', gap: S.xs }}>
           <Text style={styles.glyph}>{glyph(character.sign)}</Text>
           <Title>{sign.archetype}</Title>
-          <Body muted>Your character is saved on this device. Here’s one free quest on your top path.</Body>
+          <Body muted>Your character is saved on this device. Here’s one free real-world quest on your top path.</Body>
         </View>
         <Card>
           <Label>Your top path</Label>
-          <Text style={styles.hidden}>{CAREERS[top.careerId].name.replace(/\S/g, '•')}</Text>
+          <Text style={styles.topName}>{CAREERS[top.careerId].name}</Text>
           <DifficultyPill difficulty={top.difficulty} />
           {top.reasons[0] ? <Text style={styles.reason}>✦ {top.reasons[0]}</Text> : null}
         </Card>
-        <QuestCard careerId={top.careerId} quest={quest} kicker="Free Taste quest" hideCareer />
+        <QuestCard careerId={top.careerId} quest={quest} kicker="Free Taste quest" />
       </Screen>
     );
   }
@@ -85,6 +85,6 @@ export default function Paths() {
 
 const styles = StyleSheet.create({
   glyph: { fontSize: 36, color: C.gold },
-  hidden: { fontFamily: F.display, fontSize: 19, color: C.textMuted },
+  topName: { fontFamily: F.display, fontSize: 22, color: C.text },
   reason: { fontFamily: F.body, fontSize: 14, lineHeight: 20, color: C.textMuted },
 });
