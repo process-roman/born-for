@@ -6,13 +6,14 @@
 //   npm run life:balance -- ux_design --reference   the profiles from balance_check.py
 //   npm run life:balance -- --runs 200
 //   npm run life:balance -- --age 34          a career-change life starting at 34
+//   npm run life:balance -- --all             every career, both tracks (200 lives per sign each)
 //
 // Exits with 1 when content is invalid or a target is missed.
 
 import type { AttributeId, Stats } from '../src/content/attributes';
 import { ATTRIBUTE_IDS } from '../src/content/attributes';
 import type { CareerId } from '../src/content/careers';
-import { LIVES, METERS, SHARED_EVENTS, type Choice, type LifeEvent, type Meter } from '../src/content/life';
+import { LIFE_CAREER_IDS, LIVES, METERS, SHARED_EVENTS, type Choice, type LifeEvent, type Meter } from '../src/content/life';
 import { SIGN_IDS, SIGNS, type Element, type SignId } from '../src/content/signs';
 import { createRng, lifeStart, oddsFor, playLife, TRACK_FLAGS, type LifeRun } from '../src/logic/life';
 import { validateLife } from '../src/logic/lifeValidate';
@@ -43,148 +44,164 @@ const option = (name: string) => {
   return i >= 0 ? args[i + 1] : undefined;
 };
 const career = (args.find((a, i) => !a.startsWith('--') && args[i - 1] !== '--runs' && args[i - 1] !== '--age') ?? 'ux_design') as CareerId;
-const runsPer = Number(option('runs') ?? 1000);
+const runsPer = Number(option('runs') ?? (flag('all') ? 200 : 1000));
 const reference = flag('reference');
 const age = option('age') ? Number(option('age')) : null;
 
-const life = LIVES[career];
-if (!life) {
-  console.error(`No life content for "${career}". Lives: ${Object.keys(LIVES).join(', ')}`);
-  process.exit(1);
-}
+/** Plays the lives and checks the targets; returns how many targets were missed. */
+function balance(career: CareerId, age: number | null, verbose: boolean): number {
+  const log = verbose ? console.log : () => {};
+  const life = LIVES[career];
+  if (!life) {
+    console.error(`No life content for "${career}".`);
+    return 1;
+  }
 
-const report = validateLife(life, SHARED_EVENTS);
-for (const w of report.warnings) console.log(`warning: ${w}`);
-if (report.errors.length) {
-  for (const e of report.errors) console.error(`error: ${e}`);
-  process.exit(1);
-}
+  const report = validateLife(life, SHARED_EVENTS);
+  for (const w of report.warnings) log(`warning: ${w}`);
+  if (report.errors.length) {
+    for (const e of report.errors) console.error(`${career} error: ${e}`);
+    return 1;
+  }
 
-function profile(sign: SignId): { stats: Stats; element: Element } {
-  if (!reference) return { stats: SIGNS[sign].stats, element: SIGNS[sign].element };
-  const [element, values] = REFERENCE[sign];
-  return { stats: Object.fromEntries(ATTRIBUTE_IDS.map((a) => [a, values[a] ?? 50])) as Stats, element };
-}
+  function profile(sign: SignId): { stats: Stats; element: Element } {
+    if (!reference) return { stats: SIGNS[sign].stats, element: SIGNS[sign].element };
+    const [element, values] = REFERENCE[sign];
+    return { stats: Object.fromEntries(ATTRIBUTE_IDS.map((a) => [a, values[a] ?? 50])) as Stats, element };
+  }
 
-const rng = createRng(42);
-const pickRandom = <T>(items: T[]): T => items[Math.floor(rng() * items.length)]!;
+  const rng = createRng(42);
+  const pickRandom = <T>(items: T[]): T => items[Math.floor(rng() * items.length)]!;
 
-function chooser(strategy: Strategy) {
-  return (_event: unknown, choices: Choice[], run: LifeRun): Choice => {
-    if (strategy === 'random') return pickRandom(choices);
-    if (strategy === 'safe') {
-      const safe = choices.filter((c) => !c.check);
-      return pickRandom(safe.length ? safe : choices);
-    }
-    const checks = choices.filter((c) => c.check);
-    if (!checks.length) return pickRandom(choices);
-    // Highest odds; the first one wins ties, like Python's max().
-    return checks.reduce((best, c) => (oddsFor(run.statsSnapshot, c.check!, run.flags) > oddsFor(run.statsSnapshot, best.check!, run.flags) ? c : best));
-  };
-}
-
-const endingIds = life.endings.map((e) => e.id);
-const endings: Record<Strategy, Map<string, number>> = { random: new Map(), safe: new Map(), bold: new Map() };
-const signEndings = new Map<SignId, Map<string, number>>();
-const eventCounts = new Map<string, number>();
-const skipped = new Map<string, number>();
-const finals: Record<Meter, number> = { joy: 0, energy: 0, money: 0, mastery: 0 };
-let checks = 0;
-let oddsSum = 0;
-let successes = 0;
-let burnout = 0;
-let events = 0;
-let total = 0;
-const bump = (m: Map<string, number>, k: string) => m.set(k, (m.get(k) ?? 0) + 1);
-
-for (const strategy of STRATEGIES) {
-  for (const sign of SIGN_IDS) {
-    const { stats, element } = profile(sign);
-    for (let i = 0; i < runsPer; i++) {
-      const seed = Math.floor(rng() * 4294967296);
-      const { run, skipped: skips } = playLife(life, SHARED_EVENTS, { id: `${total}`, career, seed, startedAt: '2026-10-30T00:00:00Z', stats, element, age }, chooser(strategy));
-      total += 1;
-      const ending = run.completed!.endingId;
-      bump(endings[strategy], ending);
-      if (strategy === 'random') {
-        if (!signEndings.has(sign)) signEndings.set(sign, new Map());
-        bump(signEndings.get(sign)!, ending);
+  function chooser(strategy: Strategy) {
+    return (_event: unknown, choices: Choice[], run: LifeRun): Choice => {
+      if (strategy === 'random') return pickRandom(choices);
+      if (strategy === 'safe') {
+        const safe = choices.filter((c) => !c.check);
+        return pickRandom(safe.length ? safe : choices);
       }
-      for (const entry of run.log) {
-        bump(eventCounts, entry.eventId);
-        events += 1;
-        if (entry.check) {
-          checks += 1;
-          oddsSum += entry.check.odds;
-          successes += entry.check.success ? 1 : 0;
+      const checks = choices.filter((c) => c.check);
+      if (!checks.length) return pickRandom(choices);
+      // Highest odds; the first one wins ties, like Python's max().
+      return checks.reduce((best, c) => (oddsFor(run.statsSnapshot, c.check!, run.flags) > oddsFor(run.statsSnapshot, best.check!, run.flags) ? c : best));
+    };
+  }
+
+  const endingIds = life.endings.map((e) => e.id);
+  const endings: Record<Strategy, Map<string, number>> = { random: new Map(), safe: new Map(), bold: new Map() };
+  const signEndings = new Map<SignId, Map<string, number>>();
+  const eventCounts = new Map<string, number>();
+  const skipped = new Map<string, number>();
+  const finals: Record<Meter, number> = { joy: 0, energy: 0, money: 0, mastery: 0 };
+  let checks = 0;
+  let oddsSum = 0;
+  let successes = 0;
+  let burnout = 0;
+  let events = 0;
+  let total = 0;
+  const bump = (m: Map<string, number>, k: string) => m.set(k, (m.get(k) ?? 0) + 1);
+
+  for (const strategy of STRATEGIES) {
+    for (const sign of SIGN_IDS) {
+      const { stats, element } = profile(sign);
+      for (let i = 0; i < runsPer; i++) {
+        const seed = Math.floor(rng() * 4294967296);
+        const { run, skipped: skips } = playLife(life, SHARED_EVENTS, { id: `${total}`, career, seed, startedAt: '2026-10-30T00:00:00Z', stats, element, age }, chooser(strategy));
+        total += 1;
+        const ending = run.completed!.endingId;
+        bump(endings[strategy], ending);
+        if (strategy === 'random') {
+          if (!signEndings.has(sign)) signEndings.set(sign, new Map());
+          bump(signEndings.get(sign)!, ending);
         }
+        for (const entry of run.log) {
+          bump(eventCounts, entry.eventId);
+          events += 1;
+          if (entry.check) {
+            checks += 1;
+            oddsSum += entry.check.odds;
+            successes += entry.check.success ? 1 : 0;
+          }
+        }
+        if (run.log.some((l) => l.eventId === 'shared_burnout')) burnout += 1;
+        for (const s of skips) bump(skipped, s);
+        for (const m of METERS) finals[m] += run.meters[m];
       }
-      if (run.log.some((l) => l.eventId === 'shared_burnout')) burnout += 1;
-      for (const s of skips) bump(skipped, s);
-      for (const m of METERS) finals[m] += run.meters[m];
     }
   }
+
+  const perStrategy = runsPer * SIGN_IDS.length;
+  const pct = (n: number, of: number) => (100 * n) / of;
+  const fmt = (n: number) => `${n.toFixed(1)}%`;
+
+  log(`\nCareer: ${career} · ${total} lives (12 signs × 3 strategies × ${runsPer}) · ${reference ? 'reference profiles' : 'app sign stats'} · ${age === null ? 'starts at 18' : `starts at ${age}`}\n`);
+  log('Endings by strategy (%):');
+  log(`  ${'ending'.padEnd(18)}${STRATEGIES.map((s) => s.padStart(9)).join('')}`);
+  for (const id of endingIds) log(`  ${id.padEnd(18)}${STRATEGIES.map((s) => fmt(pct(endings[s].get(id) ?? 0, perStrategy)).padStart(9)).join('')}`);
+
+  const short = (id: string) => id.replace(`${career}_end_`, '').replace(/^ux_end_/, '');
+  log('\nEndings by sign (random strategy, %):');
+  for (const [sign, counts] of signEndings) {
+    const n = [...counts.values()].reduce((a, b) => a + b, 0);
+    log(`  ${sign.padEnd(12)}${endingIds.map((id) => `${short(id)} ${pct(counts.get(id) ?? 0, n).toFixed(1).padStart(5)}`).join('  ')}`);
+  }
+
+  const avgOdds = oddsSum / checks;
+  const eventsPerLife = events / total;
+  log(`\nChecks: ${checks} · average shown odds ${avgOdds.toFixed(1)}% · actual success ${fmt(pct(successes, checks))}`);
+  log(`Burnout event in ${fmt(pct(burnout, total))} of lives`);
+  log(`Average final meters: ${METERS.map((m) => `${m} ${Math.round(finals[m] / total)}`).join(', ')}`);
+  log(`Average events per life: ${eventsPerLife.toFixed(1)}`);
+  log(`Skipped slots: ${skipped.size ? JSON.stringify(Object.fromEntries(skipped)) : 'none'}`);
+
+  // Scenes written for the other track (first career vs career change) can't appear here.
+  const trackFlag = TRACK_FLAGS[lifeStart(age).track];
+  const otherFlag = Object.values(TRACK_FLAGS).find((f) => f !== trackFlag)!;
+  const onTrack = (e: LifeEvent) => !e.conditions?.flagsAll?.includes(otherFlag) && !e.conditions?.flagsNone?.includes(trackFlag);
+  const offTrack = [...life.events, ...SHARED_EVENTS].filter((e) => !onTrack(e)).map((e) => e.id);
+  const allIds = [...life.events, ...SHARED_EVENTS].filter(onTrack).map((e) => e.id);
+  log(`\nEvent appearance (% of lives)${offTrack.length ? `, skipping the other track's ${offTrack.join(', ')}` : ''}:`);
+  for (const id of allIds) log(`  ${id.padEnd(22)} ${fmt(pct(eventCounts.get(id) ?? 0, total)).padStart(6)}`);
+  const rarest = allIds.reduce((a, b) => ((eventCounts.get(a) ?? 0) <= (eventCounts.get(b) ?? 0) ? a : b));
+
+  // Targets (§16).
+  const thriving = endingIds.find((id) => id.endsWith('_thriving'));
+  const targets: [string, boolean, string][] = [
+    ...endingIds.map((id): [string, boolean, string] => {
+      const p = pct(endings.random.get(id) ?? 0, perStrategy);
+      return [`${life.endings.find((e) => e.id === id)!.name}, random: 5–55%`, p >= 5 && p <= 55, fmt(p)];
+    }),
+    ...(thriving
+      ? [
+          [
+            'Thriving, bold higher than random',
+            (endings.bold.get(thriving) ?? 0) > (endings.random.get(thriving) ?? 0),
+            `${fmt(pct(endings.bold.get(thriving) ?? 0, perStrategy))} vs ${fmt(pct(endings.random.get(thriving) ?? 0, perStrategy))}`,
+          ] as [string, boolean, string],
+        ]
+      : []),
+    ['Average shown odds: 50–65%', avgOdds >= 50 && avgOdds <= 65, fmt(avgOdds)],
+    ['Burnout event: 8–20% of lives', pct(burnout, total) >= 8 && pct(burnout, total) <= 20, fmt(pct(burnout, total))],
+    ['Skipped slots: 0', skipped.size === 0, String([...skipped.values()].reduce((a, b) => a + b, 0))],
+    ['Events per life: 10–12', eventsPerLife >= 10 && eventsPerLife <= 12, eventsPerLife.toFixed(1)],
+    ['Every event appears in ≥ 5% of lives', pct(eventCounts.get(rarest) ?? 0, total) >= 5, `lowest: ${rarest} ${fmt(pct(eventCounts.get(rarest) ?? 0, total))}`],
+  ];
+
+  log('\nTargets:');
+  for (const [name, ok, value] of targets) log(`  ${ok ? 'PASS' : 'FAIL'}  ${name.padEnd(40)} ${value}`);
+  const failed = targets.filter(([, ok]) => !ok).length;
+  log(failed ? `\n${failed} target(s) missed.` : '\nAll targets met.');
+  if (!verbose && failed) console.log(`${career} (${age === null ? 'from 18' : `from ${age}`}): ${targets.filter(([, ok]) => !ok).map(([n, , v]) => `${n} = ${v}`).join('; ')}`);
+  return failed;
 }
 
-const perStrategy = runsPer * SIGN_IDS.length;
-const pct = (n: number, of: number) => (100 * n) / of;
-const fmt = (n: number) => `${n.toFixed(1)}%`;
-
-console.log(`\nCareer: ${career} · ${total} lives (12 signs × 3 strategies × ${runsPer}) · ${reference ? 'reference profiles' : 'app sign stats'} · ${age === null ? 'starts at 18' : `starts at ${age}`}\n`);
-console.log('Endings by strategy (%):');
-console.log(`  ${'ending'.padEnd(18)}${STRATEGIES.map((s) => s.padStart(9)).join('')}`);
-for (const id of endingIds) console.log(`  ${id.padEnd(18)}${STRATEGIES.map((s) => fmt(pct(endings[s].get(id) ?? 0, perStrategy)).padStart(9)).join('')}`);
-
-const short = (id: string) => id.replace(/^ux_end_/, '');
-console.log('\nEndings by sign (random strategy, %):');
-for (const [sign, counts] of signEndings) {
-  const n = [...counts.values()].reduce((a, b) => a + b, 0);
-  console.log(`  ${sign.padEnd(12)}${endingIds.map((id) => `${short(id)} ${pct(counts.get(id) ?? 0, n).toFixed(1).padStart(5)}`).join('  ')}`);
+if (flag('all')) {
+  // Every career with a life, both tracks. Fewer runs per sign by default to keep it quick.
+  let missed = 0;
+  for (const id of LIFE_CAREER_IDS) for (const a of [null, 34]) missed += balance(id, a, false) ? 1 : 0;
+  console.log(missed ? `
+${missed} career/track combination(s) missed a target.` : `
+All ${LIFE_CAREER_IDS.length} lives meet every target on both tracks.`);
+  process.exit(missed ? 1 : 0);
 }
-
-const avgOdds = oddsSum / checks;
-const eventsPerLife = events / total;
-console.log(`\nChecks: ${checks} · average shown odds ${avgOdds.toFixed(1)}% · actual success ${fmt(pct(successes, checks))}`);
-console.log(`Burnout event in ${fmt(pct(burnout, total))} of lives`);
-console.log(`Average final meters: ${METERS.map((m) => `${m} ${Math.round(finals[m] / total)}`).join(', ')}`);
-console.log(`Average events per life: ${eventsPerLife.toFixed(1)}`);
-console.log(`Skipped slots: ${skipped.size ? JSON.stringify(Object.fromEntries(skipped)) : 'none'}`);
-
-// Scenes written for the other track (first career vs career change) can't appear here.
-const trackFlag = TRACK_FLAGS[lifeStart(age).track];
-const otherFlag = Object.values(TRACK_FLAGS).find((f) => f !== trackFlag)!;
-const onTrack = (e: LifeEvent) => !e.conditions?.flagsAll?.includes(otherFlag) && !e.conditions?.flagsNone?.includes(trackFlag);
-const offTrack = [...life.events, ...SHARED_EVENTS].filter((e) => !onTrack(e)).map((e) => e.id);
-const allIds = [...life.events, ...SHARED_EVENTS].filter(onTrack).map((e) => e.id);
-console.log(`\nEvent appearance (% of lives)${offTrack.length ? `, skipping the other track's ${offTrack.join(', ')}` : ''}:`);
-for (const id of allIds) console.log(`  ${id.padEnd(22)} ${fmt(pct(eventCounts.get(id) ?? 0, total)).padStart(6)}`);
-const rarest = allIds.reduce((a, b) => ((eventCounts.get(a) ?? 0) <= (eventCounts.get(b) ?? 0) ? a : b));
-
-// Targets (§16).
-const thriving = endingIds.find((id) => id.endsWith('_thriving'));
-const targets: [string, boolean, string][] = [
-  ...endingIds.map((id): [string, boolean, string] => {
-    const p = pct(endings.random.get(id) ?? 0, perStrategy);
-    return [`${life.endings.find((e) => e.id === id)!.name}, random: 5–55%`, p >= 5 && p <= 55, fmt(p)];
-  }),
-  ...(thriving
-    ? [
-        [
-          'Thriving, bold higher than random',
-          (endings.bold.get(thriving) ?? 0) > (endings.random.get(thriving) ?? 0),
-          `${fmt(pct(endings.bold.get(thriving) ?? 0, perStrategy))} vs ${fmt(pct(endings.random.get(thriving) ?? 0, perStrategy))}`,
-        ] as [string, boolean, string],
-      ]
-    : []),
-  ['Average shown odds: 50–65%', avgOdds >= 50 && avgOdds <= 65, fmt(avgOdds)],
-  ['Burnout event: 8–20% of lives', pct(burnout, total) >= 8 && pct(burnout, total) <= 20, fmt(pct(burnout, total))],
-  ['Skipped slots: 0', skipped.size === 0, String([...skipped.values()].reduce((a, b) => a + b, 0))],
-  ['Events per life: 10–12', eventsPerLife >= 10 && eventsPerLife <= 12, eventsPerLife.toFixed(1)],
-  ['Every event appears in ≥ 5% of lives', pct(eventCounts.get(rarest) ?? 0, total) >= 5, `lowest: ${rarest} ${fmt(pct(eventCounts.get(rarest) ?? 0, total))}`],
-];
-
-console.log('\nTargets:');
-for (const [name, ok, value] of targets) console.log(`  ${ok ? 'PASS' : 'FAIL'}  ${name.padEnd(40)} ${value}`);
-const failed = targets.filter(([, ok]) => !ok).length;
-console.log(failed ? `\n${failed} target(s) missed.` : '\nAll targets met.');
-process.exit(failed ? 1 : 0);
+process.exit(balance(career, age, true) ? 1 : 0);

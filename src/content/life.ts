@@ -2,8 +2,9 @@
 // Event text lives in the JSON files only; never hard-code it in components.
 
 import type { AttributeId } from './attributes';
-import type { CareerId } from './careers';
+import { CAREER_IDS, type CareerId } from './careers';
 import type { Element } from './signs';
+import { templateLife } from './lifeTemplate';
 import uxDesign from './lives/ux_design.json';
 import shared from './shared_events.json';
 
@@ -117,9 +118,14 @@ export interface CareerLife {
 // The JSON is checked by validateLife (tests and the balance script), so a cast is enough here.
 export const SHARED_EVENTS = (shared as unknown as { events: LifeEvent[] }).events;
 
-export const LIVES: Partial<Record<CareerId, CareerLife>> = {
+/** Hand-written lives (JSON). Every other career gets a template life built from its content. */
+export const HAND_WRITTEN_LIVES: Partial<Record<CareerId, CareerLife>> = {
   ux_design: uxDesign as unknown as CareerLife,
 };
+
+export const LIVES: Partial<Record<CareerId, CareerLife>> = Object.fromEntries(
+  CAREER_IDS.map((id) => [id, HAND_WRITTEN_LIVES[id] ?? templateLife(id)]).filter(([, life]) => life),
+);
 
 export const LIFE_CAREER_IDS = Object.keys(LIVES) as CareerId[];
 

@@ -25,10 +25,23 @@ export function canPlayLife(game: Game, runs: readonly LifeRun[], careerId: Care
   return careerId === freeLifeCareer(game.character) && !hasFinishedLife(runs, careerId);
 }
 
-/** A life the user could play now and hasn't finished yet, for the Home card. */
+/** How many of the user's top matches Home suggests living (paid users). */
+export const HOME_LIVES = 3;
+
+/**
+ * A life to suggest on Home: the free life until it's lived, or for paid users the first of their
+ * top matches not lived yet. A life in progress always comes first.
+ */
 export function unplayedLife(game: Game, runs: readonly LifeRun[]): CareerId | null {
-  const order = game.paid ? Object.keys(LIVES) as CareerId[] : [freeLifeCareer(game.character)].filter((c): c is CareerId => c !== null);
-  const preferred = freeLifeCareer(game.character);
-  const sorted = preferred ? [preferred, ...order.filter((c) => c !== preferred)] : order;
-  return sorted.find((c) => canPlayLife(game, runs, c) && !hasFinishedLife(runs, c)) ?? null;
+  const inProgress = runs.find((r) => !r.completed && canPlayLife(game, runs, r.career));
+  if (inProgress) return inProgress.career;
+  const free = freeLifeCareer(game.character);
+  const order = game.paid
+    ? rankingFor(game.character)
+        .ranked.slice(0, HOME_LIVES)
+        .map((m) => m.careerId)
+    : free
+      ? [free]
+      : [];
+  return order.find((c) => canPlayLife(game, runs, c) && !hasFinishedLife(runs, c)) ?? null;
 }

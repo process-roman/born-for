@@ -1,29 +1,41 @@
 // Lives hub (cream, Life Sim Spec §12 screen 6): every career with a life, and how far you got.
 
 import { Redirect, router } from 'expo-router';
+import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { CAREERS } from '@/content/careers';
 import { LIFE_CAREER_IDS, LIVES } from '@/content/life';
+import { rankingFor } from '@/logic/character';
 import { endingsFound, LIFE_SLOTS, realAge } from '@/logic/life';
 import { canPlayLife } from '@/logic/lifeAccess';
 import { useGame } from '@/state/game';
 import { activeRun, latestCompleted, useLives } from '@/state/lives';
 import { Body, Button, Card, Label, Screen, Title } from '@/ui/components';
-import { C, day, S, type } from '@/ui/theme';
+import { day, S, type } from '@/ui/theme';
+
+/** Lives shown before "Show all". */
+const SHOWN = 8;
 
 export default function LivesHub() {
   const { game } = useGame();
   const { runs } = useLives();
+  const [showAll, setShowAll] = useState(false);
   if (!game) return <Redirect href="/" />;
   const lived = LIFE_CAREER_IDS.filter((id) => latestCompleted(runs, id));
+  // Lives you've started or finished first, then your matches in ranking order.
+  const { ranked, notForMe } = rankingFor(game.character);
+  const byMatch = [...ranked, ...notForMe].map((m) => m.careerId).filter((id) => LIFE_CAREER_IDS.includes(id));
+  const touched = byMatch.filter((id) => runs.some((r) => r.career === id));
+  const order = [...touched, ...byMatch.filter((id) => !touched.includes(id))];
+  const shown = showAll ? order : order.slice(0, Math.max(SHOWN, touched.length));
 
   return (
     <Screen footer={<Button title="Back" variant="ghost" onPress={() => (router.canGoBack() ? router.back() : router.replace('/explore'))} />}>
       <Title>Lives</Title>
       <Body muted>Live twelve years of a career, starting at your age, before you try it for real. Your real stats set the odds.</Body>
 
-      {LIFE_CAREER_IDS.map((id) => {
+      {shown.map((id) => {
         const life = LIVES[id]!;
         const active = activeRun(runs, id);
         const found = endingsFound(life, runs).filter((f) => f.firstFoundAt).length;
@@ -55,7 +67,7 @@ export default function LivesHub() {
           </Pressable>
         );
       })}
-      <Text style={styles.small}>More lives are on the way. Careers without one say “Life coming soon”.</Text>
+      {shown.length < order.length ? <Button title={`Show all ${order.length} lives`} variant="ghost" onPress={() => setShowAll(true)} /> : null}
 
       <Card>
         <Label>Compare lives</Label>
@@ -79,5 +91,4 @@ const styles = StyleSheet.create({
   career: { ...type.small, color: day.textMuted },
   chevron: { fontSize: 18, color: day.primary },
   body: { ...type.body, fontSize: 15, lineHeight: 22, color: day.text },
-  small: { ...type.small, fontSize: 13, color: C.textMuted },
 });

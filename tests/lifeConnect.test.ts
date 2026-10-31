@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import type { CareerId } from '../src/content/careers';
 import { LIVES, SHARED_EVENTS } from '../src/content/life';
 import { createCharacter, rankingFor } from '../src/logic/character';
 import { finishLife, newGame, powerUpQuest, setLifeWant, startQuest, finishQuest } from '../src/logic/game';
@@ -8,10 +9,10 @@ import { FEEDBACK_EFFECTS } from '../src/logic/ranking';
 import { SIGNS } from '../src/content/signs';
 import { MAYA } from './personas';
 
-const designer = LIVES.ux_design!;
-const run = (completed: boolean): LifeRun => {
-  const base = startLife(designer, SHARED_EVENTS, { id: 'r', career: 'ux_design', seed: 1, startedAt: '2026-10-31T00:00:00Z', stats: SIGNS.cancer.stats, element: 'water' }).run;
-  return completed ? { ...base, pendingEventId: undefined, completed: { endingId: 'ux_end_steady', role: 'Junior designer', finishedAt: '2026-10-31T00:10:00Z' } } : base;
+const run = (completed: boolean, career: CareerId = 'teaching'): LifeRun => {
+  const life = LIVES[career]!;
+  const base = startLife(life, SHARED_EVENTS, { id: `r-${career}`, career, seed: 1, startedAt: '2026-10-31T00:00:00Z', stats: SIGNS.cancer.stats, element: 'water' }).run;
+  return completed ? { ...base, pendingEventId: undefined, completed: { endingId: life.endings.at(-1)!.id, role: 'x', finishedAt: '2026-10-31T00:10:00Z' } } : base;
 };
 
 describe('life XP', () => {
@@ -56,24 +57,34 @@ describe('"Would you want this life?" in matching', () => {
 });
 
 describe('free life access', () => {
-  it('the free life is the best-ranked career that has a life', () => {
-    expect(freeLifeCareer(createCharacter(MAYA))).toBe('ux_design'); // the only life so far
+  it('every career has a life, so the free life is the top match', () => {
+    const maya = createCharacter(MAYA);
+    expect(freeLifeCareer(maya)).toBe(rankingFor(maya).ranked[0]!.careerId);
+    expect(freeLifeCareer(maya)).toBe('teaching');
   });
 
   it('free users play it once; a run in progress can resume; paid users play anything', () => {
     const free = newGame(createCharacter(MAYA), false);
-    expect(canPlayLife(free, [], 'ux_design')).toBe(true);
-    expect(canPlayLife(free, [run(false)], 'ux_design')).toBe(true);
-    expect(canPlayLife(free, [run(true)], 'ux_design')).toBe(false);
-    expect(canPlayLife(free, [], 'teaching')).toBe(false); // no life content
-    expect(canPlayLife({ ...free, paid: true }, [run(true)], 'ux_design')).toBe(true);
+    expect(canPlayLife(free, [], 'teaching')).toBe(true);
+    expect(canPlayLife(free, [run(false)], 'teaching')).toBe(true);
+    expect(canPlayLife(free, [run(true)], 'teaching')).toBe(false);
+    expect(canPlayLife(free, [], 'ux_design')).toBe(false); // not their free life
+    expect(canPlayLife({ ...free, paid: true }, [run(true)], 'teaching')).toBe(true);
   });
 
-  it('Home shows a life until it’s been lived', () => {
+  it('Home shows the free life until it’s been lived', () => {
     const free = newGame(createCharacter(MAYA), false);
-    expect(unplayedLife(free, [])).toBe('ux_design');
-    expect(unplayedLife(free, [run(false)])).toBe('ux_design');
+    expect(unplayedLife(free, [])).toBe('teaching');
+    expect(unplayedLife(free, [run(false)])).toBe('teaching');
     expect(unplayedLife(free, [run(true)])).toBeNull();
+  });
+
+  it('for paid users, Home suggests their top three matches, then stops', () => {
+    const paid = newGame(createCharacter(MAYA), true);
+    const top3 = rankingFor(paid.character).ranked.slice(0, 3).map((m) => m.careerId);
+    expect(unplayedLife(paid, [])).toBe(top3[0]);
+    expect(unplayedLife(paid, [run(true, top3[0]!)])).toBe(top3[1]);
+    expect(unplayedLife(paid, top3.map((c) => run(true, c)))).toBeNull();
   });
 });
 
