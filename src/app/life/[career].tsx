@@ -100,6 +100,20 @@ export default function LifeIntro() {
         })}
         <Text style={styles.small}>Real quests raise your stats, and better stats mean better odds next time.</Text>
       </Card>
+
+      {__DEV__ ? (
+        <Card>
+          <Label>Dev: preview an ending</Label>
+          {life.endings.map((e) => (
+            <Button
+              key={e.id}
+              title={e.name}
+              variant="ghost"
+              onPress={() => router.push({ pathname: '/life/play', params: { career: careerId, devEnding: e.id } })}
+            />
+          ))}
+        </Card>
+      ) : null}
     </Screen>
   );
 }

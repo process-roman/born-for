@@ -7,6 +7,7 @@ import {
   choose,
   endingFor,
   eventById,
+  endingsFound,
   fillTokens,
   mostCheckedAttributes,
   typicalOdds,
@@ -237,6 +238,25 @@ describe('Life at 30 details', () => {
     expect(top).toContain('communication');
     expect(typicalOdds(designer, 'communication', statsAll(60))).toBeGreaterThan(typicalOdds(designer, 'communication', statsAll(50))!);
     expect(typicalOdds(designer, 'hands_on', statsAll(60))).toBeNull();
+  });
+
+  it('endings collection: found endings with the first date, in file order', () => {
+    const done = (endingId: string, finishedAt: string, career = 'ux_design'): LifeRun =>
+      ({ ...startLife(designer, SHARED_EVENTS, params(1)).run, career, completed: { endingId, role: 'x', finishedAt } }) as LifeRun;
+    const found = endingsFound(designer, [
+      done('ux_end_steady', '2026-10-30T10:00:00Z'),
+      done('ux_end_steady', '2026-10-29T10:00:00Z'),
+      done('ux_end_studio', '2026-10-31T10:00:00Z'),
+      done('ux_end_pivot', '2026-10-28T10:00:00Z', 'teaching'),
+      startLife(designer, SHARED_EVENTS, params(2)).run,
+    ]);
+    expect(found.map((f) => [f.ending.id, f.firstFoundAt])).toEqual([
+      ['ux_end_pivot', null],
+      ['ux_end_studio', '2026-10-31T10:00:00Z'],
+      ['ux_end_rebuilt', null],
+      ['ux_end_thriving', null],
+      ['ux_end_steady', '2026-10-29T10:00:00Z'],
+    ]);
   });
 
   it('tokens', () => {

@@ -388,6 +388,17 @@ export function lifeAsks(run: LifeRun): { asks: AttributeAsk[]; powerUp: Attribu
   return { asks, powerUp: weakest?.attribute ?? null };
 }
 
+/** The endings collection: every ending in order, with the date it was first found (or null). */
+export function endingsFound(life: CareerLife, runs: readonly LifeRun[]): { ending: Ending; firstFoundAt: string | null }[] {
+  return life.endings.map((ending) => {
+    const dates = runs
+      .filter((r) => r.career === life.career && r.completed?.endingId === ending.id)
+      .map((r) => r.completed!.finishedAt)
+      .sort();
+    return { ending, firstFoundAt: dates[0] ?? null };
+  });
+}
+
 // ---------------------------------------------------------------------------------------------
 // Helpers for screens.
 

@@ -8,26 +8,16 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { ATTRIBUTE_LABELS } from '@/content/attributes';
 import { CAREER_IDS, type CareerId } from '@/content/careers';
-import { lifeFor, SHARED_EVENTS, STAGE_NAMES, type CareerLife, type Stage } from '@/content/life';
+import { lifeFor, SHARED_EVENTS, STAGE_NAMES, type Stage } from '@/content/life';
 import { SIGNS } from '@/content/signs';
-import {
-  AGE_AT_END,
-  ageFor,
-  choose,
-  eventById,
-  fillTokens,
-  highlightsFor,
-  NO_HIGHLIGHTS_LINE,
-  stageFor,
-  visibleChoices,
-  type LifeRun,
-  type LifeTokens,
-  type Resolution,
-} from '@/logic/life';
+import { ageFor, choose, eventById, fillTokens, stageFor, visibleChoices, type LifeRun, type LifeTokens, type Resolution } from '@/logic/life';
+import { lifeWithEnding } from '@/logic/lifeDev';
+import { statsOf } from '@/logic/character';
 import { hybridTitle } from '@/logic/titles';
 import { useGame } from '@/state/game';
 import { activeRun, latestCompleted, useLives } from '@/state/lives';
 import { Button, Card, Label, Screen } from '@/ui/components';
+import { LifeAt30 } from '@/ui/LifeAt30';
 import { LifeIcon } from '@/ui/lifeIcons';
 import { ChoiceButton, MeterDeltas, MetersBar, RealityNote, RollStar } from '@/ui/lifeParts';
 import { LifeSky } from '@/ui/LifeSky';
@@ -90,47 +80,8 @@ function Transition({ stage, age, run, onDone }: { stage: Stage; age: number; ru
   );
 }
 
-/** Placeholder Life at 30 (the full card comes in Step 3). */
-function LifeAt30({ life, run, tokens }: { life: CareerLife; run: LifeRun; tokens: LifeTokens }) {
-  const ending = life.endings.find((e) => e.id === run.completed!.endingId)!;
-  const highlights = highlightsFor(run);
-  return (
-    <Screen
-      tone="night"
-      footer={
-        <>
-          <Button title="Live it again" onPress={() => router.replace({ pathname: '/life/[career]', params: { career: run.career } })} />
-          <Button title="Back to the path" variant="ghost" onPress={() => router.replace({ pathname: '/path/[id]', params: { id: run.career } })} />
-        </>
-      }
-    >
-      <LifeSky age={AGE_AT_END} meters={run.meters} element={run.element} variant="card" />
-      <View style={{ alignItems: 'center', gap: S.xs }}>
-        <Label>Life at 30</Label>
-        <Text style={styles.nightTitle}>{tokens.title}</Text>
-        <Text style={styles.endingName}>{ending.name}</Text>
-        <Text style={styles.nightBody}>{fillTokens(ending.text, tokens)}</Text>
-        <Text style={styles.role}>{run.completed!.role}</Text>
-      </View>
-      <MetersBar meters={run.meters} tone="night" />
-      <Card>
-        <Label>Highlights</Label>
-        {highlights.length ? (
-          highlights.map((h) => (
-            <Text key={h} style={styles.nightBody}>
-              ★ {h}
-            </Text>
-          ))
-        ) : (
-          <Text style={styles.nightBody}>{NO_HIGHLIGHTS_LINE}</Text>
-        )}
-      </Card>
-    </Screen>
-  );
-}
-
 export default function LifePlay() {
-  const { career } = useLocalSearchParams<{ career: string }>();
+  const { career, devEnding } = useLocalSearchParams<{ career: string; devEnding?: string }>();
   const { game } = useGame();
   const { runs, save, discard } = useLives();
   const careerId = career as CareerId;
@@ -141,14 +92,25 @@ export default function LifePlay() {
   const [menu, setMenu] = useState(false);
   const toEvent = useCallback(() => setPhase({ kind: 'event' }), []);
   const rolled = useCallback(() => setPhase((p) => (p.kind === 'rolling' ? { kind: 'outcome', res: p.res, before: p.before } : p)), []);
+  // Dev only: a real life that reached the requested ending, never saved.
+  const [preview, setPreview] = useState<LifeRun | null>(() => {
+    if (!__DEV__ || !devEnding || !game || !life) return null;
+    const { sign } = game.character;
+    return lifeWithEnding(life, SHARED_EVENTS, { id: 'preview', career: careerId, startedAt: new Date().toISOString(), stats: statsOf(game.character), element: SIGNS[sign].element }, devEnding);
+  });
 
   if (!game || !life) return <Redirect href="/" />;
   const sign = SIGNS[game.character.sign];
   const tokens: LifeTokens = { archetype: sign.archetype.replace(/^The /, ''), sign: sign.name, title: hybridTitle(game.character.sign, careerId) };
 
+  if (preview?.completed) {
+    return <LifeAt30 life={life} run={preview} tokens={tokens} preview onAnswer={(wouldWant) => setPreview({ ...preview, completed: { ...preview.completed!, wouldWant } })} />;
+  }
+
   if (phase.kind === 'done') {
     const run = runs.find((r) => r.id === phase.runId);
-    return run?.completed ? <LifeAt30 life={life} run={run} tokens={tokens} /> : <Redirect href={{ pathname: '/life/[career]', params: { career: careerId } }} />;
+    if (!run?.completed) return <Redirect href={{ pathname: '/life/[career]', params: { career: careerId } }} />;
+    return <LifeAt30 life={life} run={run} tokens={tokens} onAnswer={(wouldWant) => save({ ...run, completed: { ...run.completed!, wouldWant } })} />;
   }
 
   if (phase.kind === 'transition') {
@@ -269,8 +231,4 @@ const styles = StyleSheet.create({
   },
   transitionAge: { ...type.label, color: night.text },
   transitionStage: { fontFamily: fonts.serifMedium, fontSize: 44, lineHeight: 48, color: night.text },
-  nightTitle: { ...type.h1, color: night.text, textAlign: 'center' },
-  endingName: { ...type.h2, color: night.accent, textAlign: 'center' },
-  nightBody: { ...type.body, color: night.text, textAlign: 'center' },
-  role: { ...type.label, color: night.gold },
 });

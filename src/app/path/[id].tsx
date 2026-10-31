@@ -9,6 +9,8 @@ import { SIGNS } from '@/content/signs';
 import { WORLDS } from '@/content/worlds';
 import { litStarNumbers, rankingFor, statsOf } from '@/logic/character';
 import { lifeFor } from '@/content/life';
+import { endingsFound } from '@/logic/life';
+import { useLives } from '@/state/lives';
 import { isConstellationComplete } from '@/logic/constellation';
 import { canStartQuest } from '@/logic/game';
 import type { PathInterest } from '@/logic/ranking';
@@ -38,9 +40,28 @@ function List({ items }: { items: string[] }) {
   );
 }
 
+/** "2 of 5 endings found": found ones with the date first found, the rest as ???. */
+function EndingsCard({ found }: { found: ReturnType<typeof endingsFound> }) {
+  const count = found.filter((f) => f.firstFoundAt).length;
+  return (
+    <Card>
+      <Label>
+        Life endings · {count} of {found.length} found
+      </Label>
+      {found.map(({ ending, firstFoundAt }) => (
+        <View key={ending.id} style={styles.endingRow}>
+          <Text style={[styles.endingName, !firstFoundAt && { color: C.textMuted }]}>{firstFoundAt ? ending.name : '???'}</Text>
+          {firstFoundAt ? <Text style={styles.endingDate}>{new Date(firstFoundAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</Text> : null}
+        </View>
+      ))}
+    </Card>
+  );
+}
+
 export default function PathDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { game, setInterest } = useGame();
+  const { runs } = useLives();
   if (!game) return <Redirect href="/" />;
   if (!CAREER_IDS.includes(id as CareerId)) return <Redirect href="/explore" />;
   const careerId = id as CareerId;
@@ -52,6 +73,7 @@ export default function PathDetail() {
   const match = [...ranked, ...notForMe].find((m) => m.careerId === careerId)!;
   const interest = character.feedback[careerId]?.interest;
   const complete = isConstellationComplete(lit);
+  const life = lifeFor(careerId);
 
   return (
     <Screen footer={<Button title="Back" variant="ghost" onPress={() => (router.canGoBack() ? router.back() : router.replace('/explore'))} />}>
@@ -65,7 +87,7 @@ export default function PathDetail() {
         <PathConstellation career={career} lit={lit} size={220} />
         <Text style={styles.count}>{lit.length} of 5 stars lit</Text>
       </PlumCard>
-      {lifeFor(careerId) ? (
+      {life ? (
         <Button title="Live this life" onPress={() => router.push({ pathname: '/life/[career]', params: { career: careerId } })} />
       ) : (
         <Text style={styles.comingSoon}>Life coming soon</Text>
@@ -105,6 +127,8 @@ export default function PathDetail() {
           </Pressable>
         ))}
       </View>
+
+      {life ? <EndingsCard found={endingsFound(life, runs)} /> : null}
 
       <Card>
         <Label>Difficulty for you</Label>
@@ -185,6 +209,9 @@ export default function PathDetail() {
 const styles = StyleSheet.create({
   sky: { alignItems: 'center' },
   comingSoon: { ...type.label, color: C.textMuted, textAlign: 'center' },
+  endingRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline' },
+  endingName: { ...type.h3, fontSize: 18, color: C.text },
+  endingDate: { ...type.label, fontSize: 10, color: C.textMuted },
   count: { ...type.label, color: night.gold },
   interest: { flexDirection: 'row', gap: S.sm, justifyContent: 'center' },
   worlds: { flexDirection: 'row', flexWrap: 'wrap', gap: S.sm, justifyContent: 'center' },
