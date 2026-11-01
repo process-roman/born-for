@@ -158,7 +158,7 @@ export default function Home() {
       <View style={styles.welcome}>
         <View style={{ flex: 1, gap: space.sm }}>
           <Text style={styles.greeting}>
-            Welcome back, <Text style={styles.greetingItalic}>{sign.archetype.replace('The ', '')}</Text>
+            {Object.keys(character.stars).length ? 'Welcome back, ' : 'Welcome, '}<Text style={styles.greetingItalic}>{sign.archetype.replace('The ', '')}</Text>
           </Text>
           <SectionLabel>
             {sign.name} · Level {levelOf(character)}

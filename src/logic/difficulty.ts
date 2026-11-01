@@ -14,6 +14,9 @@ export const DIFFICULTY_LABELS: Record<DifficultyLevel, string> = {
   3: 'Challenging but achievable',
 };
 
+/** Level 1 with every requirement already met, so the top of the list isn't all one label. */
+export const READY_LABEL = 'Ready now';
+
 /** A gap above this counts as a key gap. */
 export const KEY_GAP = 10;
 /** Any single gap above this makes a career Challenging on its own. */
@@ -35,6 +38,8 @@ export interface Difficulty {
   label: string;
   /** Key gaps, largest first: the attributes that need training. */
   keyGaps: AttributeGap[];
+  /** Small gaps (1 to KEY_GAP), largest first: "almost there" on a Natural fit. */
+  closeGaps: AttributeGap[];
   /** Why age made it harder, e.g. "About 3–5 years of study to qualify from scratch…". Null otherwise. */
   ageNote: string | null;
 }
@@ -65,9 +70,11 @@ export function ageEffect(training: CareerTraining, age: number | null): { bump:
 export function difficultyFor(career: Career, stats: Stats, age: number | null = null): Difficulty {
   const gaps = career.requirements.map((r) => ({ attribute: r.attribute, gap: r.required - stats[r.attribute] }));
   const keyGaps = gaps.filter((g) => g.gap > KEY_GAP).sort((a, b) => b.gap - a.gap);
+  const closeGaps = gaps.filter((g) => g.gap > 0 && g.gap <= KEY_GAP).sort((a, b) => b.gap - a.gap);
   const fromStats: DifficultyLevel =
     keyGaps.length >= 2 || gaps.some((g) => g.gap > LARGE_GAP) ? 3 : keyGaps.length === 1 ? 2 : 1;
   const effect = ageEffect(CAREER_TRAINING[career.id], age);
   const level = (effect.longShot ? 3 : Math.min(3, fromStats + effect.bump)) as DifficultyLevel;
-  return { level, label: DIFFICULTY_LABELS[level], keyGaps, ageNote: effect.note };
+  const label = level === 1 && closeGaps.length === 0 ? READY_LABEL : DIFFICULTY_LABELS[level];
+  return { level, label, keyGaps, closeGaps, ageNote: effect.note };
 }

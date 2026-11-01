@@ -51,6 +51,7 @@ export default function LivesHub() {
           <Pressable
             key={id}
             accessibilityRole="button"
+            accessibilityLabel={`${life.lifeName} life, ${status}`}
             onPress={() => router.push({ pathname: '/life/[career]', params: { career: id } })}
             style={({ pressed }) => pressed && { opacity: 0.85 }}
           >

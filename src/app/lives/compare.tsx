@@ -37,7 +37,7 @@ function Column({ run }: { run: LifeRun }) {
           </View>
         ))}
       </View>
-      <Text style={styles.want}>Would want it: {run.completed!.wouldWant ? WOULD_WANT[run.completed!.wouldWant] : 'Not sure'}</Text>
+      <Text style={styles.want}>Would want it: {run.completed!.wouldWant ? WOULD_WANT[run.completed!.wouldWant] : 'Skipped'}</Text>
     </Card>
   );
 }

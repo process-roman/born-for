@@ -86,8 +86,8 @@ export default function Poll() {
           {...responder.panHandlers}
           style={[styles.card, { transform: [{ translateX: pan.x }, { translateY: pan.y }, { rotate }] }]}
         >
-          <Animated.Text style={[styles.stamp, styles.stampYes, { opacity: yesOpacity }]}>THAT’S ME</Animated.Text>
-          <Animated.Text style={[styles.stamp, styles.stampNo, { opacity: noOpacity }]}>NOT REALLY</Animated.Text>
+          <Animated.Text aria-hidden style={[styles.stamp, styles.stampYes, { opacity: yesOpacity }]}>THAT’S ME</Animated.Text>
+          <Animated.Text aria-hidden style={[styles.stamp, styles.stampNo, { opacity: noOpacity }]}>NOT REALLY</Animated.Text>
           <Text style={styles.attribute}>{ATTRIBUTE_LABELS[card.attribute]}</Text>
           <Text style={styles.prediction}>
             Your sign says: <Text style={{ color: C.gold, fontFamily: F.bodyBold }}>{card.signBand}</Text>

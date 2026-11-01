@@ -24,8 +24,8 @@ export function validateLife(life: CareerLife, shared: LifeEvent[], iconNames?: 
     errors.push(`${life.career}: class "${life.class}" doesn't match the title system ("${CAREERS[life.career].className}")`);
   }
 
-  // The engine sets the track flags at the start of every life.
-  const setFlags = new Set<string>(Object.values(TRACK_FLAGS));
+  // Track flags and start flags ("no_boss") are set when a run begins, not by an effect.
+  const setFlags = new Set<string>([...Object.values(TRACK_FLAGS), 'no_boss', ...(life.startFlags ?? [])]);
   const usedFlags = new Map<string, string>(); // flag → where it's used
   const noteFlags = (flags: string[] | undefined, where: string) => flags?.forEach((f) => usedFlags.has(f) || usedFlags.set(f, where));
 

@@ -244,7 +244,7 @@ export const PRACTICAL_CAREERS: Career[] = [
   job({
     id: 'drone_pilot',
     name: 'Drone pilot',
-    worlds: ['build', 'tech'],
+    worlds: ['travel', 'creators'],
     className: 'Skywatcher',
     item: 'drone',
     sigil: 'Kite',

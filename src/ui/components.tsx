@@ -117,6 +117,8 @@ export function Button({
   return (
     <Pressable
       accessibilityRole="button"
+      accessibilityLabel={title}
+      accessibilityState={{ disabled: !!disabled }}
       disabled={disabled}
       onPress={onPress}
       style={({ pressed }) => [
@@ -153,6 +155,7 @@ export function OptionCard({
   return (
     <Pressable
       accessibilityRole="button"
+      accessibilityLabel={detail ? `${label}. ${detail}` : label}
       accessibilityState={{ selected }}
       onPress={onPress}
       style={({ pressed }) => [

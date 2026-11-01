@@ -75,7 +75,7 @@ export default function Birthday() {
         <Title>Choose your sign</Title>
         <View style={styles.grid}>
           {SIGN_IDS.map((s) => (
-            <Pressable key={s} accessibilityRole="button" onPress={() => choose(s, null, null)} style={({ pressed }) => [styles.signTile, pressed && { borderColor: C.gold }]}>
+            <Pressable key={s} accessibilityRole="button" accessibilityLabel={SIGNS[s].name} onPress={() => choose(s, null, null)} style={({ pressed }) => [styles.signTile, pressed && { borderColor: C.gold }]}>
               <Text style={styles.signGlyph}>{glyph(s)}</Text>
               <Text style={styles.signName}>{SIGNS[s].name}</Text>
             </Pressable>

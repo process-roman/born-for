@@ -158,6 +158,7 @@ export default function PathDetail() {
             <Pressable
               key={q.star}
               accessibilityRole="button"
+              accessibilityLabel={`${q.name}, ${TIER_LABELS[q.tier]}, ${q.time}, ${isLit ? 'lit' : isActive ? 'active' : startable ? 'start' : game.paid ? 'locked' : 'unlock to play'}`}
               disabled={!startable || isActive}
               onPress={() => router.push({ pathname: '/quest/start', params: { career: careerId, star: String(q.star) } })}
               style={[styles.quest, startable && !isActive && styles.questOpen, isLit && { opacity: 1 }]}

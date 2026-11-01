@@ -140,7 +140,8 @@
         "flagsNone": [
           "studio",
           "freelance",
-          "pivoted"
+          "pivoted",
+          "no_boss"
         ]
       },
       "icon": "warning",

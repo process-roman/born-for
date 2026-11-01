@@ -189,7 +189,7 @@ export function LifeAt30({
             </Pressable>
           ))}
         </View>
-        {!answered ? <Button title="Not sure" variant="ghost" onPress={() => setSkipped(true)} /> : null}
+        {!answered ? <Button title="Skip" variant="ghost" onPress={() => setSkipped(true)} /> : null}
       </Card>
 
       <Modal visible={sharing} transparent animationType="fade" onRequestClose={() => setSharing(false)}>

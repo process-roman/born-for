@@ -61,6 +61,9 @@ describe('template lives', () => {
     expect(titles('pilot')).toContain('Home or the Horizon?');
     expect(titles('farmer')).toContain('The Bad Season');
     expect(titles('architect')).toContain('Revision Twelve');
+    expect(LIVES.streamer!.startFlags).toEqual(['no_boss']); // no company, so no layoffs
+    expect(LIVES.actor!.startFlags).toEqual(['no_boss']);
+    expect(LIVES.nursing!.startFlags).toBeUndefined();
     for (const id of Object.keys(CAREERS)) if (id !== 'ux_design') expect(familyOf(id as keyof typeof CAREERS)).not.toBeNull(); // every templated career has a family
     expect(JSON.stringify(LIVES.chef)).toContain('Open your own restaurant');
     expect(JSON.stringify(LIVES.animator)).toContain('Open your own animation studio');

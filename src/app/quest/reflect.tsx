@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { ATTRIBUTE_IDS, ATTRIBUTE_LABELS, type AttributeId } from '@/content/attributes';
-import { getQuest } from '@/content/careers';
+import { CAREERS, getQuest } from '@/content/careers';
 import type { Reflection, WouldDoMore } from '@/logic/character';
 import { MAX_FELT_NATURAL } from '@/logic/xp';
 import { useGame } from '@/state/game';
@@ -19,10 +19,26 @@ const MORE: { id: WouldDoMore; label: string }[] = [
   { id: 'no', label: 'No' },
 ];
 
-function Chips({ selected, onToggle, max }: { selected: AttributeId[]; onToggle: (a: AttributeId) => void; max?: number }) {
+/** How many traits show before "More traits": the quest's own, then the career's key ones. */
+const SUGGESTED = 6;
+
+function Chips({
+  selected,
+  onToggle,
+  max,
+  suggested,
+}: {
+  selected: AttributeId[];
+  onToggle: (a: AttributeId) => void;
+  max?: number;
+  suggested: AttributeId[];
+}) {
+  const [all, setAll] = useState(false);
+  // Anything already picked stays visible even when the list is collapsed.
+  const shown = all ? ATTRIBUTE_IDS : ATTRIBUTE_IDS.filter((a) => suggested.includes(a) || selected.includes(a));
   return (
     <View style={styles.chips}>
-      {ATTRIBUTE_IDS.map((a) => {
+      {shown.map((a) => {
         const on = selected.includes(a);
         const full = max !== undefined && selected.length >= max && !on;
         return (
@@ -38,6 +54,11 @@ function Chips({ selected, onToggle, max }: { selected: AttributeId[]; onToggle:
           </Pressable>
         );
       })}
+      {all ? null : (
+        <Pressable accessibilityRole="button" accessibilityLabel="Show all traits" onPress={() => setAll(true)} style={[styles.chip, styles.chipMore]}>
+          <Text style={[styles.chipText, { color: C.textMuted }]}>More traits +</Text>
+        </Pressable>
+      )}
     </View>
   );
 }
@@ -50,6 +71,7 @@ export default function Reflect() {
   const [hard, setHard] = useState<AttributeId[]>([]);
   if (!game?.activeQuest) return <Redirect href="/home" />;
   const quest = getQuest(game.activeQuest.careerId, game.activeQuest.star);
+  const suggested = [...new Set([...quest.attributes, ...CAREERS[game.activeQuest.careerId].requirements.map((r) => r.attribute)])].slice(0, SUGGESTED);
   const toggle = (list: AttributeId[], set: (l: AttributeId[]) => void) => (a: AttributeId) =>
     set(list.includes(a) ? list.filter((x) => x !== a) : [...list, a]);
 
@@ -99,6 +121,7 @@ export default function Reflect() {
           <Pressable
             key={o.id}
             accessibilityRole="button"
+            accessibilityLabel={`Would do more: ${o.label}`}
             accessibilityState={{ selected: more === o.id }}
             onPress={() => setMore(o.id)}
             style={[styles.moreOption, more === o.id && styles.chipOn]}
@@ -110,10 +133,10 @@ export default function Reflect() {
 
       <Label>What felt natural? (up to {MAX_FELT_NATURAL})</Label>
       <Text style={styles.hint}>Tap a trait and you’ve confirmed it yourself, not just your sign.</Text>
-      <Chips selected={natural} onToggle={toggle(natural, setNatural)} max={MAX_FELT_NATURAL} />
+      <Chips selected={natural} onToggle={toggle(natural, setNatural)} max={MAX_FELT_NATURAL} suggested={suggested} />
 
       <Label>What felt hard?</Label>
-      <Chips selected={hard} onToggle={toggle(hard, setHard)} />
+      <Chips selected={hard} onToggle={toggle(hard, setHard)} suggested={suggested} />
     </Screen>
   );
 }
@@ -128,5 +151,6 @@ const styles = StyleSheet.create({
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: S.sm },
   chip: { paddingHorizontal: S.md, paddingVertical: 8, borderRadius: 999, borderWidth: 1, borderColor: C.border, backgroundColor: C.night },
   chipOn: { borderColor: C.gold, backgroundColor: C.goldSoft },
+  chipMore: { borderStyle: 'dashed' },
   chipText: { fontFamily: F.bodyMedium, fontSize: 14, color: C.text },
 });

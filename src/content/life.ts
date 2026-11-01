@@ -102,6 +102,8 @@ export interface Ending {
 
 export interface CareerLife {
   career: CareerId;
+  /** Flags every run starts with, e.g. "no_boss" for careers with no employer. */
+  startFlags?: string[];
   /** "Designer". */
   lifeName: string;
   /** "Shaper", matches the title system. */

@@ -78,7 +78,7 @@ export default function CharacterScreen() {
           titles.map((t) => {
             const equipped = game.equippedTitle === t.careerId;
             return (
-              <Pressable key={t.careerId} accessibilityRole="button" onPress={() => equipTitle(t.careerId)} style={[styles.title, equipped && styles.titleOn]}>
+              <Pressable key={t.careerId} accessibilityRole="button" accessibilityLabel={`${t.text}, ${equipped ? 'equipped' : 'equip'}`} onPress={() => equipTitle(t.careerId)} style={[styles.title, equipped && styles.titleOn]}>
                 <Text style={styles.titleText}>{t.text}</Text>
                 <Text style={styles.titleState}>{equipped ? 'Equipped' : 'Equip'}</Text>
               </Pressable>
@@ -111,7 +111,7 @@ export default function CharacterScreen() {
         ) : (
           <View style={styles.sky}>
             {started.map((id) => (
-              <Pressable key={id} accessibilityRole="button" onPress={() => router.push({ pathname: '/path/[id]', params: { id } })} style={{ alignItems: 'center' }}>
+              <Pressable key={id} accessibilityRole="button" accessibilityLabel={`${CAREERS[id].constellation.name}, ${CAREERS[id].name} path`} onPress={() => router.push({ pathname: '/path/[id]', params: { id } })} style={{ alignItems: 'center' }}>
                 <PathConstellation career={CAREERS[id]} lit={litStarNumbers(character, id)} size={88} />
                 <Text style={styles.skyName}>{CAREERS[id].constellation.name}</Text>
               </Pressable>

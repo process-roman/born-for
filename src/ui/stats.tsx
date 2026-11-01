@@ -128,11 +128,15 @@ export function DifficultyPill({ difficulty }: { difficulty: Difficulty }) {
       </Text>
     </View>
   );
-  if (!difficulty.ageNote) return pill;
+  const close = difficulty.level === 1 && difficulty.closeGaps.length > 0
+    ? `Almost there on ${difficulty.closeGaps.map((g) => ATTRIBUTE_LABELS[g.attribute]).join(' and ')}`
+    : null;
+  const note = difficulty.ageNote ?? close;
+  if (!note) return pill;
   return (
     <View style={{ gap: S.xs }}>
       {pill}
-      <Text style={[styles.ageNote, { color: t.textMuted }]}>{difficulty.ageNote}</Text>
+      <Text style={[styles.ageNote, { color: t.textMuted }]}>{note}</Text>
     </View>
   );
 }

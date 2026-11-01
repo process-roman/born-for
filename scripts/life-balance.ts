@@ -154,13 +154,15 @@ function balance(career: CareerId, age: number | null, verbose: boolean): number
   log(`Average events per life: ${eventsPerLife.toFixed(1)}`);
   log(`Skipped slots: ${skipped.size ? JSON.stringify(Object.fromEntries(skipped)) : 'none'}`);
 
-  // Scenes written for the other track (first career vs career change) can't appear here.
+  // Scenes written for the other track (first career vs career change), or ruled out by the life's
+  // start flags (no layoffs without a boss), can't appear here.
   const trackFlag = TRACK_FLAGS[lifeStart(age).track];
   const otherFlag = Object.values(TRACK_FLAGS).find((f) => f !== trackFlag)!;
-  const onTrack = (e: LifeEvent) => !e.conditions?.flagsAll?.includes(otherFlag) && !e.conditions?.flagsNone?.includes(trackFlag);
+  const startFlags = [trackFlag, ...(life.startFlags ?? [])];
+  const onTrack = (e: LifeEvent) => !e.conditions?.flagsAll?.includes(otherFlag) && !e.conditions?.flagsNone?.some((f) => startFlags.includes(f));
   const offTrack = [...life.events, ...SHARED_EVENTS].filter((e) => !onTrack(e)).map((e) => e.id);
   const allIds = [...life.events, ...SHARED_EVENTS].filter(onTrack).map((e) => e.id);
-  log(`\nEvent appearance (% of lives)${offTrack.length ? `, skipping the other track's ${offTrack.join(', ')}` : ''}:`);
+  log(`\nEvent appearance (% of lives)${offTrack.length ? `, skipping ${offTrack.join(', ')}` : ''}:`);
   for (const id of allIds) log(`  ${id.padEnd(22)} ${fmt(pct(eventCounts.get(id) ?? 0, total)).padStart(6)}`);
   const rarest = allIds.reduce((a, b) => ((eventCounts.get(a) ?? 0) <= (eventCounts.get(b) ?? 0) ? a : b));
 

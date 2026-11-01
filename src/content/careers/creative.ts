@@ -28,7 +28,7 @@ export const CREATIVE_CAREERS: Career[] = [
   job({
     id: 'stylist',
     name: 'Stylist',
-    worlds: ['fashion', 'creators'],
+    worlds: ['fashion'],
     className: 'Glamourist',
     item: 'garment rail',
     sigil: 'Mirror',

@@ -28,7 +28,7 @@ export const BUSINESS_CAREERS: Career[] = [
   job({
     id: 'ecommerce_owner',
     name: 'E-commerce store owner',
-    worlds: ['business', 'creators'],
+    worlds: ['business', 'fashion'],
     className: 'Merchant',
     item: 'parcel',
     sigil: 'Parcel',

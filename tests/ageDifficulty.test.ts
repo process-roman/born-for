@@ -21,6 +21,17 @@ describe('age-aware difficulty', () => {
     expect(thirty.ageNote).toBe('About 3–5 years of study to qualify from scratch, less with a related degree. Harder to fit in at 30, still possible.');
   });
 
+  it('Natural fit splits into Ready now (every requirement met) and almost-there gaps', () => {
+    const ready = difficultyFor(CAREERS.accountant, strong);
+    expect(ready.label).toBe('Ready now');
+    expect(ready.closeGaps).toEqual([]);
+    const req = CAREERS.accountant.requirements[0]!;
+    const close = difficultyFor(CAREERS.accountant, { ...strong, [req.attribute]: req.required - 5 });
+    expect(close.level).toBe(1);
+    expect(close.label).toBe('Natural fit');
+    expect(close.closeGaps).toEqual([{ attribute: req.attribute, gap: 5 }]);
+  });
+
   it('long routes add one level from 25, very long routes two; never past Challenging', () => {
     expect(difficultyFor(CAREERS.accountant, strong, 24).level).toBe(1);
     expect(difficultyFor(CAREERS.accountant, strong, 25).level).toBe(2);

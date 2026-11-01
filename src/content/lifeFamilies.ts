@@ -34,6 +34,9 @@ export const FAMILIES: Record<FamilyId, readonly CareerId[]> = {
   land: ['florist', 'farmer', 'landscape_gardener'],
 };
 
+/** Families whose careers have no employer, so scenes about a company (layoffs) stay out. */
+export const NO_BOSS_FAMILIES: ReadonlySet<FamilyId> = new Set<FamilyId>(['creators', 'performing']);
+
 /**
  * Generic template scenes a family drops because they don't fit its kind of work (creators have no
  * boss to promote them). Listed by the generic scene's id suffix.

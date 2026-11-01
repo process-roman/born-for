@@ -68,6 +68,7 @@ export default function QuestStart() {
             <Pressable
               key={d.toDateString()}
               accessibilityRole="button"
+              accessibilityLabel={d.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' })}
               accessibilityState={{ selected: day === i + 1 }}
               onPress={() => setDay(i + 1)}
               style={[styles.day, day === i + 1 && styles.dayOn]}

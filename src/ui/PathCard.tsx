@@ -32,7 +32,7 @@ export function PathCard({ match, rank, onPress }: { match: CareerMatch; rank?: 
   );
   if (!onPress) return body;
   return (
-    <Pressable accessibilityRole="button" onPress={onPress} style={({ pressed }) => pressed && { opacity: 0.85 }}>
+    <Pressable accessibilityRole="button" accessibilityLabel={`${career.name}, ${match.difficulty.label}`} accessibilityHint="Opens this path" onPress={onPress} style={({ pressed }) => pressed && { opacity: 0.85 }}>
       {body}
     </Pressable>
   );

@@ -9,7 +9,7 @@ import type { AttributeId } from './attributes';
 import { CAREER_TRAINING } from './careerTraining';
 import { CAREER_IDS, CAREERS, type Career, type CareerId } from './careers';
 import type { CareerLife, Choice, LifeEvent } from './life';
-import { FAMILY_REPLACES, familyEvents, familyOf } from './lifeFamilies';
+import { FAMILY_REPLACES, familyEvents, familyOf, NO_BOSS_FAMILIES, type FamilyId } from './lifeFamilies';
 import { article, CHANGER, check, firstSentence, inSentence, result } from './lifeKit';
 import { ladderFor, type LifeLadder } from './lifeLadders';
 
@@ -397,6 +397,7 @@ export function templateLife(id: CareerId): CareerLife | null {
   return {
     career: id,
     lifeName: name,
+    ...(NO_BOSS_FAMILIES.has(familyOf(id) as FamilyId) ? { startFlags: ['no_boss'] } : {}),
     class: career.className,
     roles: {
       byFlag: [
@@ -414,7 +415,7 @@ export function templateLife(id: CareerId): CareerLife | null {
       { id: e('end_pivot'), name: 'Found a Different Path', when: { flagsAll: ['pivoted'] }, roleOverride: 'Took your skills somewhere new', text: `${name} opened a door you didn’t expect. You walked through it, and it still shapes how you work.` },
       { id: e('end_own'), name: 'Struck Out On Your Own', when: { flagsAll: ['studio'], meterMin: { joy: 40 } }, roleOverride: ladder.ownRole, text: `Your name is on the door of your own ${ladder.ownNoun}. Some months are lean, some are great, and every decision is yours.` },
       { id: e('end_rebuilt'), name: 'Burned Out, Then Rebuilt', when: { flagsAll: ['burned_out'] }, text: 'Somewhere along the way it got to be too much. You stepped back, learned your limits and came back on your own terms. Most people learn that much later.' },
-      { id: e('end_thriving'), name: 'Thriving', when: { meterMin: { mastery: 55, joy: 65 } }, text: 'You’re good at this, and you still love it. People rely on what you do, even when they don’t know your name. You know, though.' },
+      { id: e('end_thriving'), name: 'Thriving', when: { meterMin: { mastery: 55, joy: 65 } }, text: 'You’re good at this, and you still love it. People rely on what you do, and you know you earned it.' },
       { id: e('end_steady'), name: 'Steady', when: {}, text: `A solid life in ${work}: good days, hard days, good people, a life that fits. Not every life needs fireworks.` },
     ],
     events,

@@ -214,7 +214,7 @@ export function startLife(life: CareerLife, shared: readonly LifeEvent[], params
     startAge,
     slotIndex: 0,
     meters: { ...START_METERS },
-    flags: [TRACK_FLAGS[track]],
+    flags: [TRACK_FLAGS[track], ...(life.startFlags ?? [])],
     usedEventIds: [],
     forcedCount: 0,
     log: [],

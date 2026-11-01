@@ -37,6 +37,14 @@ describe('confirmed by you', () => {
     expect(confirmedLine(c, 'leadership')).toBe('Your sign didn’t predict Leadership. You found it yourself.');
   });
 
+  it('a trait the user said "Not really" to gets its own line, whatever the sign said', () => {
+    const c = createCharacter(MAYA);
+    const said = { ...c, answers: { ...c.answers, empathy: 'no' as const } };
+    expect(confirmedLine(said, 'empathy')).toBe('You said Empathy wasn’t you. This quest says otherwise.');
+    const added = { ...c, answers: { ...c.answers, leadership: 'yes' as const } }; // a background trait they tapped
+    expect(confirmedLine(added, 'leadership')).toBe('You said Leadership was you. Now you’ve proved it.');
+  });
+
   it('three confirmed traits earn the Proven badge', () => {
     const c = light(createCharacter(MAYA), 'teaching', [1, 2], loved(['empathy', 'communication']));
     expect(earnedBadges(c)).not.toContain('proven');

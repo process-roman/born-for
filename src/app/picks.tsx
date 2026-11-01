@@ -3,11 +3,25 @@
 import { Redirect, router } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { careersInWorld } from '@/content/careers';
-import { WORLDS } from '@/content/worlds';
+import { careersInWorld, type Career } from '@/content/careers';
+import { WORLDS, type WorldId } from '@/content/worlds';
 import { useOnboarding } from '@/state/onboarding';
 import { Body, Button, Label, Screen, Step, Title } from '@/ui/components';
 import { C, F, S } from '@/ui/theme';
+
+/**
+ * Each job once: under its main world when the user chose it, otherwise under the first chosen world
+ * it belongs to. Jobs whose main world this is come first.
+ */
+function pickSections(worlds: readonly WorldId[]): { world: WorldId; careers: Career[] }[] {
+  const home = (c: Career) => (worlds.includes(c.worlds[0]!) ? c.worlds[0]! : worlds.find((w) => c.worlds.includes(w))!);
+  return worlds
+    .map((w) => {
+      const here = careersInWorld(w).filter((c) => home(c) === w);
+      return { world: w, careers: [...here.filter((c) => c.worlds[0] === w), ...here.filter((c) => c.worlds[0] !== w)] };
+    })
+    .filter((section) => section.careers.length > 0);
+}
 
 export default function Picks() {
   const { state, dispatch } = useOnboarding();
@@ -26,18 +40,19 @@ export default function Picks() {
       <Step index={6} total={9} />
       <Title>Any of these catch your eye?</Title>
       <Body muted>Tap any jobs you’re curious about, even long shots. Not sure? Skip, and we’ll rank them all for you.</Body>
-      {state.worlds.map((w) => (
+      {pickSections(state.worlds).map(({ world: w, careers }) => (
         <View key={w} style={{ gap: S.sm }}>
           <Label>
             {WORLDS[w].emoji} {WORLDS[w].name}
           </Label>
           <View style={styles.chips}>
-            {careersInWorld(w).map((c) => {
+            {careers.map((c) => {
               const on = state.picks.includes(c.id);
               return (
                 <Pressable
                   key={c.id}
                   accessibilityRole="button"
+                  accessibilityLabel={c.realityCheck ? `${c.name}, long shot` : c.name}
                   accessibilityState={{ selected: on }}
                   onPress={() => dispatch({ type: 'togglePick', careerId: c.id })}
                   style={({ pressed }) => [styles.chip, on && styles.chipOn, pressed && { opacity: 0.85 }]}

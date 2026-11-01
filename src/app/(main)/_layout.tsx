@@ -9,7 +9,11 @@ import { day, fonts, palette } from '@/ui/theme';
 
 const icon = (symbol: string) =>
   function TabIcon({ color }: { color: ColorValue }) {
-    return <Text style={{ fontSize: 18, color }}>{symbol}</Text>;
+    return (
+      <Text aria-hidden style={{ fontSize: 18, color }}>
+        {symbol}
+      </Text>
+    );
   };
 
 export default function MainLayout() {
