@@ -10,9 +10,9 @@ import type { LifeEvent } from './life';
 import { article, check, inSentence, result } from './lifeKit';
 import type { LifeLadder } from './lifeLadders';
 
-export type FamilyId = 'creators' | 'trades' | 'health' | 'tech' | 'studio' | 'performing' | 'sport' | 'care';
+export type FamilyId = 'creators' | 'trades' | 'health' | 'tech' | 'studio' | 'performing' | 'sport' | 'care' | 'business' | 'food' | 'fashion';
 
-export const FAMILY_NAMES: Record<FamilyId, string> = { creators: 'Creators', trades: 'Trades', health: 'Health care', tech: 'Tech', studio: 'Creative studio', performing: 'Performing', sport: 'Sport', care: 'Care and education' };
+export const FAMILY_NAMES: Record<FamilyId, string> = { creators: 'Creators', trades: 'Trades', health: 'Health care', tech: 'Tech', studio: 'Creative studio', performing: 'Performing', sport: 'Sport', care: 'Care and education', business: 'Business', food: 'Food and hospitality', fashion: 'Fashion and beauty' };
 
 /** Careers in each family. Careers in no family use the generic template scenes only. */
 export const FAMILIES: Record<FamilyId, readonly CareerId[]> = {
@@ -24,6 +24,9 @@ export const FAMILIES: Record<FamilyId, readonly CareerId[]> = {
   performing: ['actor', 'dancer', 'musician', 'model'],
   sport: ['athlete', 'sports_coach', 'personal_trainer', 'yoga_instructor', 'esports_player'],
   care: ['teaching', 'social_work', 'counsellor', 'youth_worker', 'early_childhood', 'psychologist'],
+  business: ['marketing', 'sales', 'recruiter', 'accountant', 'real_estate', 'entrepreneur', 'ecommerce_owner', 'project_coord'],
+  food: ['chef', 'pastry_chef', 'barista', 'bartender', 'hotel_manager', 'event_planner'],
+  fashion: ['fashion_designer', 'stylist', 'makeup_artist', 'hairdresser', 'nail_artist', 'fashion_buyer'],
 };
 
 /**
@@ -41,6 +44,11 @@ export const FAMILY_REPLACES: Record<FamilyId, readonly string[]> = {
   // Sport has trials and first spots, not job applications.
   sport: ['big_one', 'job_hunt', 'change_job_hunt'],
   care: ['big_one'],
+  business: ['big_one'],
+  // Food has its own nights-and-weekends scene.
+  food: ['big_one', 'other_side'],
+  // Fashion and beauty has its own on-your-feet scene.
+  fashion: ['big_one', 'other_side'],
 };
 
 export function familyOf(id: CareerId): FamilyId | null {
@@ -1163,7 +1171,370 @@ function care({ ladder, main, next, e }: FamilyContext): LifeEvent[] {
   ];
 }
 
-const BUILDERS: Record<FamilyId, (ctx: FamilyContext) => LifeEvent[]> = { creators, trades, health, tech, studio, performing, sport, care };
+function business({ ladder, main, next, e }: FamilyContext): LifeEvent[] {
+  return [
+    {
+      id: e('b_spreadsheet'),
+      kind: 'career',
+      stages: ['training'],
+      weight: WEIGHT,
+      icon: 'squares-four',
+      title: 'The Spreadsheet',
+      text: 'Your first real spreadsheet: hundreds of rows, a deadline, and someone who wants “just the headline.”',
+      choices: [
+        check('dig', 'Dig into the numbers', 'analytical', 55, ['You find the one number that matters. Your manager quotes you in a meeting.', { mastery: 10 }], ['You drown in rows and miss the point.', { mastery: 5, energy: -8 }]),
+        check('system', 'Build a clean system first', 'organization', 55, ['Your template gets copied by the whole team.', { mastery: 10, energy: -5 }], ['Beautiful system, missed deadline.', { energy: -10 }]),
+        check('shortcuts', 'Ask someone to show you the shortcuts', 'communication', 50, ['Twenty minutes with a colleague saves you twenty hours. New friend, too.', { mastery: 8, joy: 5, set: ['peer_friend'] }], ['They’re too busy today.', { mastery: 4 }]),
+      ],
+    },
+    {
+      id: e('b_first_pitch'),
+      kind: 'career',
+      stages: ['training'],
+      weight: WEIGHT,
+      icon: 'chats',
+      title: 'Your First Pitch',
+      text: 'Five minutes to convince a room of people who are checking their phones.',
+      choices: [
+        check('story', 'Tell a story', 'communication', 60, ['Phones go down. Someone asks a follow-up question. You’ve got them.', { mastery: 10, joy: 8, highlight: 'Won over a room with your first pitch' }], ['The story wanders. So does the room.', { joy: -8 }]),
+        check('numbers', 'Lead with the numbers', 'analytical', 55, ['Hard to argue with your numbers. They don’t.', { mastery: 10 }], ['Too many slides. Glazed eyes.', { joy: -5 }]),
+        check('rehearse', 'Rehearse it twenty times', 'persistence', 55, ['Smooth, confident, on time.', { mastery: 8, energy: -8 }], ['Over-rehearsed and stiff.', { energy: -10 }]),
+      ],
+    },
+    {
+      id: e('b_target'),
+      kind: 'career',
+      stages: ['breaking_in'],
+      weight: WEIGHT,
+      icon: 'path',
+      title: 'The Target',
+      text: 'Your first real target for the quarter. It looks impossible.',
+      choices: [
+        check('grind', 'Grind every lead', 'persistence', 60, ['You hit it on the last day. Barely, gloriously.', { money: 10, mastery: 8, energy: -12 }], ['You miss it by a little and sleep for a weekend.', { energy: -15, joy: -5 }]),
+        check('smart', 'Find the best leads first', 'analytical', 60, ['Fewer calls, better calls. You beat the target.', { money: 10, mastery: 10 }], ['Your clever plan misses the obvious.', { joy: -5 }]),
+        check('ask_best', 'Ask the top performer how they do it', 'communication', 55, ['They take you under their wing.', { mastery: 10, set: ['has_mentor'], highlight: 'Learned from the best on the team' }], ['They guard their secrets.', { joy: -3 }]),
+      ],
+    },
+    {
+      id: e('b_credit'),
+      kind: 'career',
+      stages: ['breaking_in'],
+      weight: WEIGHT,
+      icon: 'users',
+      title: 'Office Politics',
+      text: 'Someone takes credit for your work in a big meeting.',
+      choices: [
+        check('speak', 'Speak up, calmly', 'communication', 60, ['“Glad you liked it. I built that part.” People notice.', { joy: 8, mastery: 5 }], ['It comes out bitter. Awkward silence.', { joy: -10 }]),
+        check('private', 'Talk to them privately', 'empathy', 55, ['They apologize and credit you next time.', { joy: 5, mastery: 3 }], ['They act like they don’t know what you mean.', { joy: -5 }]),
+        check('results', 'Let your results speak', 'persistence', 55, ['Your next three projects make it obvious who does the work.', { mastery: 8, money: 5 }], ['Results speak quietly. Nobody hears.', { joy: -8 }]),
+      ],
+    },
+    {
+      id: e('b_quarter_end'),
+      kind: 'career',
+      stages: ['first_job'],
+      conditions: { flagsAll: ['employed'] },
+      weight: WEIGHT,
+      icon: 'lightning',
+      title: 'Quarter End',
+      text: 'The end of the quarter: deals to close, reports due, and everyone is on edge.',
+      choices: [
+        result('late', 'Stay late all week', 'It all gets done. You don’t remember the week.', { money: 10, energy: -15, mastery: 5 }),
+        check('prioritize', 'Prioritize ruthlessly', 'organization', 60, ['You drop the unimportant half and nobody notices.', { mastery: 10, energy: 5 }], ['You dropped the wrong half.', { energy: -10 }]),
+        check('weekends', 'Keep your weekends sacred', 'independence', 55, ['You come back Monday sharper than everyone else.', { energy: 12, joy: 5 }], ['You spend the weekend checking your phone anyway.', { joy: -5, energy: -5 }]),
+      ],
+    },
+    {
+      id: e('b_big_client'),
+      kind: 'career',
+      stages: ['first_job'],
+      conditions: { flagsAll: ['employed'] },
+      weight: WEIGHT,
+      icon: 'handshake',
+      title: 'The Big Client',
+      text: 'A client who could double your numbers, and who knows it.',
+      choices: [
+        check('negotiate', 'Negotiate hard', 'communication', 65, ['Fair terms, a long contract, and a client who respects you.', { money: 15, mastery: 8, highlight: 'Landed the big client' }], ['They push you around and walk anyway.', { money: -5, joy: -8 }]),
+        check('overdeliver', 'Overdeliver', 'persistence', 60, ['They’re so happy they refer two more clients.', { mastery: 10, joy: 5, money: 5, energy: -10 }], ['You give everything; they want more.', { energy: -15 }]),
+        result('walk', 'Walk away from a bad deal', 'It hurts the numbers. It saves your sanity.', { joy: 5, money: -5, mastery: 3 }),
+      ],
+    },
+    {
+      id: e('b_climb'),
+      kind: 'crossroads',
+      stages: ['crossroads'],
+      conditions: { flagsAll: ['employed'] },
+      weight: LATE_WEIGHT,
+      icon: 'rocket',
+      title: 'Climb, Study or Start?',
+      text: `You could chase the promotion, go back to study, or start your own ${ladder.ownNoun}.`,
+      choices: [
+        check('climb', 'Chase the promotion', 'empathy', 60, ['You get it, and turn out to be a manager people want to work for.', { mastery: 10, joy: 5, money: 10, set: ['manager'] }], ['Someone else gets it. You learn what they had that you didn’t.', { joy: -10 }]),
+        result('study', 'Go back to study, in the evenings', 'Two years of evenings. A qualification that opens bigger doors.', { money: -15, mastery: 15, joy: 3 }),
+        check('own', `Start your own ${ladder.ownNoun}`, 'independence', 65, ['Your name on the door, your first clients, your own rules.', { money: 10, joy: 15, energy: -10, set: ['studio'], highlight: `Started your own ${ladder.ownNoun}` }], ['A lean year, then back to a team, with a much better feel for business.', { money: -5, mastery: 8, joy: -5 }], { check: { attribute: 'independence', difficulty: 65, bonus: { has_mentor: 5 } } }),
+        result('move', `Move into ${inSentence(next.name)}`, `You take your business sense into ${inSentence(next.name)}.`, { money: 10, mastery: 5, set: ['pivoted'] }),
+      ],
+    },
+    {
+      id: e('b_deal'),
+      kind: 'finale',
+      stages: ['thirty'],
+      conditions: { flagsAll: ['employed'], flagsNone: ['pivoted'] },
+      icon: 'star',
+      title: 'The Deal of Your Career',
+      text: 'One deal, one launch, one number that will define your year.',
+      choices: [
+        check('lead', 'Lead it from the front', main, 65, ['Signed, celebrated, framed on the wall.', { mastery: 15, joy: 10, money: 10, highlight: 'Closed the deal of your career' }], ['It closes late and smaller than you hoped. Still closes.', { mastery: 10, energy: -15 }], { check: { attribute: main, difficulty: 65, bonus: { manager: 10, has_mentor: 10 } } }),
+        result('back_up', 'Back up the team', 'You make everyone around you look good.', { mastery: 6, joy: 5, energy: 5 }),
+        result('pass', 'Let someone else take it', 'You stay out of the spotlight and the stress.', { energy: 15, joy: -5 }),
+      ],
+    },
+  ];
+}
+
+function food({ ladder, main, next, e }: FamilyContext): LifeEvent[] {
+  return [
+    {
+      id: e('f_burns'),
+      kind: 'career',
+      stages: ['training'],
+      weight: WEIGHT,
+      icon: 'fire',
+      title: 'Burns and Blisters',
+      text: 'Your first weeks: hot pans, heavy trays, ten hours on your feet.',
+      choices: [
+        check('tough', 'Toughen up', 'persistence', 55, ['By week four, you barely notice. You’re fast now.', { mastery: 10, energy: -10 }], ['Every shift hurts. You keep going.', { energy: -15 }]),
+        check('technique', 'Learn the right technique', 'curiosity', 55, ['Turns out there’s a right way to carry, lift and stand. Less pain, more speed.', { mastery: 10 }], ['Old habits are hard to break mid-rush.', { mastery: 4, energy: -5 }]),
+        result('copy', 'Watch the fastest person and copy them', 'You steal every move they make. They don’t mind.', { mastery: 8, joy: 3 }),
+      ],
+    },
+    {
+      id: e('f_prep'),
+      kind: 'career',
+      stages: ['training'],
+      weight: WEIGHT,
+      icon: 'coffee',
+      title: 'The Prep Station',
+      text: 'Before anything exciting, you prep: the same small task, hundreds of times.',
+      choices: [
+        check('perfect', 'Do it perfectly every time', 'persistence', 55, ['Nobody says anything. Then they start trusting you with more.', { mastery: 10, highlight: 'Earned the trust of the whole team' }], ['Perfect is slow. You fall behind.', { mastery: 5, energy: -8 }]),
+        check('faster', 'Get a little faster every day', 'organization', 55, ['A month later, you’re done before anyone else.', { mastery: 10, energy: 5 }], ['Faster, sloppier.', { energy: -8 }]),
+        check('ask', 'Ask to try something new', 'communication', 55, ['They let you. You don’t mess it up.', { mastery: 8, joy: 8 }], ['“Not yet.” Back to prep.', { joy: -5 }]),
+      ],
+    },
+    {
+      id: e('f_rush'),
+      kind: 'career',
+      stages: ['breaking_in'],
+      weight: WEIGHT,
+      icon: 'lightning',
+      title: 'The Rush',
+      text: 'Friday night. Every table full, orders flying, and someone just called in sick.',
+      choices: [
+        check('calm', 'Stay calm and keep moving', 'calm', 60, ['Somehow it flows. At midnight the team cheers.', { mastery: 12, joy: 8, energy: -10, highlight: 'Held it together through the worst rush' }], ['You survive it. Barely.', { energy: -15, joy: -5 }]),
+        check('lead', 'Call it out clearly and lead', 'communication', 60, ['You take charge and everyone falls into place.', { mastery: 10, joy: 5 }], ['Too many people giving orders. Chaos.', { joy: -8 }]),
+        result('head_down', 'Keep your head down', 'You do your part, fast and silent.', { mastery: 6, energy: -12 }),
+      ],
+    },
+    {
+      id: e('f_review'),
+      kind: 'career',
+      stages: ['breaking_in'],
+      weight: WEIGHT,
+      icon: 'warning',
+      title: 'The One-Star Review',
+      text: 'A one-star review goes viral. It’s about a night you worked.',
+      choices: [
+        check('kind', 'Respond kindly and fix it', 'empathy', 55, ['They come back, and update the review to five stars.', { joy: 5, mastery: 8 }], ['Your reply makes it worse.', { joy: -8 }]),
+        check('learn', 'Find out what went wrong', 'analytical', 55, ['You fix the real problem behind it.', { mastery: 10 }], ['Nobody agrees on what went wrong.', { joy: -5 }]),
+        result('ignore', 'Ignore it', 'The internet forgets in a week. You take a little longer.', { joy: -5, energy: 5 }),
+      ],
+    },
+    {
+      id: e('f_hours'),
+      kind: 'career',
+      stages: ['first_job'],
+      conditions: { flagsAll: ['employed'] },
+      weight: WEIGHT,
+      icon: 'battery-low',
+      title: 'Nights and Weekends',
+      text: 'You work when everyone else is off. Your friends have stopped inviting you.',
+      choices: [
+        check('day_off', 'Fight for one real day off a week', 'communication', 55, ['You get it. That one day saves you.', { energy: 12, joy: 5 }], ['“Maybe next month.”', { joy: -8 }]),
+        check('work_friends', 'Make friends at work', 'empathy', 50, ['The after-shift crew becomes your people.', { joy: 10, set: ['peer_friend'] }], ['Everyone is too tired after shifts.', { joy: -3 }]),
+        result('accept', 'Accept it for now', 'Good tips, no social life. For now.', { money: 5, energy: -10, joy: -5 }),
+      ],
+    },
+    {
+      id: e('f_creation'),
+      kind: 'career',
+      stages: ['first_job'],
+      conditions: { flagsAll: ['employed'] },
+      weight: WEIGHT,
+      icon: 'sparkle',
+      title: 'Your Own Idea',
+      text: 'You get the chance to add something of your own: a dish, a drink, an event.',
+      choices: [
+        check('bold', 'Make it bold', 'creativity', 60, ['People order it again and again. It’s yours.', { mastery: 12, joy: 10, highlight: 'Got your own creation on the menu' }], ['Too bold for most people. A few love it.', { mastery: 4, joy: -5 }]),
+        check('crowd', 'Make it a crowd-pleaser', main, 55, ['Everyone loves it. It sells out on weekends.', { mastery: 8, money: 5 }], ['Safe, and a bit forgettable.', { mastery: 4 }]),
+        result('pass', 'Let someone else have the chance', 'Next time. Probably.', { energy: 5, joy: -3 }),
+      ],
+    },
+    {
+      id: e('f_own_place'),
+      kind: 'crossroads',
+      stages: ['crossroads'],
+      conditions: { flagsAll: ['employed'] },
+      weight: LATE_WEIGHT,
+      icon: 'storefront',
+      title: 'Your Own Place',
+      text: `A small place comes up for rent. Everyone says you should open your own ${ladder.ownNoun}.`,
+      choices: [
+        check('open', `Open your own ${ladder.ownNoun}`, 'independence', 65, ['Opening night: full house, wobbly knees, your name above the door.', { money: 10, joy: 15, energy: -10, set: ['studio'], highlight: `Opened your own ${ladder.ownNoun}` }], ['A brutal first year. You close it, older and much wiser.', { money: -10, mastery: 8, joy: -5 }], { check: { attribute: 'independence', difficulty: 65, bonus: { has_mentor: 5 } } }),
+        check('head', 'Take the top job somewhere big', 'empathy', 60, ['You run a big team, and run it well.', { mastery: 10, joy: 5, money: 10, set: ['manager'] }], ['Big place, big egos. Hard year.', { joy: -10 }]),
+        result('abroad', 'Work abroad for a year and learn', 'A year somewhere new, learning how they do it. You come back with ideas.', { joy: 10, mastery: 10, money: -15 }),
+        result('move', `Move into ${inSentence(next.name)}`, `You take everything you learned into ${inSentence(next.name)}. Better hours, same love.`, { money: 5, mastery: 5, set: ['pivoted'] }),
+      ],
+    },
+    {
+      id: e('f_big_night'),
+      kind: 'finale',
+      stages: ['thirty'],
+      conditions: { flagsAll: ['employed'], flagsNone: ['pivoted'] },
+      icon: 'star',
+      title: 'The Night Everyone Comes',
+      text: 'A big event, a critic in the room, a packed house. Everything has to be perfect.',
+      choices: [
+        check('lead', 'Run the whole night', main, 65, ['Perfect, start to finish. The critic comes back to say thank you.', { mastery: 15, joy: 10, highlight: 'Pulled off the night everyone came' }], ['One thing goes wrong; nobody notices but you.', { mastery: 10, energy: -15 }], { check: { attribute: main, difficulty: 65, bonus: { manager: 10, has_mentor: 10 } } }),
+        check('station', 'Run your part perfectly', 'persistence', 60, ['Your part is flawless.', { mastery: 10, joy: 5 }], ['Good, not flawless.', { mastery: 5 }]),
+        result('night_off', 'Take the night off', 'Someone else gets the glory. You get a rare free Friday.', { energy: 15, joy: -5 }),
+      ],
+    },
+  ];
+}
+
+function fashion({ ladder, main, next, e }: FamilyContext): LifeEvent[] {
+  return [
+    {
+      id: e('y_practice'),
+      kind: 'career',
+      stages: ['training'],
+      weight: WEIGHT,
+      icon: 'palette',
+      title: 'Practice, Practice',
+      text: 'You practice on mannequins, friends and anyone who will sit still long enough.',
+      choices: [
+        check('hours', 'Put in the hours', 'persistence', 55, ['Hundreds of hours later, your hands just know.', { mastery: 10, energy: -8 }], ['Some weeks you just can’t face it.', { mastery: 5, energy: -10 }]),
+        check('copy', 'Recreate looks you love', 'creativity', 60, ['You learn how the best do it by doing it yourself.', { mastery: 10, joy: 5 }], ['Your versions don’t look quite right yet.', { mastery: 4 }]),
+        check('friends', 'Practice on friends of friends', 'communication', 55, ['Word spreads. People start asking for you, evenings and weekends.', { mastery: 8, money: 5, energy: -5, set: ['has_portfolio'] }], ['A friend’s friend is not happy.', { joy: -5 }]),
+      ],
+    },
+    {
+      id: e('y_trend'),
+      kind: 'career',
+      stages: ['training'],
+      weight: WEIGHT,
+      icon: 'sparkle',
+      title: 'The Trend',
+      text: 'Everyone wants the same look this year. Secretly, you think it’s ugly.',
+      choices: [
+        result('master', 'Master it anyway', 'You get very good at something you don’t love. It pays.', { mastery: 8, money: 5, joy: -3 }),
+        check('twist', 'Put your own twist on it', 'creativity', 60, ['Your version becomes the version people ask for. Long nights getting it right.', { mastery: 10, joy: 10, energy: -6, highlight: 'Turned a trend into your signature' }], ['Too far from what people asked for.', { mastery: 3, joy: -5 }]),
+        result('ignore', 'Ignore it', 'You stay true to yourself. Some clients go elsewhere.', { joy: 3, money: -5 }),
+      ],
+    },
+    {
+      id: e('y_regular'),
+      kind: 'career',
+      stages: ['breaking_in'],
+      weight: WEIGHT,
+      icon: 'heart',
+      title: 'Your First Regular',
+      text: 'Someone keeps coming back, and only wants you.',
+      choices: [
+        check('know', 'Learn everything about them', 'empathy', 55, ['You remember their kids’ names and their big days. They tell everyone about you.', { joy: 10, mastery: 6, money: 5, highlight: 'Built your first loyal regular' }], ['You try, but you’re too busy to really connect.', { joy: 3 }]),
+        check('upsell', 'Suggest something new, gently', 'communication', 55, ['They love it. So does your bank account.', { money: 10 }], ['It feels pushy. They notice.', { joy: -5 }]),
+        result('referral', 'Ask them for a referral', 'Two new clients the next month.', { money: 5, mastery: 3, set: ['has_portfolio'] }),
+      ],
+    },
+    {
+      id: e('y_assist'),
+      kind: 'career',
+      stages: ['breaking_in'],
+      weight: WEIGHT,
+      icon: 'eye',
+      title: 'Assisting Someone Big',
+      text: 'You get to assist someone well known in your field for a whole season.',
+      choices: [
+        check('absorb', 'Watch and absorb everything', 'curiosity', 55, ['You learn more in a season than in years of classes, and sleep less than ever.', { mastery: 12, energy: -8, set: ['has_mentor'], highlight: 'Assisted someone you admire' }], ['It’s mostly fetching coffee. You still learn a little.', { mastery: 5 }]),
+        check('indispensable', 'Make yourself indispensable', 'persistence', 60, ['By the end, they won’t work without you.', { mastery: 10, money: 5, energy: -10 }], ['You run yourself into the ground.', { energy: -18 }]),
+        check('pitch', 'Pitch them your own ideas', 'courage', 65, ['They use one of your ideas, and credit you.', { mastery: 8, joy: 10 }], ['They’re not interested in the assistant’s ideas.', { joy: -8 }]),
+      ],
+    },
+    {
+      id: e('y_feet'),
+      kind: 'career',
+      stages: ['first_job'],
+      conditions: { flagsAll: ['employed'] },
+      weight: WEIGHT,
+      icon: 'battery-low',
+      title: 'On Your Feet All Day',
+      text: 'Ten hours of standing, bending and focusing. Your back has opinions.',
+      choices: [
+        check('care', 'Take care of your body', 'organization', 55, ['Good shoes, stretches, real breaks. You last.', { energy: 12 }], ['Easier said than done on a fully booked day.', { energy: -5 }]),
+        check('push', 'Push through', 'persistence', 60, ['Full books, full wallet, sore everything.', { mastery: 8, money: 5, energy: -15 }], ['Your body forces a week off.', { energy: -20 }]),
+        result('cut_back', 'Cut back your hours', 'Less money, more life.', { money: -10, energy: 10, joy: 5 }),
+      ],
+    },
+    {
+      id: e('y_feed'),
+      kind: 'career',
+      stages: ['first_job'],
+      conditions: { flagsAll: ['employed'] },
+      weight: WEIGHT,
+      icon: 'storefront',
+      title: 'Your Feed Is Your Shop Window',
+      text: 'New clients find you on social media now. Every post is an advert.',
+      choices: [
+        check('consistent', 'Post consistently', 'persistence', 55, ['Your books fill weeks in advance.', { money: 10, mastery: 5, set: ['has_portfolio'] }], ['Hard to post after a ten-hour day.', { energy: -10 }]),
+        check('process', 'Show your real process', 'creativity', 60, ['People love the behind-the-scenes. Clients come to your door.', { joy: 8, money: 8, highlight: 'Your feed brought clients to your door' }], ['Nobody watches the process videos.', { joy: -3 }]),
+        result('ignore', 'Ignore it', 'Word of mouth only. Slower, calmer.', { energy: 5, money: -5 }),
+      ],
+    },
+    {
+      id: e('y_own'),
+      kind: 'crossroads',
+      stages: ['crossroads'],
+      conditions: { flagsAll: ['employed'] },
+      weight: LATE_WEIGHT,
+      icon: 'door-open',
+      title: 'They’d Follow You Anywhere',
+      text: `Your clients say they would follow you anywhere. You could open your own ${ladder.ownNoun}.`,
+      choices: [
+        check('open', `Open your own ${ladder.ownNoun}`, 'independence', 65, ['Your own place, your own look, and your clients came with you.', { money: 10, joy: 15, energy: -10, set: ['studio'], highlight: `Opened your own ${ladder.ownNoun}` }], ['Rent and staff eat everything. You go back to working for someone else.', { money: -10, mastery: 8, joy: -5 }], { check: { attribute: 'independence', difficulty: 65, bonus: { has_portfolio: 10 } } }),
+        result('famous', 'Join a famous house', 'A big name on your CV, big clients, less freedom.', { money: 15, mastery: 10, joy: -3 }),
+        check('lead', 'Lead a team of juniors', 'empathy', 65, ['You train the next generation, and they’re good.', { mastery: 10, joy: 8, set: ['manager'] }], ['Teaching takes patience you don’t have this year.', { joy: -10 }]),
+        result('move', `Move into ${inSentence(next.name)}`, `You take your eye into ${inSentence(next.name)}.`, { money: 5, mastery: 5, set: ['pivoted'] }),
+      ],
+    },
+    {
+      id: e('y_show'),
+      kind: 'finale',
+      stages: ['thirty'],
+      conditions: { flagsAll: ['employed'], flagsNone: ['pivoted'] },
+      icon: 'star',
+      title: 'The Big Show',
+      text: 'A runway, a wedding of the year, a magazine shoot: your work in the spotlight.',
+      choices: [
+        check('lead', 'Make it unforgettable', main, 65, ['People talk about your work for weeks.', { mastery: 15, joy: 10, highlight: 'Your work stole the show' }], ['Good, not unforgettable. The pressure was huge.', { mastery: 10, energy: -15 }], { check: { attribute: main, difficulty: 65, bonus: { has_portfolio: 10, manager: 10 } } }),
+        check('flawless', 'Execute flawlessly', 'persistence', 60, ['Not a hair out of place.', { mastery: 10, joy: 5 }], ['One small thing slips. Only you notice.', { mastery: 5 }]),
+        result('pass', 'Hand it to someone you trained', 'They shine. You watch, proud.', { energy: 15, joy: -5 }),
+      ],
+    },
+  ];
+}
+
+const BUILDERS: Record<FamilyId, (ctx: FamilyContext) => LifeEvent[]> = { creators, trades, health, tech, studio, performing, sport, care, business, food, fashion };
 
 /** The family scenes for a career, or none if it's in no family. */
 export function familyEvents(ctx: FamilyContext): LifeEvent[] {

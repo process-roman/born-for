@@ -52,6 +52,10 @@ describe('template lives', () => {
     expect(titles('athlete')).toContain('Getting Your First Spot');
     expect(JSON.stringify(LIVES.athlete)).not.toContain('near me'); // search terms stay out of the story
     expect(titles('teaching')).toContain('The One Who Comes Back');
+    expect(titles('sales')).toContain('The Big Client');
+    expect(titles('chef')).toContain('The Rush');
+    expect(titles('hairdresser')).toContain('Your First Regular');
+    expect(JSON.stringify(LIVES.chef)).toContain('Open your own restaurant');
     expect(JSON.stringify(LIVES.animator)).toContain('Open your own animation studio');
     expect(titles('accountant')).not.toContain('The Algorithm Changes'); // no family yet: generic scenes only
     expect(JSON.stringify(LIVES.streamer)).toContain('Stream Number One');

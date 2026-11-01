@@ -415,7 +415,7 @@ interface LifeRun {
 ### Step 5 — More careers (later)
 - New careers are new JSON files only. No engine changes should be needed. Run the balance script for each.
 - **Done Nov 1, 2026 (template lives):** every career without a hand-written life gets a template life (`src/content/lifeTemplate.ts`), built from its own content: routes in from its training data, its day-to-day work and real downsides, its key traits for the checks, its entry roles, and a role ladder per career (`src/content/lifeLadders.ts`). Same slots, numbers and ending types as the Designer life, on both age tracks. A hand-written JSON life replaces the template for its career. `npm run life:balance -- --all` checks every career on both tracks; all 99 meet every target.
-- **Career families (Nov 1, 2026):** similar careers share hand-written family scenes (`src/content/lifeFamilies.ts`) that join the template scenes at a higher weight, and a family can drop generic scenes that don't fit it (creators have no boss). Done: Creators, Trades, Health care, Tech, Creative studio, Performing, Sport, Care and education. Next: Business, Food and hospitality, Fashion and beauty, Science, Public service.
+- **Career families (Nov 1, 2026):** similar careers share hand-written family scenes (`src/content/lifeFamilies.ts`) that join the template scenes at a higher weight, and a family can drop generic scenes that don't fit it (creators have no boss). Done: Creators, Trades, Health care, Tech, Creative studio, Performing, Sport, Care and education, Business, Food and hospitality, Fashion and beauty. Next: Science, Public service.
 
 ---
 
