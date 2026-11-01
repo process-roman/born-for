@@ -10,25 +10,28 @@ import type { LifeEvent } from './life';
 import { article, check, inSentence, result } from './lifeKit';
 import type { LifeLadder } from './lifeLadders';
 
-export type FamilyId = 'creators' | 'trades' | 'health' | 'tech' | 'studio' | 'performing' | 'sport' | 'care' | 'business' | 'food' | 'fashion' | 'science' | 'public';
+export type FamilyId = 'creators' | 'trades' | 'health' | 'tech' | 'studio' | 'performing' | 'sport' | 'care' | 'business' | 'food' | 'fashion' | 'science' | 'public' | 'words' | 'travel' | 'land';
 
-export const FAMILY_NAMES: Record<FamilyId, string> = { creators: 'Creators', trades: 'Trades', health: 'Health care', tech: 'Tech', studio: 'Creative studio', performing: 'Performing', sport: 'Sport', care: 'Care and education', business: 'Business', food: 'Food and hospitality', fashion: 'Fashion and beauty', science: 'Science', public: 'Public service' };
+export const FAMILY_NAMES: Record<FamilyId, string> = { creators: 'Creators', trades: 'Trades', health: 'Health care', tech: 'Tech', studio: 'Creative studio', performing: 'Performing', sport: 'Sport', care: 'Care and education', business: 'Business', food: 'Food and hospitality', fashion: 'Fashion and beauty', science: 'Science', public: 'Public service', words: 'Words', travel: 'Travel', land: 'Land and growing' };
 
 /** Careers in each family. Careers in no family use the generic template scenes only. */
 export const FAMILIES: Record<FamilyId, readonly CareerId[]> = {
-  creators: ['youtuber', 'streamer', 'influencer', 'podcaster', 'travel_creator'],
+  creators: ['youtuber', 'streamer', 'influencer', 'podcaster', 'travel_creator', 'esports_caster'],
   trades: ['electrician', 'plumber', 'carpenter', 'mechanic', 'welder'],
-  health: ['nursing', 'paramedic', 'physio', 'doctor', 'pharmacist', 'vet_nurse', 'veterinarian'],
-  tech: ['software_dev', 'app_developer', 'ai_engineer', 'data_analysis', 'cybersecurity', 'it_support', 'qa_tester', 'game_developer'],
-  studio: ['graphic_designer', 'illustrator', 'animator', 'game_artist', 'game_designer', 'photographer', 'video_editor'],
+  health: ['nursing', 'paramedic', 'physio', 'doctor', 'pharmacist', 'vet_nurse', 'veterinarian', 'nutritionist'],
+  tech: ['software_dev', 'app_developer', 'ai_engineer', 'data_analysis', 'cybersecurity', 'it_support', 'qa_tester', 'game_developer', 'sports_analyst'],
+  studio: ['graphic_designer', 'illustrator', 'animator', 'game_artist', 'game_designer', 'photographer', 'video_editor', 'tattoo_artist', 'interior_designer', 'architect', 'music_producer', 'sound_engineer'],
   performing: ['actor', 'dancer', 'musician', 'model'],
   sport: ['athlete', 'sports_coach', 'personal_trainer', 'yoga_instructor', 'esports_player'],
   care: ['teaching', 'social_work', 'counsellor', 'youth_worker', 'early_childhood', 'psychologist'],
-  business: ['marketing', 'sales', 'recruiter', 'accountant', 'real_estate', 'entrepreneur', 'ecommerce_owner', 'project_coord'],
+  business: ['marketing', 'sales', 'recruiter', 'accountant', 'real_estate', 'entrepreneur', 'ecommerce_owner', 'project_coord', 'social_media_manager'],
   food: ['chef', 'pastry_chef', 'barista', 'bartender', 'hotel_manager', 'event_planner'],
   fashion: ['fashion_designer', 'stylist', 'makeup_artist', 'hairdresser', 'nail_artist', 'fashion_buyer'],
   science: ['lab_scientist', 'chemist', 'env_scientist', 'marine_biologist', 'astronomer'],
   public: ['firefighter', 'police_officer', 'park_ranger', 'diplomat', 'policy_advisor', 'law'],
+  words: ['writer', 'journalist', 'screenwriter', 'copywriter'],
+  travel: ['pilot', 'flight_attendant', 'tour_guide', 'drone_pilot'],
+  land: ['florist', 'farmer', 'landscape_gardener'],
 };
 
 /**
@@ -54,6 +57,9 @@ export const FAMILY_REPLACES: Record<FamilyId, readonly string[]> = {
   science: ['big_one'],
   // Public service has its own scenes about the hard side of the job.
   public: ['big_one', 'other_side'],
+  words: ['big_one'],
+  travel: ['big_one', 'week'],
+  land: ['big_one', 'lead'],
 };
 
 export function familyOf(id: CareerId): FamilyId | null {
@@ -67,6 +73,7 @@ const MEDIUM: Partial<Record<CareerId, { one: string; many: string }>> = {
   influencer: { one: 'post', many: 'posts' },
   podcaster: { one: 'episode', many: 'episodes' },
   travel_creator: { one: 'video', many: 'videos' },
+  esports_caster: { one: 'cast', many: 'casts' },
 };
 
 export interface FamilyContext {
@@ -1411,7 +1418,7 @@ function food({ ladder, main, next, e }: FamilyContext): LifeEvent[] {
       text: 'A big event, a critic in the room, a packed house. Everything has to be perfect.',
       choices: [
         check('lead', 'Run the whole night', main, 65, ['Perfect, start to finish. The critic comes back to say thank you.', { mastery: 15, joy: 10, highlight: 'Pulled off the night everyone came' }], ['One thing goes wrong; nobody notices but you.', { mastery: 10, energy: -15 }], { check: { attribute: main, difficulty: 65, bonus: { manager: 10, has_mentor: 10 } } }),
-        check('station', 'Run your part perfectly', 'persistence', 60, ['Your part is flawless.', { mastery: 10, joy: 5 }], ['Good, not flawless.', { mastery: 5 }]),
+        check('station', 'Run your part perfectly', 'persistence', 60, ['Your part is flawless.', { mastery: 14, joy: 5 }], ['Good, not flawless.', { mastery: 5 }]),
         result('night_off', 'Take the night off', 'Someone else gets the glory. You get a rare free Friday.', { energy: 15, joy: -5 }),
       ],
     },
@@ -1781,6 +1788,369 @@ function publicService({ ladder, main, next, e }: FamilyContext): LifeEvent[] {
   ];
 }
 
+function words({ ladder, main, e }: FamilyContext): LifeEvent[] {
+  return [
+    {
+      id: e('w_blank'),
+      kind: 'career',
+      stages: ['training'],
+      weight: WEIGHT,
+      icon: 'books',
+      title: 'The Blank Page',
+      text: 'You sit down to write. An hour later you have one sentence, and you have deleted it twice.',
+      choices: [
+        check('badly', 'Write badly on purpose', 'persistence', 55, ['The bad draft turns into a decent one. Then a good one.', { mastery: 10, joy: 5 }], ['Still stuck. You go for a walk.', { mastery: 5, energy: -8 }]),
+        check('read', 'Read the writers you love', 'curiosity', 55, ['You see how they do it, and steal shamelessly.', { mastery: 10 }], ['Their work makes yours look worse. For now.', { mastery: 4 }]),
+        check('count', 'Set a word count every day', 'organization', 55, ['Five hundred words a day, every day. It adds up.', { mastery: 14, energy: -8, highlight: 'Wrote every day for a year' }], ['You miss a few days, then a few weeks.', { energy: -10 }]),
+      ],
+    },
+    {
+      id: e('w_red_pen'),
+      kind: 'career',
+      stages: ['training'],
+      weight: WEIGHT,
+      icon: 'chat-circle',
+      title: 'The Red Pen',
+      text: 'Your first piece comes back covered in edits.',
+      choices: [
+        check('notes', 'Take every note seriously', 'persistence', 55, ['The second draft is twice as good.', { mastery: 15 }], ['Too many notes. You lose your own voice for a while.', { mastery: 5, joy: -5 }]),
+        check('defend', 'Defend your favorite line', 'communication', 60, ['The editor agrees. The line stays.', { mastery: 8, joy: 8 }], ['The line goes. You still miss it.', { joy: -8 }]),
+        check('restart', 'Start over from scratch', 'creativity', 60, ['The new version is the one.', { mastery: 10, joy: 5 }], ['Starting over just means more drafts.', { energy: -10 }]),
+      ],
+    },
+    {
+      id: e('w_pitch'),
+      kind: 'career',
+      stages: ['breaking_in'],
+      weight: WEIGHT,
+      icon: 'chats',
+      title: 'The Pitch',
+      text: 'You pitch your idea. Hundreds of other people pitched theirs this week too.',
+      choices: [
+        check('again', 'Pitch again and again', 'persistence', 60, ['The fortieth pitch lands. You’re paid to write.', { money: 15, joy: 10, set: ['employed'], highlight: 'Sold your first piece' }], ['Silence, mostly. You keep a side job.', { energy: -15, joy: -5, set: ['side_job'] }], { check: { attribute: 'persistence', difficulty: 60, bonus: { has_portfolio: 10 } } }),
+        check('unignorable', 'Write the pitch they can’t ignore', 'creativity', 65, ['One line in your email makes them call you.', { money: 15, mastery: 5, joy: 8, set: ['employed'] }], ['Too clever by half.', { joy: -8 }]),
+        check('contact', 'Use a contact', 'communication', 55, ['A friend forwards it to the right person.', { money: 10, set: ['employed'] }], ['The contact moved jobs last month.', { joy: -5 }], { check: { attribute: 'communication', difficulty: 55, bonus: { has_mentor: 10 } } }),
+      ],
+    },
+    {
+      id: e('w_rejections'),
+      kind: 'career',
+      stages: ['breaking_in'],
+      weight: WEIGHT,
+      icon: 'warning',
+      title: 'The Rejection Pile',
+      text: 'Your folder of rejections is bigger than your folder of published work.',
+      choices: [
+        result('frame', 'Frame the nicest one', 'It goes on the wall. It helps, weirdly.', { joy: 5, mastery: 3 }),
+        check('ask', 'Ask why', 'communication', 55, ['One editor explains. You fix exactly that.', { mastery: 10 }], ['“Not for us.” That’s all.', { joy: -5 }]),
+        check('submit', 'Keep submitting', 'persistence', 60, ['Numbers game. Eventually, yes.', { mastery: 12, money: 5 }], ['More no’s. You keep going anyway.', { energy: -10, joy: -5 }]),
+      ],
+    },
+    {
+      id: e('w_deadline'),
+      kind: 'career',
+      stages: ['first_job'],
+      conditions: { flagsAll: ['employed'] },
+      weight: WEIGHT,
+      icon: 'lightning',
+      title: 'The Deadline',
+      text: 'Due tomorrow morning. You have half a draft and a lot of coffee.',
+      choices: [
+        result('all_night', 'Pull an all-nighter', 'It’s in on time. You don’t remember writing the ending.', { mastery: 6, energy: -15, money: 5 }),
+        check('extension', 'Ask for one more day', 'communication', 55, ['“Sure.” The extra day makes it great.', { energy: 8, mastery: 5 }], ['“No.” All-nighter after all.', { joy: -8, energy: -10 }]),
+        check('cut', 'Cut it down to what works', 'analytical', 55, ['Shorter and better. Your editor loves it.', { mastery: 14, joy: 5 }], ['You cut the wrong half.', { energy: -8 }]),
+      ],
+    },
+    {
+      id: e('w_machine'),
+      kind: 'career',
+      stages: ['first_job'],
+      conditions: { flagsAll: ['employed'] },
+      weight: WEIGHT,
+      icon: 'sparkle',
+      title: 'The Machine Writes Too',
+      text: 'An AI tool writes passable text in seconds. People you work for have noticed.',
+      choices: [
+        check('drafts', 'Use it for drafts, write the soul yourself', 'curiosity', 55, ['Faster first drafts, better final ones.', { mastery: 10, money: 5 }], ['Everything starts sounding the same.', { mastery: 4, joy: -5 }]),
+        check('voice', 'Sell your voice', 'communication', 60, ['People pay for a voice they recognize. Yours.', { money: 10, joy: 8, highlight: 'Proved your voice is worth paying for' }], ['Some clients leave for the cheap option.', { money: -5, joy: -8 }]),
+        check('craft', 'Double down on what machines can’t do', 'persistence', 60, ['Real reporting, real interviews, real stories. You become irreplaceable.', { mastery: 16 }], ['Slow work in a fast world.', { energy: -10 }]),
+      ],
+    },
+    {
+      id: e('w_crossroads'),
+      kind: 'crossroads',
+      stages: ['crossroads'],
+      conditions: { flagsAll: ['employed'] },
+      weight: LATE_WEIGHT,
+      icon: 'path',
+      title: 'Steady Job or the Big Thing?',
+      text: 'A steady staff job is on offer. Or you finally write the big thing you’ve always wanted to.',
+      choices: [
+        result('staff', 'Take the steady job', 'Regular pay, regular deadlines, regular weekends.', { money: 20, mastery: 5, joy: -3 }),
+        check('big', 'Write the big thing', 'courage', 65, ['Two years, many drafts, and it’s the best thing you’ve ever made.', { mastery: 15, joy: 10, energy: -10, highlight: 'Wrote the thing you always wanted to' }], ['It doesn’t come together yet. It will.', { joy: -10, money: -10 }]),
+        check('lead', 'Lead a team of writers', 'empathy', 65, ['You make other writers better. It turns out you love that.', { mastery: 10, joy: 8, set: ['manager'] }], ['Editing other people takes all your writing time.', { joy: -10 }]),
+        check('own', `Start your own ${ladder.ownNoun}`, 'independence', 65, ['Your own name on the door, your own kind of work.', { money: 10, joy: 15, energy: -10, set: ['studio'], highlight: `Started your own ${ladder.ownNoun}` }], ['The business side drowns the writing. You go back to a team.', { money: -5, mastery: 8, joy: -5 }]),
+      ],
+    },
+    {
+      id: e('w_published'),
+      kind: 'finale',
+      stages: ['thirty'],
+      conditions: { flagsAll: ['employed'], flagsNone: ['pivoted'] },
+      icon: 'star',
+      title: 'Your Name on It',
+      text: 'Your biggest piece of work goes out into the world: a book, a story, a show, a campaign.',
+      choices: [
+        check('launch', 'Put everything into it', main, 65, ['People quote it back to you. Strangers, even.', { mastery: 15, joy: 10, highlight: 'Put your name on something people remember' }], ['Quieter than you hoped. The people who found it loved it.', { mastery: 10, energy: -15 }], { check: { attribute: main, difficulty: 65, bonus: { has_mentor: 10, manager: 10 } } }),
+        check('polish', 'Polish it one more time', 'persistence', 60, ['Every sentence earns its place.', { mastery: 14, joy: 5 }], ['You polish until it’s smooth, and a little flat.', { mastery: 5 }]),
+        result('let_go', 'Hand it to an editor and let go', 'Someone else carries it over the line. You rest.', { energy: 15, joy: -5 }),
+      ],
+    },
+  ];
+}
+
+function travel({ ladder, main, e }: FamilyContext): LifeEvent[] {
+  return [
+    {
+      id: e('v_hours'),
+      kind: 'career',
+      stages: ['training'],
+      weight: WEIGHT,
+      icon: 'airplane',
+      title: 'Building Hours',
+      text: 'Training means hours: in the air, on the move, in front of groups. A lot of them.',
+      choices: [
+        check('grind', 'Log every hour you can', 'persistence', 55, ['Your logbook fills up faster than anyone’s.', { mastery: 10, energy: -10 }], ['Life gets in the way of the schedule.', { energy: -12 }]),
+        check('mentor', 'Find someone who has done it all', 'communication', 55, ['An old hand takes you under their wing.', { mastery: 8, set: ['has_mentor'] }], ['They’re too busy to teach.', { mastery: 4 }]),
+        check('manuals', 'Study every manual', 'analytical', 55, ['You know the rules better than people with twice your hours.', { mastery: 10 }], ['Theory without practice only gets you so far.', { mastery: 4 }]),
+      ],
+    },
+    {
+      id: e('v_assessment'),
+      kind: 'career',
+      stages: ['training'],
+      weight: WEIGHT,
+      icon: 'eye',
+      title: 'The Assessment',
+      text: 'An examiner watches everything you do for one long day.',
+      choices: [
+        check('calm', 'Stay calm and fly through it', 'calm', 60, ['Smooth from start to finish. The examiner almost smiles.', { mastery: 10, joy: 8, highlight: 'Passed a tough assessment' }], ['One mistake under pressure. Retake next month.', { joy: -10, energy: -5 }]),
+        check('prepare', 'Overprepare for it', 'organization', 55, ['Nothing surprises you.', { mastery: 10, energy: -8 }], ['You prepared for the wrong surprises.', { energy: -10 }]),
+        result('normal', 'Treat it like a normal day', 'It goes fine. Not brilliant, fine.', { mastery: 5, joy: 3 }),
+      ],
+    },
+    {
+      id: e('v_never_home'),
+      kind: 'career',
+      stages: ['breaking_in'],
+      weight: WEIGHT,
+      icon: 'suitcase',
+      title: 'Never Home',
+      text: 'A different city every week. Your plants are dead, and your friends text “where are you now?”',
+      choices: [
+        check('home', 'Make every place feel like home', 'creativity', 55, ['A candle, a playlist, a favorite café in every city.', { joy: 10 }], ['Hotel rooms all start to look the same.', { joy: -5 }]),
+        check('routine', 'Keep a strict routine', 'organization', 55, ['Same sleep, same gym, wherever you are. You stay well.', { energy: 10 }], ['Time zones laugh at your routine.', { energy: -10 }]),
+        result('yes', 'Say yes to every trip', 'More money, more stamps, less sleep.', { money: 10, energy: -12, joy: 5 }),
+      ],
+    },
+    {
+      id: e('v_plans'),
+      kind: 'career',
+      stages: ['breaking_in'],
+      weight: WEIGHT,
+      icon: 'warning',
+      title: 'Plans Fall Apart',
+      text: 'Weather, delays, a cancelled booking: the plan falls apart, with people depending on you.',
+      choices: [
+        check('calm', 'Keep everyone calm', 'calm', 60, ['You handle it so smoothly that people thank you afterwards.', { mastery: 15, joy: 5, highlight: 'Kept everyone calm when plans fell apart' }], ['It works out, but it’s messy and loud.', { energy: -10, joy: -8 }]),
+        check('improvise', 'Improvise a new plan', 'creativity', 60, ['The backup plan turns out better than the original.', { mastery: 14, joy: 8 }], ['The new plan has its own problems.', { joy: -5 }]),
+        check('procedure', 'Follow the procedure', 'organization', 55, ['Boring, correct, safe.', { mastery: 8 }], ['The procedure didn’t plan for this.', { energy: -8 }]),
+      ],
+    },
+    {
+      id: e('v_difficult'),
+      kind: 'career',
+      stages: ['first_job'],
+      conditions: { flagsAll: ['employed'] },
+      weight: WEIGHT,
+      icon: 'users',
+      title: 'The Difficult One',
+      text: 'Someone is rude, loud and making everyone else miserable.',
+      choices: [
+        check('kind_firm', 'Stay kind and firm', 'empathy', 55, ['They calm down. Everyone else notices how you handled it.', { joy: 8, mastery: 10 }], ['They don’t calm down. Long day.', { joy: -8 }]),
+        result('backup', 'Call for backup', 'Someone more senior takes over. Good call.', { mastery: 4, energy: 5 }),
+        check('laugh', 'Make them laugh', 'communication', 60, ['Somehow it works. Even they’re smiling by the end.', { joy: 10 }], ['Wrong moment for a joke.', { joy: -5 }]),
+      ],
+    },
+    {
+      id: e('v_seniority'),
+      kind: 'career',
+      stages: ['first_job'],
+      conditions: { flagsAll: ['employed'] },
+      weight: WEIGHT,
+      icon: 'path',
+      title: 'Bottom of the List',
+      text: 'The newest person gets the worst routes, the worst shifts and the holidays nobody wants.',
+      choices: [
+        check('smile', 'Take them with a smile', 'persistence', 55, ['People remember. Better routes come sooner than expected.', { mastery: 12, money: 5 }], ['It grinds you down.', { energy: -12, joy: -5 }]),
+        check('swap', 'Swap and trade cleverly', 'communication', 55, ['You work the system and get the trips you want.', { energy: 8, joy: 5 }], ['Nobody wants your trips.', { joy: -5 }]),
+        result('accept', 'Accept it for now', 'Your turn will come.', { energy: -8, money: 5 }),
+      ],
+    },
+    {
+      id: e('v_horizon'),
+      kind: 'crossroads',
+      stages: ['crossroads'],
+      conditions: { flagsAll: ['employed'] },
+      weight: LATE_WEIGHT,
+      icon: 'airplane',
+      title: 'Home or the Horizon?',
+      text: 'A role closer to home opens up, with much less travel. Or you keep going further.',
+      choices: [
+        result('home', 'Take the role closer to home', 'Your own bed most nights. Your plants survive.', { joy: 8, energy: 10, mastery: 5 }),
+        check('further', 'Go further', 'courage', 60, ['Longer trips, bigger responsibility, places you only dreamed about.', { mastery: 15, joy: 8, money: 10, energy: -10, highlight: 'Went further than you ever planned' }], ['The distance takes more out of you than you expected.', { energy: -15 }]),
+        check('train', 'Train the new people', 'empathy', 60, ['You become the one everyone wants to learn from.', { mastery: 10, joy: 8, set: ['manager'] }], ['Teaching is harder than doing.', { joy: -10 }]),
+        check('own', `Start your own ${ladder.ownNoun}`, 'independence', 65, ['Your own business, your own routes, your own name.', { money: 10, joy: 15, energy: -10, set: ['studio'], highlight: `Started your own ${ladder.ownNoun}` }], ['The costs are brutal. You go back to working for someone else.', { money: -5, mastery: 8, joy: -5 }]),
+      ],
+    },
+    {
+      id: e('v_journey'),
+      kind: 'finale',
+      stages: ['thirty'],
+      conditions: { flagsAll: ['employed'], flagsNone: ['pivoted'] },
+      icon: 'star',
+      title: 'The Trip of Your Career',
+      text: 'The biggest trip of your career: the one you’ll still be talking about in twenty years.',
+      choices: [
+        check('lead', 'Lead it', main, 65, ['Everything goes right, and everyone gets home with a story.', { mastery: 15, joy: 10, highlight: 'Led the trip of your career' }], ['Bumpy, stressful, and still a story worth telling.', { mastery: 10, energy: -15 }], { check: { attribute: main, difficulty: 65, bonus: { has_mentor: 10, manager: 10 } } }),
+        check('part', 'Do your part perfectly', 'persistence', 60, ['Your part is flawless.', { mastery: 10, joy: 5 }], ['Solid, not flawless.', { mastery: 5 }]),
+        result('give', 'Give the trip to someone else', 'Someone newer gets their big moment. You get a quiet week.', { energy: 15, joy: -5 }),
+      ],
+    },
+  ];
+}
+
+function land({ ladder, main, next, e }: FamilyContext): LifeEvent[] {
+  return [
+    {
+      id: e('l_seasons'),
+      kind: 'career',
+      stages: ['training'],
+      weight: WEIGHT,
+      icon: 'plant',
+      title: 'Learning the Seasons',
+      text: 'Everything depends on the season: what grows, what sells, what dies.',
+      choices: [
+        check('notice', 'Notice everything', 'curiosity', 55, ['By the end of the year, you can read the weeks ahead.', { mastery: 10 }], ['It’s a lot to take in.', { mastery: 4 }]),
+        check('notebook', 'Keep a notebook of everything', 'organization', 55, ['Your notebook becomes your best tool.', { mastery: 10, energy: -5, highlight: 'Learned the rhythm of the seasons' }], ['You stop writing things down in the busy weeks.', { energy: -8 }]),
+        check('old_timer', 'Learn from an old-timer', 'empathy', 50, ['They’ve seen fifty seasons. They share a lot of them with you.', { mastery: 8, set: ['has_mentor'] }], ['They prefer working alone.', { mastery: 4 }]),
+      ],
+    },
+    {
+      id: e('l_hands'),
+      kind: 'career',
+      stages: ['training'],
+      weight: WEIGHT,
+      icon: 'lightning',
+      title: 'Hard on the Hands',
+      text: 'Thorns, soil, cold mornings and heavy loads.',
+      choices: [
+        check('tough', 'Toughen up', 'persistence', 55, ['Your hands harden. So does your resolve.', { mastery: 10, energy: -10 }], ['Every day hurts.', { energy: -15 }]),
+        check('technique', 'Learn the right technique', 'hands_on', 55, ['Less effort, better results.', { mastery: 10 }], ['Old habits die hard.', { energy: -8 }]),
+        result('gear', 'Invest in good gear', 'Good gloves, good tools, fewer sore days.', { money: -10, mastery: 5, energy: 5 }),
+      ],
+    },
+    {
+      id: e('l_bad_season'),
+      kind: 'career',
+      stages: ['breaking_in'],
+      weight: WEIGHT,
+      icon: 'warning',
+      title: 'The Bad Season',
+      text: 'The weather ruins weeks of work. Nobody to blame, nothing to do but start again.',
+      choices: [
+        check('again', 'Start again right away', 'persistence', 60, ['You rebuild faster than anyone expected.', { mastery: 10, energy: -10 }], ['You start again, exhausted.', { energy: -15, joy: -5 }]),
+        check('change', 'Change what you do', 'creativity', 60, ['Your new idea works better than the old one.', { mastery: 10, joy: 8, highlight: 'Turned a bad season around' }], ['The new idea needs more money than you have.', { money: -10 }]),
+        result('side_job', 'Take a side job for now', 'Steady money while you recover.', { money: 10, energy: -10 }),
+      ],
+    },
+    {
+      id: e('l_market'),
+      kind: 'career',
+      stages: ['breaking_in'],
+      weight: WEIGHT,
+      icon: 'storefront',
+      title: 'Market Day',
+      text: 'Your first time selling your own work directly to people.',
+      choices: [
+        check('chat', 'Talk to everyone who stops', 'communication', 55, ['People come back next week, and bring friends.', { money: 10, joy: 8 }], ['You’re too shy to make the sale.', { joy: -5 }]),
+        check('beautiful', 'Make it look beautiful', 'creativity', 55, ['People stop just to take photos, then buy.', { money: 8, joy: 5, set: ['has_portfolio'] }], ['Beautiful, but nobody buys.', { mastery: 3 }]),
+        check('price', 'Get the prices right', 'analytical', 55, ['You sell out by noon, at a profit.', { money: 10, mastery: 5 }], ['Too cheap. You sell out and lose money.', { money: -5 }]),
+      ],
+    },
+    {
+      id: e('l_big_order'),
+      kind: 'career',
+      stages: ['first_job'],
+      conditions: { flagsAll: ['employed'] },
+      weight: WEIGHT,
+      icon: 'briefcase',
+      title: 'The Big Order',
+      text: 'A wedding, a hotel, a restaurant: one order bigger than anything you have done before.',
+      choices: [
+        check('deliver', 'Plan it and deliver', 'organization', 60, ['On time, beautiful, paid. They order again.', { money: 15, mastery: 10, highlight: 'Delivered your biggest order yet' }], ['Done, but you didn’t sleep for a week.', { energy: -15, joy: -5 }]),
+        result('help', 'Hire help for the week', 'Less profit, much less stress.', { money: 5, energy: 5, mastery: 5 }),
+        result('no', 'Say no', 'Too big, too soon. You sleep fine.', { joy: -3, energy: 5 }),
+      ],
+    },
+    {
+      id: e('l_long_days'),
+      kind: 'career',
+      stages: ['first_job'],
+      conditions: { flagsAll: ['employed'] },
+      weight: WEIGHT,
+      icon: 'battery-low',
+      title: 'Dawn to Dark',
+      text: 'In the busy season, you work from first light until it’s too dark to see.',
+      choices: [
+        check('pace', 'Pace yourself', 'organization', 55, ['You make it through the season still smiling.', { energy: 12 }], ['Pacing goes out the window by week two.', { energy: -5 }]),
+        check('push', 'Push through', 'persistence', 60, ['Your best season yet, and your most tired.', { money: 10, mastery: 8, energy: -15 }], ['Your body says stop.', { energy: -20 }]),
+        check('day_off', 'One day off a week, no matter what', 'independence', 55, ['That one day keeps you going.', { energy: 10, joy: 5 }], ['The work doesn’t care about your day off.', { joy: -5 }]),
+      ],
+    },
+    {
+      id: e('l_own_patch'),
+      kind: 'crossroads',
+      stages: ['crossroads'],
+      conditions: { flagsAll: ['employed'] },
+      weight: LATE_WEIGHT,
+      icon: 'door-open',
+      title: 'Your Own Patch',
+      text: 'A place of your own comes up: land, a shop, a contract. It’s a big risk.',
+      choices: [
+        check('own', `Make it your own ${ladder.ownNoun}`, 'independence', 65, ['It’s yours. Every hard morning is for something you own.', { money: 10, joy: 15, energy: -10, set: ['studio'], highlight: `Started your own ${ladder.ownNoun}` }], ['A brutal first year. You go back to working for someone else.', { money: -10, mastery: 8, joy: -5 }], { check: { attribute: 'independence', difficulty: 65, bonus: { has_mentor: 5 } } }),
+        check('run', 'Run someone else’s bigger operation', 'empathy', 60, ['A big team, a big operation, and you run it well.', { mastery: 10, joy: 5, money: 10, set: ['manager'] }], ['Too many moving parts.', { joy: -10 }]),
+        check('green', 'Go greener and more sustainable', 'curiosity', 60, ['Better for the land, and customers love it.', { mastery: 12, joy: 10, highlight: 'Made your work kinder to the land' }], ['The switch costs more than you expected.', { money: -10 }]),
+        result('move', `Move into ${inSentence(next.name)}`, `You take what the land taught you into ${inSentence(next.name)}.`, { money: 5, mastery: 5, set: ['pivoted'] }),
+      ],
+    },
+    {
+      id: e('l_best_year'),
+      kind: 'finale',
+      stages: ['thirty'],
+      conditions: { flagsAll: ['employed'], flagsNone: ['pivoted'] },
+      icon: 'star',
+      title: 'The Best Year',
+      text: 'Everything comes together: the best season, your best work, and people noticing.',
+      choices: [
+        check('go_big', 'Make it the best year ever', main, 65, ['People drive from far away for your work.', { mastery: 15, joy: 10, highlight: 'Had the best year of your working life' }], ['A great year, with one bad week you’ll never forget.', { mastery: 10, energy: -15 }], { check: { attribute: main, difficulty: 65, bonus: { has_mentor: 10, manager: 10 } } }),
+        check('steady', 'Keep it steady and solid', 'persistence', 60, ['A good year, done well.', { mastery: 10, joy: 5 }], ['Good, not great.', { mastery: 5 }]),
+        result('share', 'Share the work and the credit', 'You let the team shine and take a breath yourself.', { energy: 15, joy: -5 }),
+      ],
+    },
+  ];
+}
+
 const BUILDERS: Record<FamilyId, (ctx: FamilyContext) => LifeEvent[]> = {
   creators,
   trades,
@@ -1795,6 +2165,9 @@ const BUILDERS: Record<FamilyId, (ctx: FamilyContext) => LifeEvent[]> = {
   fashion,
   science,
   public: publicService,
+  words,
+  travel,
+  land,
 };
 
 /** The family scenes for a career, or none if it's in no family. */

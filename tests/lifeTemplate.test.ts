@@ -57,9 +57,14 @@ describe('template lives', () => {
     expect(titles('hairdresser')).toContain('Your First Regular');
     expect(titles('marine_biologist')).toContain('Fieldwork');
     expect(titles('firefighter')).toContain('Your First Real Call');
+    expect(titles('journalist')).toContain('The Rejection Pile');
+    expect(titles('pilot')).toContain('Home or the Horizon?');
+    expect(titles('farmer')).toContain('The Bad Season');
+    expect(titles('architect')).toContain('Revision Twelve');
+    for (const id of Object.keys(CAREERS)) if (id !== 'ux_design') expect(familyOf(id as keyof typeof CAREERS)).not.toBeNull(); // every templated career has a family
     expect(JSON.stringify(LIVES.chef)).toContain('Open your own restaurant');
     expect(JSON.stringify(LIVES.animator)).toContain('Open your own animation studio');
-    expect(titles('accountant')).not.toContain('The Algorithm Changes'); // no family yet: generic scenes only
+    expect(titles('accountant')).not.toContain('The Algorithm Changes'); // other families' scenes stay out
     expect(JSON.stringify(LIVES.streamer)).toContain('Stream Number One');
     expect(JSON.stringify(LIVES.plumber)).toContain('Started your own plumbing business');
     for (const family of Object.keys(FAMILIES) as (keyof typeof FAMILIES)[]) for (const id of FAMILIES[family]) expect(familyOf(id)).toBe(family);
