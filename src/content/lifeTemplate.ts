@@ -8,42 +8,10 @@
 import type { AttributeId } from './attributes';
 import { CAREER_TRAINING } from './careerTraining';
 import { CAREER_IDS, CAREERS, type Career, type CareerId } from './careers';
-import type { CareerLife, Choice, Effects, LifeEvent } from './life';
+import type { CareerLife, Choice, LifeEvent } from './life';
+import { FAMILY_REPLACES, familyEvents, familyOf } from './lifeFamilies';
+import { article, CHANGER, check, firstSentence, inSentence, result } from './lifeKit';
 import { ladderFor, type LifeLadder } from './lifeLadders';
-
-const CHANGER = 'track_changer';
-
-const article = (word: string) => (/^[aeiou]/i.test(word) && !/^(uni|eu|one)/i.test(word) ? 'an' : 'a');
-
-/** Lowercases a name for use mid-sentence, but leaves names like "YouTuber" or "AI engineer" alone. */
-function inSentence(name: string): string {
-  return /^[A-Z]{2}|^[A-Z][a-z]+[A-Z]/.test(name) ? name : name.charAt(0).toLowerCase() + name.slice(1);
-}
-
-/** The first sentence, not fooled by "e.g." or "i.e.". */
-export function firstSentence(text: string): string {
-  for (const m of text.matchAll(/\.\s/g)) {
-    const before = text.slice(0, m.index);
-    if (/\b(e\.g|i\.e|etc|vs)$/i.test(before)) continue;
-    return text.slice(0, m.index + 1);
-  }
-  return text;
-}
-
-const outcome = (text: string, effects: Effects) => ({ text, effects });
-
-function check(id: string, label: string, attribute: AttributeId, difficulty: number, success: [string, Effects], fail: [string, Effects], extra: Partial<Choice> = {}): Choice {
-  return { id, label, check: { attribute, difficulty, ...(extra.check ?? {}) }, success: outcome(...success), fail: outcome(...fail), ...omitCheck(extra) };
-}
-
-function omitCheck(extra: Partial<Choice>): Partial<Choice> {
-  const { check: _check, ...rest } = extra;
-  return rest;
-}
-
-function result(id: string, label: string, text: string, effects: Effects, hint?: string): Choice {
-  return { id, label, ...(hint ? { hint } : {}), result: outcome(text, effects) };
-}
 
 /** The most similar other career, for "switch to something next to it". */
 function neighbour(career: Career): Career {
@@ -117,12 +85,15 @@ export function templateLife(id: CareerId): CareerLife | null {
   const work = `${inSentence(name)} work`;
   const day = career.dayToDay.map((d) => inSentence(d));
   const downs = career.downsides.map((d) => inSentence(d));
-  const roles = career.nextSteps.searchFor.slice(0, 2);
+  // Search terms like "video editor entry level" read better without the suffix.
+  const roles = career.nextSteps.searchFor.slice(0, 2).map((r) => r.replace(/\s*\bentry[- ]level\b\s*/i, ' ').trim());
   const next = neighbour(career);
   const [junior, mid, senior, lead] = ladder.roles;
   const e = (suffix: string) => `${id}_${suffix}`;
+  const family = familyOf(id);
+  const replaced = new Set((family ? FAMILY_REPLACES[family] : []).map(e));
 
-  const events: LifeEvent[] = [
+  const allEvents: LifeEvent[] = [
     ...openers(career, ladder, main),
 
     // Training
@@ -416,7 +387,11 @@ export function templateLife(id: CareerId): CareerLife | null {
         result('bring', 'Bring it into your new work', 'Turns out what you learned is useful almost anywhere.', { mastery: 5, joy: 5, set: ['pivoted'] }),
       ],
     },
+
+    // Scenes shared by the career's family (creators, trades, health care…), weighted to show up most of the time.
+    ...familyEvents({ career, ladder, main, next, e }),
   ];
+  const events = allEvents.filter((ev) => !replaced.has(ev.id));
 
   return {
     career: id,

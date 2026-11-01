@@ -4,6 +4,7 @@ import { HAND_WRITTEN_LIVES, LIFE_CAREER_IDS, LIVES, SHARED_EVENTS, type LifeEve
 import { SIGN_IDS, SIGNS } from '../src/content/signs';
 import { createRng, LIFE_SLOTS, playLife } from '../src/logic/life';
 import { validateLife } from '../src/logic/lifeValidate';
+import { FAMILIES, familyOf } from '../src/content/lifeFamilies';
 
 describe('template lives', () => {
   it('every career has a life; hand-written ones win', () => {
@@ -38,6 +39,31 @@ describe('template lives', () => {
     expect(labels('barista')).toContain('Teach yourself');
   });
 
+  it('family careers get their family’s scenes, filled with their own details', () => {
+    const titles = (id: keyof typeof LIVES) => new Set(LIVES[id]!.events.map((e) => e.title));
+    expect(titles('youtuber')).toContain('The Algorithm Changes');
+    expect(titles('electrician')).toContain('The Licence Exam');
+    expect(titles('nursing')).toContain('Night Shifts');
+    expect(titles('accountant')).not.toContain('The Algorithm Changes'); // no family yet: generic scenes only
+    expect(JSON.stringify(LIVES.streamer)).toContain('Stream Number One');
+    expect(JSON.stringify(LIVES.plumber)).toContain('Started your own plumbing business');
+    for (const family of Object.keys(FAMILIES) as (keyof typeof FAMILIES)[]) for (const id of FAMILIES[family]) expect(familyOf(id)).toBe(family);
+  });
+
+  it('family scenes show up in most lives of that family', () => {
+    const rng = createRng(3);
+    const pick = (_e: LifeEvent, choices: LifeEvent['choices']) => choices[Math.floor(rng() * choices.length)]!;
+    const familyIds = new Set(LIVES.youtuber!.events.filter((e) => e.id.startsWith('youtuber_c_')).map((e) => e.id));
+    const counts: number[] = [];
+    for (let i = 0; i < 200; i++) {
+      const sign = SIGN_IDS[i % SIGN_IDS.length]!;
+      const { run } = playLife(LIVES.youtuber!, SHARED_EVENTS, { id: 'r', career: 'youtuber', seed: Math.floor(rng() * 4294967296), startedAt: '2026-11-01T00:00:00Z', stats: SIGNS[sign].stats, element: SIGNS[sign].element }, pick);
+      counts.push(run.log.filter((l) => familyIds.has(l.eventId)).length);
+    }
+    expect(counts.reduce((a, b) => a + b, 0) / counts.length).toBeGreaterThan(2.4); // of ten slots, next to shared and sign scenes
+    expect(counts.filter((c) => c >= 2).length / counts.length).toBeGreaterThan(0.8);
+  });
+
   it('plays all ten slots on both tracks for every career, and reaches every ending', () => {
     const rng = createRng(7);
     const pick = (_e: LifeEvent, choices: LifeEvent['choices']) => choices[Math.floor(rng() * choices.length)]!;
@@ -55,5 +81,5 @@ describe('template lives', () => {
       }
       expect(endings.size, id).toBe(life.endings.length);
     }
-  });
+  }, 30_000); // plays about 24,000 lives
 });
