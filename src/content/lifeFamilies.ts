@@ -10,9 +10,9 @@ import type { LifeEvent } from './life';
 import { article, check, inSentence, result } from './lifeKit';
 import type { LifeLadder } from './lifeLadders';
 
-export type FamilyId = 'creators' | 'trades' | 'health' | 'tech' | 'studio' | 'performing' | 'sport' | 'care' | 'business' | 'food' | 'fashion';
+export type FamilyId = 'creators' | 'trades' | 'health' | 'tech' | 'studio' | 'performing' | 'sport' | 'care' | 'business' | 'food' | 'fashion' | 'science' | 'public';
 
-export const FAMILY_NAMES: Record<FamilyId, string> = { creators: 'Creators', trades: 'Trades', health: 'Health care', tech: 'Tech', studio: 'Creative studio', performing: 'Performing', sport: 'Sport', care: 'Care and education', business: 'Business', food: 'Food and hospitality', fashion: 'Fashion and beauty' };
+export const FAMILY_NAMES: Record<FamilyId, string> = { creators: 'Creators', trades: 'Trades', health: 'Health care', tech: 'Tech', studio: 'Creative studio', performing: 'Performing', sport: 'Sport', care: 'Care and education', business: 'Business', food: 'Food and hospitality', fashion: 'Fashion and beauty', science: 'Science', public: 'Public service' };
 
 /** Careers in each family. Careers in no family use the generic template scenes only. */
 export const FAMILIES: Record<FamilyId, readonly CareerId[]> = {
@@ -27,6 +27,8 @@ export const FAMILIES: Record<FamilyId, readonly CareerId[]> = {
   business: ['marketing', 'sales', 'recruiter', 'accountant', 'real_estate', 'entrepreneur', 'ecommerce_owner', 'project_coord'],
   food: ['chef', 'pastry_chef', 'barista', 'bartender', 'hotel_manager', 'event_planner'],
   fashion: ['fashion_designer', 'stylist', 'makeup_artist', 'hairdresser', 'nail_artist', 'fashion_buyer'],
+  science: ['lab_scientist', 'chemist', 'env_scientist', 'marine_biologist', 'astronomer'],
+  public: ['firefighter', 'police_officer', 'park_ranger', 'diplomat', 'policy_advisor', 'law'],
 };
 
 /**
@@ -49,6 +51,9 @@ export const FAMILY_REPLACES: Record<FamilyId, readonly string[]> = {
   food: ['big_one', 'other_side'],
   // Fashion and beauty has its own on-your-feet scene.
   fashion: ['big_one', 'other_side'],
+  science: ['big_one'],
+  // Public service has its own scenes about the hard side of the job.
+  public: ['big_one', 'other_side'],
 };
 
 export function familyOf(id: CareerId): FamilyId | null {
@@ -1534,7 +1539,263 @@ function fashion({ ladder, main, next, e }: FamilyContext): LifeEvent[] {
   ];
 }
 
-const BUILDERS: Record<FamilyId, (ctx: FamilyContext) => LifeEvent[]> = { creators, trades, health, tech, studio, performing, sport, care, business, food, fashion };
+function science({ ladder, main, e }: FamilyContext): LifeEvent[] {
+  return [
+    {
+      id: e('z_lab'),
+      kind: 'career',
+      stages: ['training'],
+      weight: WEIGHT,
+      icon: 'magnifying-glass',
+      title: 'Lab Basics',
+      text: 'Your first weeks doing real science: protocols, equipment, and a lot of things you’re not allowed to touch yet.',
+      choices: [
+        check('protocol', 'Follow every protocol exactly', 'organization', 55, ['Your results are clean and repeatable. People start trusting your data.', { mastery: 10 }], ['One skipped step ruins a week of work.', { mastery: 5, energy: -8 }]),
+        check('why', 'Ask why each step matters', 'curiosity', 55, ['You understand the method, not just the recipe.', { mastery: 10, joy: 5 }], ['Wrong time to ask. Everyone is busy.', { mastery: 4 }]),
+        check('boring', 'Volunteer for the boring jobs', 'persistence', 55, ['A senior scientist notices and starts teaching you properly.', { mastery: 8, set: ['has_mentor'] }], ['You do the boring jobs. Nobody notices.', { energy: -10 }]),
+      ],
+    },
+    {
+      id: e('z_reading'),
+      kind: 'career',
+      stages: ['training'],
+      weight: WEIGHT,
+      icon: 'books',
+      title: 'Read Everything',
+      text: 'Every paper cites ten more papers. You will never catch up.',
+      choices: [
+        check('daily', 'Read one paper every day', 'persistence', 55, ['A year later, you know the field better than people with twice your experience.', { mastery: 10, energy: -8 }], ['You fall behind, then feel guilty about it.', { energy: -10 }]),
+        check('club', 'Join a reading group', 'communication', 55, ['Arguing about papers over pizza. You learn faster and make friends.', { mastery: 8, joy: 8, set: ['peer_friend'] }], ['The group fizzles after a month.', { joy: -3 }]),
+        check('focus', 'Read only what you need', 'analytical', 55, ['You learn to find the three papers that matter.', { mastery: 8, energy: 5 }], ['You miss something important.', { mastery: 3 }]),
+      ],
+    },
+    {
+      id: e('z_fails'),
+      kind: 'career',
+      stages: ['breaking_in'],
+      weight: WEIGHT,
+      icon: 'warning',
+      title: 'The Experiment That Fails',
+      text: 'Three months of work, and the results make no sense at all.',
+      choices: [
+        check('repeat', 'Repeat it, carefully', 'persistence', 60, ['On the third try you find the mistake nobody else spotted.', { mastery: 12, energy: -10, highlight: 'Found the mistake nobody else could' }], ['Three more months, same nonsense.', { energy: -15, joy: -5 }]),
+        check('assumptions', 'Question your assumptions', 'analytical', 60, ['The “failure” is actually telling you something new.', { mastery: 12, joy: 8 }], ['You question everything and trust nothing for a while.', { joy: -5 }]),
+        check('supervisor', 'Ask your supervisor', 'communication', 55, ['They’ve seen this before. You learn how to troubleshoot.', { mastery: 8, set: ['has_mentor'] }], ['They’re away for a month.', { joy: -5 }]),
+      ],
+    },
+    {
+      id: e('z_field'),
+      kind: 'career',
+      stages: ['breaking_in'],
+      weight: WEIGHT,
+      icon: 'plant',
+      title: 'Fieldwork',
+      text: 'Weeks out in the field: weather, early mornings, and the best data you have ever collected.',
+      choices: [
+        check('embrace', 'Embrace it', 'physical', 55, ['Cold, tired, and happier than you’ve been in months.', { mastery: 10, joy: 10, energy: -8, highlight: 'Survived weeks of fieldwork' }], ['The weather wins most days.', { energy: -15 }]),
+        check('plan', 'Plan every detail', 'organization', 55, ['Nothing goes wrong that you didn’t prepare for.', { mastery: 8, energy: 5 }], ['Something you didn’t plan for goes wrong.', { energy: -10 }]),
+        result('desk', 'Stay at the desk and analyze', 'Someone else collects the data. You make sense of it.', { mastery: 6, joy: -3 }),
+      ],
+    },
+    {
+      id: e('z_grant'),
+      kind: 'career',
+      stages: ['first_job'],
+      conditions: { flagsAll: ['employed'] },
+      weight: WEIGHT,
+      icon: 'wallet',
+      title: 'The Grant',
+      text: 'Your funding depends on one application, due in two weeks.',
+      choices: [
+        check('write', 'Write the best proposal of your life', 'communication', 65, ['Funded. Three more years of work you love.', { money: 15, mastery: 8, energy: -8, highlight: 'Won a research grant' }], ['Rejected. You start the next one tomorrow.', { money: -10, joy: -10 }]),
+        check('team', 'Team up with a bigger lab', 'empathy', 55, ['Together you win something neither could alone.', { money: 10, mastery: 5 }], ['The partnership falls apart over credit.', { joy: -5 }]),
+        result('industry', 'Look for industry money', 'A company funds you, with strings attached.', { money: 10, joy: -5, mastery: 3 }),
+      ],
+    },
+    {
+      id: e('z_publish'),
+      kind: 'career',
+      stages: ['first_job'],
+      conditions: { flagsAll: ['employed'] },
+      weight: WEIGHT,
+      icon: 'books',
+      title: 'Publish or Perish',
+      text: 'Everyone around you is publishing. Your results aren’t ready yet.',
+      choices: [
+        check('wait', 'Wait until it’s right', 'persistence', 60, ['When it comes out, it’s solid, and people cite it for years.', { mastery: 12, joy: 5 }], ['Someone publishes something similar first.', { joy: -8 }]),
+        result('now', 'Publish what you have', 'A smaller paper, sooner. It counts.', { mastery: 7, money: 5, joy: -3 }),
+        check('open', 'Share it openly online first', 'curiosity', 55, ['Other scientists jump in with ideas. It gets better, faster.', { joy: 8, mastery: 6 }], ['Silence. Nobody reads preprints from unknowns.', { joy: -5 }]),
+      ],
+    },
+    {
+      id: e('z_path'),
+      kind: 'crossroads',
+      stages: ['crossroads'],
+      conditions: { flagsAll: ['employed'] },
+      weight: LATE_WEIGHT,
+      icon: 'path',
+      title: 'Research or Industry?',
+      text: 'A company offers you twice the salary. Your research isn’t finished.',
+      choices: [
+        check('research', 'Stay with your research', 'curiosity', 60, ['Less money, more meaning. The questions you love are still yours.', { mastery: 15, joy: 10, highlight: 'Followed the questions you love' }], ['The funding gets thinner every year.', { money: -10, joy: -5 }]),
+        result('industry', 'Move to industry', 'Better pay, faster pace, and your work ships to real people.', { money: 20, mastery: 8, joy: -3 }),
+        check('lead', 'Lead your own team', 'empathy', 65, ['Your own team, your own questions, your own students.', { mastery: 10, joy: 8, set: ['manager'] }], ['Managing people leaves no time for science.', { joy: -10 }]),
+        check('own', `Found your own ${ladder.ownNoun}`, 'independence', 65, ['You turn your research into something the world can use.', { money: 10, joy: 15, energy: -10, set: ['studio'], highlight: `Founded your own ${ladder.ownNoun}` }], ['Investors don’t get it yet. You go back to the lab, wiser.', { money: -5, mastery: 8, joy: -5 }]),
+      ],
+    },
+    {
+      id: e('z_discovery'),
+      kind: 'finale',
+      stages: ['thirty'],
+      conditions: { flagsAll: ['employed'], flagsNone: ['pivoted'] },
+      icon: 'star',
+      title: 'The Discovery',
+      text: 'Your data shows something nobody has ever seen. Either that, or you made a mistake.',
+      choices: [
+        check('announce', 'Make the case to the world', main, 65, ['It holds up. Your name is on something new.', { mastery: 15, joy: 10, highlight: 'Made a real discovery' }], ['It holds up partly. Still a real step forward.', { mastery: 10, energy: -15 }], { check: { attribute: main, difficulty: 65, bonus: { has_mentor: 10, manager: 10 } } }),
+        check('check', 'Check it three more times', 'persistence', 60, ['Rock solid. When you publish, nobody can argue.', { mastery: 10, joy: 5 }], ['The checking takes so long someone else gets close.', { mastery: 5 }]),
+        result('colleague', 'Hand it to a colleague to confirm', 'They confirm it. The credit is shared, and the stress too.', { energy: 15, joy: -5 }),
+      ],
+    },
+  ];
+}
+
+function publicService({ ladder, main, next, e }: FamilyContext): LifeEvent[] {
+  return [
+    {
+      id: e('q_training'),
+      kind: 'career',
+      stages: ['training'],
+      weight: WEIGHT,
+      icon: 'users-three',
+      title: 'Hard on Purpose',
+      text: 'Training is tough on purpose: tests, drills, and instructors who don’t smile.',
+      choices: [
+        check('push', 'Push through every drill', 'persistence', 55, ['You finish near the top of your class.', { mastery: 10, energy: -12 }], ['You finish. Just.', { energy: -18 }]),
+        check('help', 'Help the person struggling next to you', 'empathy', 50, ['You both make it through, and they never forget it.', { joy: 10, mastery: 5, set: ['peer_friend'], highlight: 'Helped a classmate make it through' }], ['You try, but you’re barely keeping up yourself.', { joy: 3 }]),
+        check('rules', 'Learn the rules inside out', 'analytical', 55, ['You know the rulebook better than some instructors.', { mastery: 10 }], ['Too much to memorize at once.', { mastery: 4 }]),
+      ],
+    },
+    {
+      id: e('q_tests'),
+      kind: 'career',
+      stages: ['training'],
+      weight: WEIGHT,
+      icon: 'books',
+      title: 'The Tests',
+      text: 'The physical, the written exam and the interview panel, all in one week.',
+      choices: [
+        check('train', 'Prepare for months', 'persistence', 60, ['You walk in ready and pass all three.', { mastery: 10, energy: -10 }], ['You pass two out of three. Retake in the spring.', { energy: -15, joy: -5 }]),
+        check('interview', 'Practice the interview', 'communication', 55, ['The panel nods along. They like you.', { mastery: 8, joy: 5 }], ['You freeze on the hardest question.', { joy: -5 }]),
+        check('trust', 'Trust yourself and stay calm', 'calm', 60, ['Calm in the room, clear on the page.', { mastery: 8, joy: 8 }], ['Nerves win this round.', { joy: -10 }]),
+      ],
+    },
+    {
+      id: e('q_first_call'),
+      kind: 'career',
+      stages: ['breaking_in'],
+      weight: WEIGHT,
+      icon: 'warning',
+      title: 'Your First Real Call',
+      text: 'The first time it’s real. People are looking at you to know what to do.',
+      choices: [
+        check('calm', 'Stay calm and take charge', 'calm', 60, ['It goes the way your training said it would. Better, even.', { mastery: 12, joy: 8, highlight: 'Handled your first real emergency' }], ['It works out, but your hands shake for an hour.', { energy: -10, joy: -8 }]),
+        check('procedure', 'Follow your training exactly', 'organization', 55, ['Step by step, it all falls into place.', { mastery: 10 }], ['Real life doesn’t follow the manual.', { energy: -8 }]),
+        check('partner', 'Lean on your partner', 'empathy', 50, ['Together you handle it well.', { mastery: 6, joy: 6 }], ['You’re both new. It’s messy.', { joy: -3 }]),
+      ],
+    },
+    {
+      id: e('q_red_tape'),
+      kind: 'career',
+      stages: ['breaking_in'],
+      weight: WEIGHT,
+      icon: 'squares-four',
+      title: 'The Red Tape',
+      text: 'The right thing to do is clear. The rules say something else.',
+      choices: [
+        result('rules', 'Follow the rules', 'You do it by the book. It doesn’t feel great.', { mastery: 5, joy: -5 }),
+        check('change', 'Push for the rule to change', 'communication', 60, ['It takes months, and the rule changes.', { mastery: 10, joy: 8, highlight: 'Changed a rule that wasn’t working' }], ['You hit a wall of “that’s how it’s done.”', { joy: -8, energy: -10 }]),
+        check('creative', 'Find a way inside the rules', 'creativity', 60, ['A clever, legal solution. Your boss pretends not to be impressed.', { mastery: 10, joy: 5 }], ['Too clever. You have to explain yourself.', { energy: -8 }]),
+      ],
+    },
+    {
+      id: e('q_stays'),
+      kind: 'career',
+      stages: ['first_job'],
+      conditions: { flagsAll: ['employed'] },
+      weight: WEIGHT,
+      icon: 'heart',
+      title: 'The Day That Stays With You',
+      text: 'One day on the job that you can’t stop thinking about.',
+      choices: [
+        check('talk', 'Talk to someone you trust', 'empathy', 50, ['It helps more than you expected.', { joy: 10, energy: 5 }], ['You can’t find the words yet.', { joy: -5 }]),
+        check('debrief', 'Debrief with the team', 'communication', 55, ['Everyone carried a piece of it. Carrying it together helps.', { joy: 8, mastery: 5 }], ['The debrief is rushed and formal.', { energy: -5 }]),
+        result('push_down', 'Push it down', 'It works, for now.', { energy: -8, joy: -5 }),
+      ],
+    },
+    {
+      id: e('q_watching'),
+      kind: 'career',
+      stages: ['first_job'],
+      conditions: { flagsAll: ['employed'] },
+      weight: WEIGHT,
+      icon: 'eye',
+      title: 'The Public Is Watching',
+      text: 'Someone films you at work and posts it online. Thousands of comments by morning.',
+      choices: [
+        check('professional', 'Stay professional', 'calm', 55, ['The full video shows you handled it well. The comments turn.', { joy: 5, mastery: 8 }], ['Every word gets picked apart for a week.', { joy: -10 }]),
+        check('explain', 'Explain your side', 'communication', 60, ['People listen. Some even apologize.', { joy: 8 }], ['It turns into a bigger story.', { joy: -10, energy: -5 }]),
+        result('log_off', 'Log off for a week', 'The internet moves on. So do you.', { energy: 10, joy: -3 }),
+      ],
+    },
+    {
+      id: e('q_rank'),
+      kind: 'crossroads',
+      stages: ['crossroads'],
+      conditions: { flagsAll: ['employed'] },
+      weight: LATE_WEIGHT,
+      icon: 'path',
+      title: 'Rank or Ground?',
+      text: 'A promotion means a desk, meetings and more responsibility. Staying means the work you joined for.',
+      choices: [
+        check('promotion', 'Go for the promotion', 'empathy', 60, ['You lead well, and people want to work for you.', { mastery: 10, joy: 5, money: 10, set: ['manager'] }], ['The politics wear you down.', { joy: -10 }]),
+        result('ground', 'Stay where the work is', 'You stay close to the people you serve.', { joy: 10, mastery: 6 }),
+        check('own', `Start your own ${ladder.ownNoun}`, 'independence', 65, ['You take everything you learned and build something of your own.', { money: 10, joy: 15, energy: -10, set: ['studio'], highlight: `Started your own ${ladder.ownNoun}` }], ['Harder than it looked. You go back to service.', { money: -5, mastery: 8, joy: -5 }]),
+        result('move', `Move into ${inSentence(next.name)}`, `You take your sense of duty into ${inSentence(next.name)}.`, { money: 5, mastery: 5, set: ['pivoted'] }),
+      ],
+    },
+    {
+      id: e('q_big_day'),
+      kind: 'finale',
+      stages: ['thirty'],
+      conditions: { flagsAll: ['employed'], flagsNone: ['pivoted'] },
+      icon: 'star',
+      title: 'The Day It Matters Most',
+      text: 'A crisis, a hearing, a summit: the day your whole career prepared you for.',
+      choices: [
+        check('step_up', 'Step up and lead', main, 65, ['People are safer, or better off, because you were there.', { mastery: 15, joy: 10, highlight: 'Stepped up on the day it mattered most' }], ['It’s hard and imperfect, and you hold the line.', { mastery: 10, energy: -15 }], { check: { attribute: main, difficulty: 65, bonus: { manager: 10, has_mentor: 10 } } }),
+        check('part', 'Do your part perfectly', 'persistence', 60, ['Your piece of it goes exactly right.', { mastery: 10, joy: 5 }], ['Your part is fine. Not perfect.', { mastery: 5 }]),
+        result('hand_over', 'Hand over to fresh hands', 'You know your limits. Someone rested takes over.', { energy: 15, joy: -5 }),
+      ],
+    },
+  ];
+}
+
+const BUILDERS: Record<FamilyId, (ctx: FamilyContext) => LifeEvent[]> = {
+  creators,
+  trades,
+  health,
+  tech,
+  studio,
+  performing,
+  sport,
+  care,
+  business,
+  food,
+  fashion,
+  science,
+  public: publicService,
+};
 
 /** The family scenes for a career, or none if it's in no family. */
 export function familyEvents(ctx: FamilyContext): LifeEvent[] {

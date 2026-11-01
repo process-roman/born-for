@@ -55,6 +55,8 @@ describe('template lives', () => {
     expect(titles('sales')).toContain('The Big Client');
     expect(titles('chef')).toContain('The Rush');
     expect(titles('hairdresser')).toContain('Your First Regular');
+    expect(titles('marine_biologist')).toContain('Fieldwork');
+    expect(titles('firefighter')).toContain('Your First Real Call');
     expect(JSON.stringify(LIVES.chef)).toContain('Open your own restaurant');
     expect(JSON.stringify(LIVES.animator)).toContain('Open your own animation studio');
     expect(titles('accountant')).not.toContain('The Algorithm Changes'); // no family yet: generic scenes only
