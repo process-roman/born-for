@@ -175,7 +175,7 @@ export function templateLife(id: CareerId): CareerLife | null {
       priority: 1,
       icon: 'briefcase',
       title: 'Junior at {age}',
-      text: `Most entry-level ${roles[0] ?? inSentence(junior)} roles were written with 22-year-olds in mind. Your CV has years of work they don’t quite know how to read.`,
+      text: `Most ${roles[0] ?? inSentence(junior)} roles were written with 22-year-olds in mind. Your CV has years of work they don’t quite know how to read.`,
       choices: [
         check('pitch', 'Pitch your past as a strength', 'communication', 65, ['One interviewer gets it right away: someone who already knows how work works. You’re hired.', { mastery: 8, joy: 10, money: 15, set: ['employed'], highlight: 'Turned your old career into your edge' }], ['Lots of polite interest, no offers yet. You keep your old job a little longer.', { joy: -10, energy: -5, set: ['side_job'] }], { check: { attribute: 'communication', difficulty: 65, bonus: { has_portfolio: 10, route_internal: 10 } } }),
         result('junior', 'Take a junior role and a pay cut', `Your first job as ${article(junior)} ${inSentence(junior)}, and less money than before. It stings, and it’s exactly what you wanted.`, { money: -10, mastery: 8, joy: 8, set: ['employed'] }, 'In the door · less money for a while'),

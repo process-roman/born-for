@@ -10,15 +10,17 @@ import type { LifeEvent } from './life';
 import { article, check, inSentence, result } from './lifeKit';
 import type { LifeLadder } from './lifeLadders';
 
-export type FamilyId = 'creators' | 'trades' | 'health';
+export type FamilyId = 'creators' | 'trades' | 'health' | 'tech' | 'studio';
 
-export const FAMILY_NAMES: Record<FamilyId, string> = { creators: 'Creators', trades: 'Trades', health: 'Health care' };
+export const FAMILY_NAMES: Record<FamilyId, string> = { creators: 'Creators', trades: 'Trades', health: 'Health care', tech: 'Tech', studio: 'Creative studio' };
 
 /** Careers in each family. Careers in no family use the generic template scenes only. */
 export const FAMILIES: Record<FamilyId, readonly CareerId[]> = {
   creators: ['youtuber', 'streamer', 'influencer', 'podcaster', 'travel_creator'],
   trades: ['electrician', 'plumber', 'carpenter', 'mechanic', 'welder'],
   health: ['nursing', 'paramedic', 'physio', 'doctor', 'pharmacist', 'vet_nurse', 'veterinarian'],
+  tech: ['software_dev', 'app_developer', 'ai_engineer', 'data_analysis', 'cybersecurity', 'it_support', 'qa_tester', 'game_developer'],
+  studio: ['graphic_designer', 'illustrator', 'animator', 'game_artist', 'game_designer', 'photographer', 'video_editor'],
 };
 
 /**
@@ -29,6 +31,8 @@ export const FAMILY_REPLACES: Record<FamilyId, readonly string[]> = {
   creators: ['job_hunt', 'change_job_hunt', 'change_young_boss', 'lead', 'offer', 'big_one'],
   trades: [],
   health: [],
+  tech: [],
+  studio: [],
 };
 
 export function familyOf(id: CareerId): FamilyId | null {
@@ -486,7 +490,249 @@ function health({ ladder, main, next, e }: FamilyContext): LifeEvent[] {
   ];
 }
 
-const BUILDERS: Record<FamilyId, (ctx: FamilyContext) => LifeEvent[]> = { creators, trades, health };
+function tech({ ladder, main, e }: FamilyContext): LifeEvent[] {
+  return [
+    {
+      id: e('x_bug'),
+      kind: 'career',
+      stages: ['training'],
+      weight: WEIGHT,
+      icon: 'magnifying-glass',
+      title: 'The Bug That Won’t Die',
+      text: 'Three days on one bug. When you finally find the fix, it’s a single character.',
+      choices: [
+        check('duck', 'Explain it out loud, line by line', 'analytical', 55, ['Halfway through explaining it to your coffee mug, you see it.', { mastery: 10, joy: 5 }], ['You talk it through twice. Still broken.', { mastery: 5, energy: -10 }]),
+        check('forum', 'Ask for help online', 'communication', 55, ['A stranger on the other side of the world spots it in a minute. You make a friend.', { mastery: 8, joy: 5, set: ['peer_friend'] }], ['Your question gets closed as a duplicate. Ouch.', { joy: -5 }]),
+        check('rewrite', 'Rewrite it from scratch', 'persistence', 60, ['The new version is cleaner, and the bug is gone.', { mastery: 12, energy: -10 }], ['The new version has two new bugs.', { mastery: 4, energy: -15 }]),
+      ],
+    },
+    {
+      id: e('x_side_project'),
+      kind: 'career',
+      stages: ['training'],
+      weight: WEIGHT,
+      icon: 'laptop',
+      title: 'The Side Project',
+      text: 'You build something small just for you: a tool, a game, an app nobody asked for.',
+      choices: [
+        check('ship', 'Finish it and put it out there', 'persistence', 60, ['A few hundred people use it. One sends a thank-you email.', { mastery: 10, joy: 8, set: ['has_portfolio'], highlight: 'Shipped your first side project' }], ['The last 10% takes 90% of the time. It stalls.', { mastery: 5, joy: -5 }]),
+        check('polish', 'Make it beautiful', 'creativity', 60, ['People share it just because it looks so good.', { mastery: 8, joy: 10, set: ['has_portfolio'] }], ['You polish one screen for a month.', { mastery: 3 }]),
+        result('next', 'Drop it for a new idea', 'The new idea is exciting. So was the last one.', { joy: 5, mastery: 3 }),
+      ],
+    },
+    {
+      id: e('x_interview'),
+      kind: 'career',
+      stages: ['breaking_in'],
+      weight: WEIGHT,
+      icon: 'chats',
+      title: 'The Technical Interview',
+      text: 'A whiteboard, a stranger, and a puzzle you have never seen before.',
+      choices: [
+        check('aloud', 'Think out loud', 'communication', 60, ['You don’t finish, but they love how you think. Offer by Friday.', { mastery: 5, joy: 10, money: 15, set: ['employed'], highlight: 'Won over a technical interview' }], ['You go quiet and freeze. Next time.', { joy: -10 }]),
+        check('grind', 'Grind practice problems first', 'persistence', 60, ['Weeks of practice. The puzzle looks familiar. You’re in.', { mastery: 8, money: 15, set: ['employed'] }], ['You practiced the wrong kind of problem.', { energy: -15, joy: -5 }]),
+        check('show', 'Show them what you’ve built', main, 60, ['They spend the hour asking about your project. You’re hired.', { money: 15, joy: 8, set: ['employed'] }], ['They want the puzzle, not the project.', { joy: -5 }], { check: { attribute: main, difficulty: 60, bonus: { has_portfolio: 15 } } }),
+      ],
+    },
+    {
+      id: e('x_tools'),
+      kind: 'career',
+      stages: ['breaking_in'],
+      weight: WEIGHT,
+      icon: 'lightning',
+      title: 'The Tools Change Again',
+      text: 'Everything you learned last year is suddenly called “legacy”.',
+      choices: [
+        check('learn', 'Learn the new thing', 'curiosity', 55, ['A weekend of tutorials and you’re ahead of most of the team.', { mastery: 10 }], ['It’s changing faster than you can learn it.', { mastery: 5, energy: -10 }]),
+        check('fundamentals', 'Go deep on the fundamentals', 'analytical', 60, ['Tools come and go. You understand what’s underneath all of them.', { mastery: 12, joy: 5, highlight: 'Learned the fundamentals that never change' }], ['Theory is slow. You feel behind for a while.', { mastery: 5 }]),
+        result('stick', 'Stick with what works', 'It still works. For now.', { energy: 5, joy: -3 }),
+      ],
+    },
+    {
+      id: e('x_outage'),
+      kind: 'career',
+      stages: ['first_job'],
+      conditions: { flagsAll: ['employed'] },
+      weight: WEIGHT,
+      icon: 'warning',
+      title: 'The Outage',
+      text: 'It’s 2 a.m. and everything is down. Your phone won’t stop buzzing.',
+      choices: [
+        check('debug', 'Stay calm and debug', 'analytical', 60, ['By 3 a.m. it’s back up. The team chat fills with thank-yous.', { mastery: 12, joy: 5, energy: -10, highlight: 'Brought everything back up at 2 a.m.' }], ['It’s back by morning, and you’re a wreck.', { energy: -20, joy: -5 }]),
+        result('escalate', 'Wake up someone senior', 'They fix it in twenty minutes and show you how. Humbling, useful.', { mastery: 5, energy: -5 }),
+        check('postmortem', 'Write up what went wrong afterwards', 'organization', 55, ['Your write-up changes how the team works. It never happens that way again.', { mastery: 8, joy: 5 }], ['Nobody reads it.', { energy: -5 }]),
+      ],
+    },
+    {
+      id: e('x_ai_tools'),
+      kind: 'career',
+      stages: ['first_job'],
+      conditions: { flagsAll: ['employed'] },
+      weight: WEIGHT,
+      icon: 'sparkle',
+      title: 'The New AI Tool',
+      text: 'A new AI tool does in seconds what used to take you a day. People start asking if your job will still exist.',
+      choices: [
+        check('use', 'Learn to work with it', 'curiosity', 55, ['You get twice as much done and become the team’s go-to for it.', { mastery: 12, money: 5, joy: 5 }], ['It makes confident mistakes you don’t catch. Lesson learned.', { mastery: 5, joy: -5 }]),
+        check('human', 'Focus on what it can’t do', 'communication', 60, ['Understanding people and problems turns out to be the hard part. That’s you.', { mastery: 8, joy: 8, highlight: 'Became the person the tools can’t replace' }], ['Hard to explain your value in a meeting full of demos.', { joy: -8 }]),
+        result('ignore', 'Ignore it for now', 'The hype passes, mostly. The tool stays.', { joy: -5, energy: 5 }),
+      ],
+    },
+    {
+      id: e('x_startup'),
+      kind: 'crossroads',
+      stages: ['crossroads'],
+      conditions: { flagsAll: ['employed'] },
+      weight: LATE_WEIGHT,
+      icon: 'rocket',
+      title: 'Startup or Big Company?',
+      text: 'Two offers: a startup that might change everything, or a big company with free lunches and a pension.',
+      choices: [
+        check('startup', 'Join the startup', 'independence', 60, ['Chaos, ownership, and more learning in a year than in the last three.', { mastery: 15, money: 10, energy: -15, highlight: 'Bet on a startup and learned a ton' }], ['It runs out of money in a year. Great stories, thin wallet.', { mastery: 10, money: -5, joy: -5 }]),
+        result('big', 'Join the big company', 'Good pay, good snacks, slow decisions.', { money: 20, joy: -3, mastery: 5 }),
+        check('own', `Start your own ${ladder.ownNoun}`, 'independence', 65, ['Your first customers, your first hire, your name on it.', { money: 10, joy: 15, energy: -10, set: ['studio'], highlight: `Started your own ${ladder.ownNoun}` }], ['A year in, you shut it down and go back to a team, much wiser.', { money: -5, mastery: 8, joy: -5 }], { check: { attribute: 'independence', difficulty: 65, bonus: { has_portfolio: 5 } } }),
+      ],
+    },
+    {
+      id: e('x_launch'),
+      kind: 'finale',
+      stages: ['thirty'],
+      conditions: { flagsAll: ['employed'], flagsNone: ['pivoted'] },
+      weight: LATE_WEIGHT,
+      icon: 'star',
+      title: 'Launch Day',
+      text: 'The thing you have spent a year building goes live to millions of people.',
+      choices: [
+        check('lead', 'Lead the launch', main, 65, ['It holds. Millions use it, and almost none of them notice, which is the point.', { mastery: 15, joy: 10, highlight: 'Launched something millions use' }], ['A rocky first week, then it settles.', { mastery: 10, energy: -15 }], { check: { attribute: main, difficulty: 65, bonus: { manager: 10, has_mentor: 10 } } }),
+        result('watch', 'Watch the dashboards, nervously', 'You refresh the graphs all day. They look fine.', { mastery: 6, joy: 5 }),
+        result('holiday', 'Hand it over and take a holiday', 'Someone else watches the graphs. You watch the sea.', { energy: 15, joy: -5 }),
+      ],
+    },
+  ];
+}
+
+function studio({ ladder, main, e }: FamilyContext): LifeEvent[] {
+  return [
+    {
+      id: e('s_portfolio'),
+      kind: 'career',
+      stages: ['training'],
+      weight: WEIGHT,
+      icon: 'squares-four',
+      title: 'The Empty Portfolio',
+      text: 'Every job wants a portfolio. You have three school projects and a sketchbook.',
+      choices: [
+        check('pretend', 'Make projects for pretend clients', 'creativity', 55, ['Your made-up brands look more real than some real ones. Many late nights.', { mastery: 10, energy: -8, set: ['has_portfolio'] }], ['They look like homework. Still, it’s a start.', { mastery: 5 }]),
+        result('redo', 'Redo things you love, your way', 'Your versions of famous work get noticed. Weekends disappear.', { mastery: 8, joy: 8, energy: -8, set: ['has_portfolio'], highlight: 'Built a portfolio from scratch' }),
+        result('wait', 'Wait for real work first', 'Real work doesn’t come without a portfolio. Chicken, meet egg.', { energy: 5, joy: -5 }),
+      ],
+    },
+    {
+      id: e('s_style'),
+      kind: 'career',
+      stages: ['training'],
+      weight: WEIGHT,
+      icon: 'palette',
+      title: 'Finding Your Style',
+      text: 'Everything you make looks a bit like someone else’s work.',
+      choices: [
+        check('masters', 'Copy the masters on purpose, then break away', 'persistence', 55, ['A hundred studies later, something of your own starts to show.', { mastery: 10, joy: 5, energy: -8 }], ['You get stuck in the copying phase for a while.', { mastery: 5 }]),
+        check('experiment', 'Experiment wildly', 'creativity', 65, ['One strange experiment clicks. That’s your style now.', { mastery: 12, joy: 10, energy: -8, highlight: 'Found your own style' }], ['A lot of interesting mess, nothing that sticks yet.', { mastery: 3, joy: -5 }]),
+        result('trends', 'Follow what’s trending', 'It gets likes. It doesn’t feel like yours.', { mastery: 7, joy: -3 }),
+      ],
+    },
+    {
+      id: e('s_more_fun'),
+      kind: 'career',
+      stages: ['breaking_in'],
+      weight: WEIGHT,
+      icon: 'chat-circle',
+      title: 'Make It More Fun',
+      text: 'The client wants it “more fun, but also serious, and can the colors pop?”',
+      choices: [
+        check('ask', 'Ask what they really mean', 'empathy', 55, ['Turns out they’re worried their customers find them boring. You fix that instead.', { mastery: 10, joy: 5 }], ['They don’t know what they mean either. Three more rounds.', { joy: -5 }]),
+        check('options', 'Show them three options', 'organization', 55, ['They pick one in five minutes. You charge for all three.', { mastery: 8, money: 5 }], ['They want a mix of all three.', { energy: -12 }]),
+        result('do_it', 'Just do what they say', 'The colors pop. You don’t put it in your portfolio.', { joy: -8, money: 5, mastery: 4 }),
+      ],
+    },
+    {
+      id: e('s_copied'),
+      kind: 'career',
+      stages: ['breaking_in'],
+      weight: WEIGHT,
+      icon: 'eye',
+      title: 'Someone Copies Your Work',
+      text: 'You find your work in someone else’s portfolio, with their name on it.',
+      choices: [
+        check('call_out', 'Call it out publicly', 'communication', 60, ['People back you up. They take it down and apologize.', { joy: 8, highlight: 'Stood up for your work' }], ['It turns into a messy argument online.', { joy: -10, energy: -10 }]),
+        check('private', 'Message them privately', 'empathy', 55, ['They take it down, embarrassed. Quietly settled.', { joy: 5, mastery: 3 }], ['No reply. It stays up.', { joy: -5 }]),
+        result('more', 'Let it go and make more', 'They copied one piece. You make ten new ones.', { mastery: 8, joy: -3, energy: -5 }),
+      ],
+    },
+    {
+      id: e('s_revisions'),
+      kind: 'career',
+      stages: ['first_job'],
+      conditions: { flagsAll: ['employed'] },
+      weight: WEIGHT,
+      icon: 'warning',
+      title: 'Revision Twelve',
+      text: 'Version twelve. The client wants to go back to version two.',
+      choices: [
+        check('limits', 'Set clear revision limits', 'communication', 60, ['Your new contracts include two rounds of changes. Clients respect it.', { energy: 10, joy: 5, money: 5 }], ['They walk. Some clients aren’t worth it anyway.', { energy: -10, joy: -5 }]),
+        check('grit', 'Grit your teeth and do it', 'persistence', 55, ['Version two it is, again. They pay on time, at least.', { mastery: 6, money: 5, energy: -12 }], ['Version thirteen arrives the next morning.', { energy: -18, joy: -5 }]),
+        check('reasons', 'Push back with reasons', main, 60, ['You explain why version nine works. They agree.', { mastery: 10, joy: 8 }], ['They don’t want reasons. They want version two.', { joy: -8 }]),
+      ],
+    },
+    {
+      id: e('s_ai_images'),
+      kind: 'career',
+      stages: ['first_job'],
+      conditions: { flagsAll: ['employed'] },
+      weight: WEIGHT,
+      icon: 'sparkle',
+      title: 'The Machines Can Make Pictures',
+      text: 'A free tool makes images in seconds. Some clients ask why they should still pay you.',
+      choices: [
+        check('sketch', 'Use it as a sketching tool', 'curiosity', 55, ['You explore ideas faster, then make the real thing by hand.', { mastery: 10, money: 5 }], ['Everything starts looking a bit generic.', { mastery: 4, joy: -5 }]),
+        check('value', 'Sell what only you can do', 'communication', 60, ['Taste, ideas and understanding the client: they pay more for you, not less.', { money: 10, joy: 8, highlight: 'Showed clients what only you can do' }], ['A few clients leave for the cheap option.', { joy: -8, money: -5 }]),
+        check('craft', 'Double down on craft', 'persistence', 60, ['Your work gets more personal and more valuable.', { mastery: 12, joy: 5 }], ['Craft takes time you don’t have this month.', { energy: -10 }]),
+      ],
+    },
+    {
+      id: e('s_studio'),
+      kind: 'crossroads',
+      stages: ['crossroads'],
+      conditions: { flagsAll: ['employed'] },
+      weight: LATE_WEIGHT,
+      icon: 'door-open',
+      title: 'Agency, Freelance or Your Own?',
+      text: `You could join a big agency, go freelance, or open your own ${ladder.ownNoun}.`,
+      choices: [
+        result('agency', 'Join a big agency', 'Big clients, big budgets, a lot of meetings.', { money: 15, mastery: 10, joy: -3 }),
+        check('freelance', 'Go freelance', 'independence', 60, ['Your own hours, your own clients, your own rules.', { money: 10, joy: 10, set: ['freelance'] }], ['Feast, then famine. You take a part-time job for stability.', { money: -10, joy: -5 }]),
+        check('own', `Open your own ${ladder.ownNoun}`, 'independence', 65, ['A small team, a door with your name on it, work you’re proud of.', { money: 10, joy: 15, energy: -10, set: ['studio'], highlight: `Opened your own ${ladder.ownNoun}` }], ['Running a business eats your making time. You go back to just you.', { money: -5, mastery: 8, joy: -5 }], { check: { attribute: 'independence', difficulty: 65, bonus: { has_portfolio: 10 } } }),
+      ],
+    },
+    {
+      id: e('s_big'),
+      kind: 'finale',
+      stages: ['thirty'],
+      conditions: { flagsAll: ['employed'], flagsNone: ['pivoted'] },
+      weight: LATE_WEIGHT,
+      icon: 'star',
+      title: 'Your Work, Everywhere',
+      text: 'Your work is about to be seen by more people than ever before.',
+      choices: [
+        check('yours', 'Make it unmistakably yours', 'creativity', 65, ['People recognize it as yours before they see your name.', { mastery: 15, joy: 10, highlight: 'Made work millions saw' }], ['Too personal for the brief. It still goes out, softened.', { mastery: 10, energy: -15 }], { check: { attribute: 'creativity', difficulty: 65, bonus: { has_portfolio: 10 } } }),
+        check('safe', 'Make it polished and safe', main, 60, ['Flawless. Nobody complains, nobody gasps.', { mastery: 12, joy: 5 }], ['Fine. Just fine.', { mastery: 5 }]),
+        result('pass', 'Pass it to someone else', 'Someone else gets the spotlight. You get your evenings.', { energy: 15, joy: -5 }),
+      ],
+    },
+  ];
+}
+
+const BUILDERS: Record<FamilyId, (ctx: FamilyContext) => LifeEvent[]> = { creators, trades, health, tech, studio };
 
 /** The family scenes for a career, or none if it's in no family. */
 export function familyEvents(ctx: FamilyContext): LifeEvent[] {
