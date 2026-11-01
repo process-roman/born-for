@@ -46,6 +46,12 @@ describe('template lives', () => {
     expect(titles('nursing')).toContain('Night Shifts');
     expect(titles('software_dev')).toContain('The Outage');
     expect(titles('illustrator')).toContain('Revision Twelve');
+    expect(titles('actor')).toContain('Audition Season');
+    expect(titles('actor')).not.toContain('The Job Hunt'); // performers audition instead
+    expect(titles('athlete')).toContain('The Injury');
+    expect(titles('athlete')).toContain('Getting Your First Spot');
+    expect(JSON.stringify(LIVES.athlete)).not.toContain('near me'); // search terms stay out of the story
+    expect(titles('teaching')).toContain('The One Who Comes Back');
     expect(JSON.stringify(LIVES.animator)).toContain('Open your own animation studio');
     expect(titles('accountant')).not.toContain('The Algorithm Changes'); // no family yet: generic scenes only
     expect(JSON.stringify(LIVES.streamer)).toContain('Stream Number One');

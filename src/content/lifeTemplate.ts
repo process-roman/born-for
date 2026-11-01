@@ -85,8 +85,9 @@ export function templateLife(id: CareerId): CareerLife | null {
   const work = `${inSentence(name)} work`;
   const day = career.dayToDay.map((d) => inSentence(d));
   const downs = career.downsides.map((d) => inSentence(d));
-  // Search terms like "video editor entry level" read better without the suffix.
-  const roles = career.nextSteps.searchFor.slice(0, 2).map((r) => r.replace(/\s*\bentry[- ]level\b\s*/i, ' ').trim());
+  // The first rung of the ladder reads as a job title ("bookkeeper roles"); search terms like
+  // "club trials near me" don’t.
+  const entryRole = inSentence(ladder.roles[0]);
   const next = neighbour(career);
   const [junior, mid, senior, lead] = ladder.roles;
   const e = (suffix: string) => `${id}_${suffix}`;
@@ -160,7 +161,7 @@ export function templateLife(id: CareerId): CareerLife | null {
       conditions: { flagsNone: [CHANGER] },
       icon: 'briefcase',
       title: 'The Job Hunt',
-      text: `You apply for ${roles[0] ?? inSentence(junior)}${roles[1] ? ` and ${roles[1]}` : ''} roles. Lots of applications, very few replies.`,
+      text: `You apply for ${entryRole} roles. Lots of applications, very few replies.`,
       choices: [
         check('keep', 'Keep applying', 'persistence', 60, ['One more application gets an interview, and the interview gets an offer. You’re in.', { mastery: 5, joy: 10, money: 20, set: ['employed'], highlight: `Started as ${article(junior)} ${inSentence(junior)}` }], ['Still nothing. Savings shrink, so you take a side job and keep practicing at night.', { energy: -15, money: -5, joy: -5, set: ['side_job'] }], { check: { attribute: 'persistence', difficulty: 60, bonus: { has_portfolio: 10 } } }),
         check('network', 'Ask everyone you know', 'communication', 55, ['A friend of a friend passes your name along. You’re hired within a month.', { mastery: 3, joy: 5, money: 20, set: ['employed'] }], ['Lots of “I’ll keep an eye out.” Nothing yet.', { joy: -10, energy: -5 }], { check: { attribute: 'communication', difficulty: 55, bonus: { has_mentor: 10, peer_friend: 10 } } }),
@@ -175,7 +176,7 @@ export function templateLife(id: CareerId): CareerLife | null {
       priority: 1,
       icon: 'briefcase',
       title: 'Junior at {age}',
-      text: `Most ${roles[0] ?? inSentence(junior)} roles were written with 22-year-olds in mind. Your CV has years of work they don’t quite know how to read.`,
+      text: `Most ${entryRole} roles were written with 22-year-olds in mind. Your CV has years of work they don’t quite know how to read.`,
       choices: [
         check('pitch', 'Pitch your past as a strength', 'communication', 65, ['One interviewer gets it right away: someone who already knows how work works. You’re hired.', { mastery: 8, joy: 10, money: 15, set: ['employed'], highlight: 'Turned your old career into your edge' }], ['Lots of polite interest, no offers yet. You keep your old job a little longer.', { joy: -10, energy: -5, set: ['side_job'] }], { check: { attribute: 'communication', difficulty: 65, bonus: { has_portfolio: 10, route_internal: 10 } } }),
         result('junior', 'Take a junior role and a pay cut', `Your first job as ${article(junior)} ${inSentence(junior)}, and less money than before. It stings, and it’s exactly what you wanted.`, { money: -10, mastery: 8, joy: 8, set: ['employed'] }, 'In the door · less money for a while'),
