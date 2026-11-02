@@ -17,6 +17,7 @@ import type { PathInterest } from '@/logic/ranking';
 import { useGame } from '@/state/game';
 import { Body, Button, Card, Label, Screen, Title } from '@/ui/components';
 import { PathConstellation } from '@/ui/PathConstellation';
+import { PayCard } from '@/ui/PayCard';
 import { TIER_LABELS } from '@/ui/quest';
 import { DifficultyPill } from '@/ui/stats';
 import { PlumCard } from '@/ui/kit';
@@ -113,6 +114,7 @@ export default function PathDetail() {
           <Text style={styles.item}>{career.realityCheck}</Text>
         </Card>
       ) : null}
+      <PayCard careerId={careerId} />
 
       <View style={styles.interest}>
         {INTEREST_OPTIONS.map((o) => (

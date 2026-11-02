@@ -12,6 +12,7 @@ import { ageOf, statsOf } from '@/logic/character';
 import { LIFE_SLOTS, lifeStart, mostCheckedAttributes, realAge, START_METERS, startLife, typicalOdds, type LifeRun } from '@/logic/life';
 import { useGame } from '@/state/game';
 import { canPlayLife } from '@/logic/lifeAccess';
+import { payShort } from '@/logic/pay';
 import { activeRun, latestCompleted, useLives } from '@/state/lives';
 import { Body, Button, Card, Label, Screen, Title } from '@/ui/components';
 import { LifeSky } from '@/ui/LifeSky';
@@ -82,6 +83,7 @@ export default function LifeIntro() {
         <Body muted>
           {CAREERS[careerId].name}, from {startAge} to {startAge + 12}. About 5 minutes · your real stats set the odds.
         </Body>
+        {payShort(careerId) ? <Text style={styles.small}>{payShort(careerId)}</Text> : null}
         {age === null ? <Text style={styles.small}>Add your birth year in Settings to start this life at your own age.</Text> : null}
       </View>
 
