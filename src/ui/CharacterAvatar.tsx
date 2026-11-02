@@ -1,14 +1,17 @@
-// Placeholder art for the evolving character (Blueprint §7). Built as stacked layers so real
-// illustrations can replace each one later: base → aura → element glow → path item → celestial frame.
+// An engraved celestial medallion. The five progression layers keep their original rules.
 
+import { LinearGradient } from 'expo-linear-gradient';
 import { StyleSheet, Text, View } from 'react-native';
+import Svg, { Circle, G, Path } from 'react-native-svg';
 
 import { CAREERS } from '@/content/careers';
 import { SIGNS } from '@/content/signs';
-import { WORLDS } from '@/content/worlds';
 import { avatarLayers } from '@/logic/avatar';
 import type { Character } from '@/logic/character';
-import { elementGlow, fonts, glyph, night, palette } from './theme';
+import { elementGlow, fonts, night, palette } from './theme';
+import { ArchetypePortrait } from './ArchetypePortrait';
+import { WorldIcon } from './WorldIcon';
+import { CelestialStar } from './CelestialArt';
 
 const AURA_STARS = 10;
 
@@ -35,10 +38,9 @@ export function CharacterAvatar({ character, size }: { character: Character; siz
                   width: d,
                   height: d,
                   borderRadius: d / 2,
-                  backgroundColor: night.text,
                   opacity: 0.7,
                 }}
-              />
+              ><CelestialStar size={d} color={night.gold} /></View>
             );
           })
         : null}
@@ -56,7 +58,15 @@ export function CharacterAvatar({ character, size }: { character: Character; siz
           layers.glow && { shadowColor: element, shadowOpacity: 0.9, shadowRadius: size * 0.18, shadowOffset: { width: 0, height: 0 }, backgroundColor: palette.plum },
         ]}
       >
-        <Text style={{ fontSize: core * 0.5, color: night.gold }}>{glyph(character.sign)}</Text>
+        <LinearGradient colors={['#695373', '#342541', '#241B33']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={[StyleSheet.absoluteFill, { borderRadius: core / 2 }]} />
+        <Svg width={core} height={core} viewBox="0 0 100 100" style={StyleSheet.absoluteFill} aria-hidden>
+          <Circle cx="50" cy="50" r="44" fill="none" stroke={night.gold} strokeWidth=".45" opacity=".65" />
+          <Circle cx="50" cy="50" r="39" fill="none" stroke={night.gold} strokeWidth=".25" opacity=".3" />
+          <G stroke={night.gold} strokeWidth=".6" opacity=".5">
+            {Array.from({ length: 12 }, (_, i) => <Path key={i} d="M50 7V11" transform={`rotate(${i * 30} 50 50)`} />)}
+          </G>
+        </Svg>
+        <View><ArchetypePortrait key={character.sign} sign={character.sign} size={core * .86} /></View>
       </View>
 
       {layers.frame
@@ -79,7 +89,7 @@ export function CharacterAvatar({ character, size }: { character: Character; siz
 
       {layers.item ? (
         <View style={[styles.item, { width: size * 0.32, height: size * 0.32, borderRadius: size * 0.16 }]}>
-          <Text style={{ fontSize: size * 0.16 }}>{WORLDS[CAREERS[layers.item.careerId].worlds[0]!].emoji}</Text>
+          <WorldIcon world={CAREERS[layers.item.careerId].worlds[0]!} size={size * .22} />
         </View>
       ) : null}
     </View>

@@ -15,6 +15,7 @@ import { useGame } from '@/state/game';
 import { activeRun, useLives } from '@/state/lives';
 import { Body, Button, Card, Label, Screen, Title } from '@/ui/components';
 import { PathCard } from '@/ui/PathCard';
+import { WorldIcon } from '@/ui/WorldIcon';
 import { DifficultyPill } from '@/ui/stats';
 import { C, F, S } from '@/ui/theme';
 
@@ -155,7 +156,7 @@ export default function Explore() {
               onPress={() => router.push({ pathname: '/world/[id]', params: { id } })}
               style={({ pressed }) => [styles.world, pressed && { borderColor: C.gold }]}
             >
-              <Text style={styles.emoji}>{w.emoji}</Text>
+              <WorldIcon world={id} />
               <Text style={styles.worldName}>{w.name}</Text>
               <Text style={styles.count}>{careersInWorld(id).length} paths</Text>
             </Pressable>

@@ -12,7 +12,7 @@ import type { Element } from '@/content/signs';
 // Raw palette. Tweak colors here; everything else refers to these.
 
 export const palette = {
-  cream: '#F8F4EF',
+  cream: '#FAF7F2',
   creamDeep: '#F1EAE2',
   white: '#FFFFFF',
   plum: '#3B2A4E',
@@ -189,7 +189,7 @@ export const space = { xs: 4, sm: 8, md: 12, lg: 16, xl: 24, xxl: 32, xxxl: 48 }
 export const radius = { sm: 10, md: 16, lg: 24, pill: 999 } as const;
 
 export const shadow = {
-  soft: { shadowColor: palette.plum, shadowOpacity: 0.08, shadowRadius: 18, shadowOffset: { width: 0, height: 8 }, elevation: 3 },
+  soft: { shadowColor: palette.plum, shadowOpacity: 0.05, shadowRadius: 14, shadowOffset: { width: 0, height: 8 }, elevation: 3 },
   lifted: { shadowColor: palette.plum, shadowOpacity: 0.18, shadowRadius: 24, shadowOffset: { width: 0, height: 12 }, elevation: 6 },
 } as const;
 

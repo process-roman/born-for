@@ -4,6 +4,7 @@ import { Redirect, router } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { ATTRIBUTE_IDS, ATTRIBUTE_LABELS } from '@/content/attributes';
+import { BadgeMark } from '@/ui/BadgeMark';
 import { BADGES } from '@/content/badges';
 import { CAREERS, getQuest } from '@/content/careers';
 import { SIGNS } from '@/content/signs';
@@ -94,9 +95,9 @@ export default function Rewards() {
       {newBadges.map((id) => (
         <Card key={id} style={styles.momentCard}>
           <Label>Badge unlocked</Label>
-          <Text style={styles.moment}>
-            {BADGES[id].emoji} {BADGES[id].name}
-          </Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: S.sm }}>
+            <BadgeMark id={id} /><Text style={styles.moment}>{BADGES[id].name}</Text>
+          </View>
           <Text style={styles.gain}>{BADGES[id].description}</Text>
         </Card>
       ))}

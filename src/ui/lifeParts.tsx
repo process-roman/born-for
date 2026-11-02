@@ -1,6 +1,7 @@
 // Pieces of the life sim screens (Life Sim Spec §4, §5, §10, §12). Meters describe how the life is
 // going; attributes set the odds. They're shown differently and never mixed.
 
+import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect, useState } from 'react';
 import { Animated, Easing, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useReducedMotion } from 'react-native-reanimated';
@@ -29,7 +30,7 @@ function MeterBar({ meter, value, tone }: { meter: Meter; value: number; tone: '
         <Text style={[styles.meterValue, { color: tone === 'day' ? day.text : night.text }]}>{value}</Text>
       </View>
       <View style={[styles.track, { backgroundColor: tone === 'day' ? day.track : night.track }]}>
-        <Animated.View style={[styles.fill, { width: width.interpolate({ inputRange: [0, 100], outputRange: ['0%', '100%'], extrapolate: 'clamp' }) }]} />
+        <Animated.View style={[styles.fill, { width: width.interpolate({ inputRange: [0, 100], outputRange: ['0%', '100%'], extrapolate: 'clamp' }) }]}><LinearGradient colors={[palette.peachSoft, palette.peach]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={[StyleSheet.absoluteFill, { borderRadius: 99 }]} /></Animated.View>
       </View>
     </View>
   );

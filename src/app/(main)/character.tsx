@@ -3,6 +3,7 @@
 import { router } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { BadgeMark } from '@/ui/BadgeMark';
 import { BADGE_IDS, BADGES } from '@/content/badges';
 import { CAREER_IDS, CAREERS } from '@/content/careers';
 import { SIGNS } from '@/content/signs';
@@ -51,7 +52,7 @@ export default function CharacterScreen() {
           {layers.item ? ` · carrying a ${layers.item.name}` : ''}
         </Text>
         <Text style={styles.legendText}>
-          {nextLayer ? `Next: ${nextLayer.toLowerCase()} at level ${layers.level + 1}.` : 'Full celestial form reached.'} Placeholder art; illustrations come later.
+          {nextLayer ? `Next: ${nextLayer.toLowerCase()} at level ${layers.level + 1}.` : 'Full celestial form reached.'}
         </Text>
       </View>
 
@@ -96,7 +97,7 @@ export default function CharacterScreen() {
             const on = badges.has(id);
             return (
               <View key={id} style={[styles.badge, !on && { opacity: 0.35 }]} accessibilityLabel={`${BADGES[id].name}: ${on ? 'earned' : 'locked'}. ${BADGES[id].description}`}>
-                <Text style={styles.badgeEmoji}>{on ? BADGES[id].emoji : '🔒'}</Text>
+                <BadgeMark id={id} locked={!on} />
                 <Text style={styles.badgeName}>{BADGES[id].name}</Text>
               </View>
             );

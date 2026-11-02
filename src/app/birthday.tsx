@@ -4,11 +4,12 @@ import { router } from 'expo-router';
 import { useRef, useState, type ComponentRef } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
+import { ZodiacMark } from '@/ui/ZodiacMark';
 import { SIGN_IDS, SIGNS, type SignId } from '@/content/signs';
 import { isValidBirthDate, signFromBirthday } from '@/logic/birthday';
 import { useOnboarding } from '@/state/onboarding';
 import { Body, Button, Label, OptionCard, Screen, Step, Title } from '@/ui/components';
-import { C, F, glyph, radius, S, shadow } from '@/ui/theme';
+import { C, F, radius, S, shadow } from '@/ui/theme';
 
 const OLDEST_YEAR = 1920;
 
@@ -57,7 +58,7 @@ export default function Birthday() {
           {mode.signs.map((s) => (
             <OptionCard
               key={s}
-              emoji={glyph(s)}
+              icon={<ZodiacMark sign={s} size={22} color={C.gold} />}
               label={`${SIGNS[s].name}, ${SIGNS[s].archetype}`}
               detail={SIGNS[s].revealLine}
               onPress={() => choose(s, mode.signs, Number(year))}
@@ -76,7 +77,7 @@ export default function Birthday() {
         <View style={styles.grid}>
           {SIGN_IDS.map((s) => (
             <Pressable key={s} accessibilityRole="button" accessibilityLabel={SIGNS[s].name} onPress={() => choose(s, null, null)} style={({ pressed }) => [styles.signTile, pressed && { borderColor: C.gold }]}>
-              <Text style={styles.signGlyph}>{glyph(s)}</Text>
+              <View style={{ height: 34, justifyContent: 'center' }}><ZodiacMark sign={s} size={28} color={C.gold} /></View>
               <Text style={styles.signName}>{SIGNS[s].name}</Text>
             </Pressable>
           ))}
