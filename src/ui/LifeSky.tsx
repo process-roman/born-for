@@ -5,12 +5,14 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { View, type LayoutChangeEvent, type StyleProp, type ViewStyle } from 'react-native';
 import { useReducedMotion } from 'react-native-reanimated';
-import Svg, { Circle, ClipPath, Defs, G, LinearGradient, Path, RadialGradient, Rect, Stop } from 'react-native-svg';
+import Svg, { Circle, ClipPath, Defs, G, Image as SvgImage, LinearGradient, Path, RadialGradient, Rect, Stop } from 'react-native-svg';
 
 import type { Meters } from '@/content/life';
 import type { Element } from '@/content/signs';
 import { dayProgress, glowOpacity, mistOpacity, mixHex, skyColors, starOpacity, type SkyState } from './lifeSkyModel';
 import { elementGlow, lifeSky } from './theme';
+
+const MOUNTAINS = require('../../assets/scenery/life-mountains.webp');
 
 const TRANSITION_MS = 600;
 const MAX_STARS = 20;
@@ -67,39 +69,6 @@ function starSpots(w: number, h: number): [number, number, number][] {
   return spots;
 }
 
-function ridge(w: number, h: number, points: [number, number][]): string {
-  const scaled = points.map(([x, y]) => [x * w, y * h]);
-  let path = `M0,${h} L${scaled[0]![0]},${scaled[0]![1]}`;
-  for (let i = 1; i < scaled.length; i++) {
-    const [x, y] = scaled[i]!;
-    const next = scaled[i + 1] ?? scaled[i]!;
-    path += ` Q${x},${y} ${(x! + next[0]!) / 2},${(y! + next[1]!) / 2}`;
-  }
-  return `${path} L${w},${h} Z`;
-}
-
-/** The winding path: a cubic centerline from the bottom of the arch to the horizon, tapering. */
-function roadPath(w: number, h: number): string {
-  const p = [
-    [0.5, 1.0],
-    [0.12, 0.88],
-    [0.86, 0.77],
-    [0.55, 0.665],
-  ] as const;
-  const left: string[] = [];
-  const right: string[] = [];
-  for (let i = 0; i <= 24; i++) {
-    const t = i / 24;
-    const u = 1 - t;
-    const x = u ** 3 * p[0][0] + 3 * u * u * t * p[1][0] + 3 * u * t * t * p[2][0] + t ** 3 * p[3][0];
-    const y = u ** 3 * p[0][1] + 3 * u * u * t * p[1][1] + 3 * u * t * t * p[2][1] + t ** 3 * p[3][1];
-    const half = ((0.17 * u + 0.006 * t) * w) / 2;
-    left.push(`${x * w - half},${y * h}`);
-    right.unshift(`${x * w + half},${y * h}`);
-  }
-  return `M${left.join(' L')} L${right.join(' L')} Z`;
-}
-
 export function LifeSky({
   age,
   meters,
@@ -143,11 +112,9 @@ export function LifeSky({
           <RadialGradient id={`sunHalo${id}`}>
             <Stop stopColor={sunColor} stopOpacity=".5" /><Stop offset="1" stopColor={sunColor} stopOpacity="0" />
           </RadialGradient>
-          <LinearGradient id={`mountains${id}`} x2="0" y2="1">
-            <Stop stopColor="#695472" /><Stop offset="1" stopColor={lifeSky.nearMountains} />
-          </LinearGradient>
-          <LinearGradient id={`road${id}`} x2="0" y2="1">
-            <Stop stopColor="#E9BD9C" /><Stop offset="1" stopColor={lifeSky.path} />
+          <LinearGradient id={`groundShade${id}`} x2="0" y2="1">
+            <Stop stopColor={lifeSky.nearMountains} stopOpacity="0" />
+            <Stop offset="1" stopColor={lifeSky.nearMountains} stopOpacity={Math.max(0, (s.age - 25) / 5) * .3} />
           </LinearGradient>
           <ClipPath id={`arch${id}`}>
             <Path d={arch} />
@@ -163,7 +130,8 @@ export function LifeSky({
           </LinearGradient>
           <LinearGradient id={`tint${id}`} x1="0" y1="0" x2="0" y2="1">
             <Stop offset="0" stopColor={elementGlow[element]} stopOpacity={0} />
-            <Stop offset="1" stopColor={elementGlow[element]} stopOpacity={0.22} />
+            <Stop offset=".55" stopColor={elementGlow[element]} stopOpacity={0.22} />
+            <Stop offset="1" stopColor={elementGlow[element]} stopOpacity={0} />
           </LinearGradient>
           <LinearGradient id={`mist${id}`} x1="0" y1="0" x2="0" y2="1">
             <Stop offset="0" stopColor={lifeSky.mist} stopOpacity={0} />
@@ -173,41 +141,16 @@ export function LifeSky({
 
         <G clipPath={`url(#arch${id})`}>
           <Rect x={0} y={0} width={w} height={h} fill={`url(#sky${id})`} />
-          <Rect x={0} y={horizon - h * 0.3} width={w} height={h * 0.34} fill={`url(#glow${id})`} />
-          <Rect x={0} y={horizon - h * 0.14} width={w} height={h * 0.14} fill={`url(#tint${id})`} />
           {starSpots(w, h).map(([x, y, sz], i) => {
             const opacity = starOpacity(s.mastery, i);
             return opacity > 0 ? <Path key={i} d={starPath(x, y, sz)} fill={lifeSky.star} opacity={opacity} /> : null;
           })}
           <Circle cx={sunX} cy={sunY} r={sunR * 4} fill={`url(#sunHalo${id})`} />
           <Circle cx={sunX} cy={sunY} r={sunR} fill={sunColor} />
-          <Path
-            d={ridge(w, h, [
-              [0, 0.6],
-              [0.12, 0.52],
-              [0.27, 0.58],
-              [0.42, 0.47],
-              [0.58, 0.56],
-              [0.74, 0.49],
-              [0.88, 0.57],
-              [1, 0.53],
-            ])}
-            fill={lifeSky.farMountains}
-            opacity={0.6}
-          />
-          <Path
-            d={ridge(w, h, [
-              [0, 0.7],
-              [0.17, 0.63],
-              [0.33, 0.69],
-              [0.5, 0.645],
-              [0.68, 0.71],
-              [0.85, 0.635],
-              [1, 0.68],
-            ])}
-            fill={`url(#mountains${id})`}
-          />
-          <Path d={roadPath(w, h)} fill={`url(#road${id})`} opacity={0.85} />
+          <SvgImage href={MOUNTAINS} x={0} y={h * .28} width={w} height={h * .72} preserveAspectRatio="xMidYMax slice" />
+          <Rect x={0} y={h * .28} width={w} height={h * .72} fill={`url(#groundShade${id})`} />
+          <Rect x={0} y={horizon - h * .3} width={w} height={h * .4} fill={`url(#glow${id})`} opacity={.45} />
+          <Rect x={0} y={horizon - h * .14} width={w} height={h * .3} fill={`url(#tint${id})`} />
           <Rect x={0} y={h * 0.45} width={w} height={h * 0.55} fill={`url(#mist${id})`} />
         </G>
         <Path d={arch} fill="none" stroke={lifeSky.outline} strokeWidth={0.8} />

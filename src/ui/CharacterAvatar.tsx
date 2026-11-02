@@ -4,13 +4,12 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { StyleSheet, Text, View } from 'react-native';
 import Svg, { Circle, G, Path } from 'react-native-svg';
 
-import { CAREERS } from '@/content/careers';
 import { SIGNS } from '@/content/signs';
 import { avatarLayers } from '@/logic/avatar';
 import type { Character } from '@/logic/character';
 import { elementGlow, fonts, night, palette } from './theme';
 import { ArchetypePortrait } from './ArchetypePortrait';
-import { WorldIcon } from './WorldIcon';
+import { CareerAccessory } from './CareerAccessory';
 import { CelestialStar } from './CelestialArt';
 
 const AURA_STARS = 10;
@@ -89,7 +88,7 @@ export function CharacterAvatar({ character, size }: { character: Character; siz
 
       {layers.item ? (
         <View style={[styles.item, { width: size * 0.32, height: size * 0.32, borderRadius: size * 0.16 }]}>
-          <WorldIcon world={CAREERS[layers.item.careerId].worlds[0]!} size={size * .22} />
+          <CareerAccessory careerId={layers.item.careerId} size={size * .22} />
         </View>
       ) : null}
     </View>
