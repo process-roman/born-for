@@ -1,3 +1,4 @@
+import { WorldIcon } from '@/ui/WorldIcon';
 // Explore: where to look next. A life to pick up, a short list of your best paths, lives you haven't
 // tried, paths outside the worlds you chose, then every career world to browse (Blueprint §12 screen 9,
 // Pilot Content §1). The full ranked list lives on Paths, so it isn't repeated here.
@@ -155,7 +156,7 @@ export default function Explore() {
               onPress={() => router.push({ pathname: '/world/[id]', params: { id } })}
               style={({ pressed }) => [styles.world, pressed && { borderColor: C.gold }]}
             >
-              <Text style={styles.emoji}>{w.emoji}</Text>
+              <WorldIcon world={id} />
               <Text style={styles.worldName}>{w.name}</Text>
               <Text style={styles.count}>{careersInWorld(id).length} paths</Text>
             </Pressable>

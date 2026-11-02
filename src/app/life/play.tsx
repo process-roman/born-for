@@ -141,6 +141,7 @@ export default function LifePlay() {
         preview
         free={!game.paid}
         onPowerUp={() => powerUp(preview)}
+        onConcern={(concern) => setPreview({ ...preview, completed: { ...preview.completed!, concern } })}
         onAnswer={(wouldWant) => setPreview({ ...preview, completed: { ...preview.completed!, wouldWant } })}
       />
     );
@@ -157,8 +158,9 @@ export default function LifePlay() {
         free={!game.paid}
         xp={lifeXp}
         onPowerUp={() => powerUp(run)}
+        onConcern={(concern) => save({ ...run, completed: { ...run.completed!, concern } })}
         onAnswer={(wouldWant) => {
-          save({ ...run, completed: { ...run.completed!, wouldWant } });
+          save({ ...run, completed: { ...run.completed!, wouldWant, concern: undefined } });
           setLifeWant(careerId, wouldWant);
         }}
       />
@@ -193,8 +195,8 @@ export default function LifePlay() {
           <Text style={styles.chosen}>{res.choice.label}</Text>
           {res.check ? (
             <Label>
-              {ATTRIBUTE_LABELS[res.check.attribute]} · {res.check.odds}%
-              {phase.kind === 'outcome' ? (res.check.success ? '  ·  It worked' : '  ·  Not this time') : '  ·  Rolling…'}
+              {ATTRIBUTE_LABELS[res.check.attribute]} · {res.check.odds}% game odds
+              {phase.kind === 'outcome' ? (res.check.success ? '  ·  Story success' : '  ·  Story setback') : '  ·  Rolling…'}
             </Label>
           ) : null}
           {phase.kind === 'outcome' ? (

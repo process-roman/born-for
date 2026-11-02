@@ -80,7 +80,7 @@ export default function LifeIntro() {
         <Label>{track === 'change' ? `A career change at ${startAge}` : 'Live it first'}</Label>
         <Title>{life.lifeName} life</Title>
         <Body muted>
-          {CAREERS[careerId].name}, from {startAge} to {startAge + 12}. About 5 minutes · your real stats set the odds.
+          {CAREERS[careerId].name}, from {startAge} to {startAge + 12}. About 5 minutes · your character stats set the game odds.
         </Body>
         {age === null ? <Text style={styles.small}>Add your birth year in Settings to start this life at your own age.</Text> : null}
       </View>
@@ -104,7 +104,9 @@ export default function LifeIntro() {
       ) : null}
 
       <Card>
-        <Label>Your odds in this life</Label>
+        <Label>Game odds in this life</Label>
+        <Text style={styles.small}>These percentages are story mechanics, not predictions of real career success. Character stats and choices affect rolls; hiring, funding and luck are not measures of your worth.</Text>
+        <Text style={styles.small}>Meters run from 0 to 100: Joy is enjoyment, Energy is capacity, Money is a financial cushion, and Mastery is practice in this story. They are not salary or real-world skill scores.</Text>
         {attributes.map((a) => {
           const now = typicalOdds(life, a, stats)!;
           const before = previous ? typicalOdds(life, a, previous.statsSnapshot)! : null;

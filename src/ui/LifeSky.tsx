@@ -1,11 +1,11 @@
-// The living scene for the life sim (Life Sim Spec §11): one SVG drawn in code, no illustrations.
+// The living celestial scene; all visual layers retain their original state drivers.
 // Age moves the sky from dawn to dusk and the sun across it; Mastery adds stars, Joy warms the
 // horizon, low Energy brings in mist, and the element tints the horizon.
 
 import { useEffect, useId, useRef, useState } from 'react';
 import { View, type LayoutChangeEvent, type StyleProp, type ViewStyle } from 'react-native';
 import { useReducedMotion } from 'react-native-reanimated';
-import Svg, { Circle, ClipPath, Defs, G, LinearGradient, Path, Rect, Stop } from 'react-native-svg';
+import Svg, { Circle, ClipPath, Defs, G, LinearGradient, Path, RadialGradient, Rect, Stop } from 'react-native-svg';
 
 import type { Meters } from '@/content/life';
 import type { Element } from '@/content/signs';
@@ -68,7 +68,14 @@ function starSpots(w: number, h: number): [number, number, number][] {
 }
 
 function ridge(w: number, h: number, points: [number, number][]): string {
-  return `M0,${h} ${points.map(([x, y]) => `L${x * w},${y * h}`).join(' ')} L${w},${h} Z`;
+  const scaled = points.map(([x, y]) => [x * w, y * h]);
+  let path = `M0,${h} L${scaled[0]![0]},${scaled[0]![1]}`;
+  for (let i = 1; i < scaled.length; i++) {
+    const [x, y] = scaled[i]!;
+    const next = scaled[i + 1] ?? scaled[i]!;
+    path += ` Q${x},${y} ${(x! + next[0]!) / 2},${(y! + next[1]!) / 2}`;
+  }
+  return `${path} L${w},${h} Z`;
 }
 
 /** The winding path: a cubic centerline from the bottom of the arch to the horizon, tapering. */
@@ -133,6 +140,15 @@ export function LifeSky({
     <View style={[box, style]} onLayout={onLayout} accessibilityRole="image" accessibilityLabel={label}>
       <Svg width={w} height={h}>
         <Defs>
+          <RadialGradient id={`sunHalo${id}`}>
+            <Stop stopColor={sunColor} stopOpacity=".5" /><Stop offset="1" stopColor={sunColor} stopOpacity="0" />
+          </RadialGradient>
+          <LinearGradient id={`mountains${id}`} x2="0" y2="1">
+            <Stop stopColor="#695472" /><Stop offset="1" stopColor={lifeSky.nearMountains} />
+          </LinearGradient>
+          <LinearGradient id={`road${id}`} x2="0" y2="1">
+            <Stop stopColor="#E9BD9C" /><Stop offset="1" stopColor={lifeSky.path} />
+          </LinearGradient>
           <ClipPath id={`arch${id}`}>
             <Path d={arch} />
           </ClipPath>
@@ -163,7 +179,7 @@ export function LifeSky({
             const opacity = starOpacity(s.mastery, i);
             return opacity > 0 ? <Path key={i} d={starPath(x, y, sz)} fill={lifeSky.star} opacity={opacity} /> : null;
           })}
-          <Circle cx={sunX} cy={sunY} r={sunR * 2.3} fill={sunColor} opacity={0.22} />
+          <Circle cx={sunX} cy={sunY} r={sunR * 4} fill={`url(#sunHalo${id})`} />
           <Circle cx={sunX} cy={sunY} r={sunR} fill={sunColor} />
           <Path
             d={ridge(w, h, [
@@ -189,12 +205,12 @@ export function LifeSky({
               [0.85, 0.635],
               [1, 0.68],
             ])}
-            fill={lifeSky.nearMountains}
+            fill={`url(#mountains${id})`}
           />
-          <Path d={roadPath(w, h)} fill={lifeSky.path} opacity={0.7} />
+          <Path d={roadPath(w, h)} fill={`url(#road${id})`} opacity={0.85} />
           <Rect x={0} y={h * 0.45} width={w} height={h * 0.55} fill={`url(#mist${id})`} />
         </G>
-        <Path d={arch} fill="none" stroke={lifeSky.outline} strokeWidth={1.5} />
+        <Path d={arch} fill="none" stroke={lifeSky.outline} strokeWidth={0.8} />
       </Svg>
     </View>
   );

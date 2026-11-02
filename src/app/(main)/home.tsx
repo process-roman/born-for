@@ -1,6 +1,8 @@
 // Home (cream "daytime"): what to do next first. Compact welcome, the active or next quest,
 // one character card with your top superpowers, then your constellations (Blueprint §4.3, §4.5).
 
+import { MoonStarsIcon } from 'phosphor-react-native/src/icons/MoonStars';
+import { GearIcon } from 'phosphor-react-native/src/icons/Gear';
 import { router } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
@@ -147,11 +149,11 @@ export default function Home() {
     <DayScreen>
       <View style={styles.brandRow}>
         <View style={styles.mark}>
-          <Text style={styles.markGlyph}>☾</Text>
+          <MoonStarsIcon size={22} color={palette.peach} weight="duotone" />
         </View>
         <Text style={[styles.brand, { flex: 1 }]}>Born For</Text>
         <Pressable accessibilityRole="button" accessibilityLabel="Settings" onPress={() => router.push('/settings')} style={styles.settings}>
-          <Text style={styles.settingsIcon}>⚙︎</Text>
+          <GearIcon size={21} color={day.primary} weight="light" />
         </Pressable>
       </View>
 

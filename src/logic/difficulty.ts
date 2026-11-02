@@ -9,13 +9,13 @@ import type { Career } from '../content/careers';
 export type DifficultyLevel = 1 | 2 | 3;
 
 export const DIFFICULTY_LABELS: Record<DifficultyLevel, string> = {
-  1: 'Natural fit',
+  1: 'Worth exploring',
   2: 'Some training',
   3: 'Challenging but achievable',
 };
 
 /** Level 1 with every requirement already met, so the top of the list isn't all one label. */
-export const READY_LABEL = 'Ready now';
+export const READY_LABEL = 'Promising fit to explore';
 
 /** A gap above this counts as a key gap. */
 export const KEY_GAP = 10;

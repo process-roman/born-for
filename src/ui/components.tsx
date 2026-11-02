@@ -1,6 +1,8 @@
 // Shared screen building blocks. Every screen is either a cream "day" screen or a deep plum "night"
 // scene (Screen's `tone`); the components inside pick their colors from that tone.
 
+import { LinearGradient } from 'expo-linear-gradient';
+import { CelestialBackdrop } from './CelestialArt';
 import { StatusBar } from 'expo-status-bar';
 import { createContext, useContext, type ReactNode } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View, type StyleProp, type TextStyle, type ViewStyle } from 'react-native';
@@ -113,6 +115,7 @@ export function Button({
   style?: StyleProp<ViewStyle>;
 }) {
   const t = useToneColors();
+  const tone = useTone();
   const color = variant === 'primary' ? t.onPrimary : variant === 'ghost' ? t.textMuted : t.text;
   return (
     <Pressable
@@ -131,6 +134,7 @@ export function Button({
         style,
       ]}
     >
+      {variant === 'primary' ? <LinearGradient pointerEvents="none" colors={tone === 'day' ? ['#5B4573', '#2A1E3A'] : ['#F3CFB7', '#E9A889']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={[StyleSheet.absoluteFill, { borderRadius: radius.pill }]} /> : null}
       <Text style={[variant === 'ghost' ? styles.ghostText : type.button, { color }]}>{title}</Text>
     </Pressable>
   );
@@ -138,6 +142,7 @@ export function Button({
 
 export function OptionCard({
   emoji,
+  icon,
   label,
   detail,
   selected,
@@ -145,6 +150,7 @@ export function OptionCard({
   style,
 }: {
   emoji?: string;
+  icon?: ReactNode;
   label: string;
   detail?: string;
   selected?: boolean;
@@ -166,7 +172,7 @@ export function OptionCard({
         style,
       ]}
     >
-      {emoji ? <Text style={styles.optionEmoji}>{emoji}</Text> : null}
+      {icon || emoji ? <View style={[styles.optionBadge, { backgroundColor: t.surfaceSoft }]}>{icon ?? <Text style={styles.optionEmoji}>{emoji}</Text>}</View> : null}
       <View style={{ flex: 1 }}>
         <Text style={[styles.optionLabel, { color: t.text }]}>{label}</Text>
         {detail ? <Text style={[styles.optionDetail, { color: t.textMuted }]}>{detail}</Text> : null}
@@ -177,7 +183,7 @@ export function OptionCard({
 
 export function Card({ children, style }: { children: ReactNode; style?: StyleProp<ViewStyle> }) {
   const tone = useTone();
-  return <View style={[styles.card, tone === 'day' ? styles.cardDay : styles.cardNight, style]}>{children}</View>;
+  return <View style={[styles.card, tone === 'day' ? styles.cardDay : styles.cardNight, style]}>{tone === 'night' ? <CelestialBackdrop /> : <View pointerEvents="none" style={[StyleSheet.absoluteFill, { borderRadius: radius.lg, borderWidth: StyleSheet.hairlineWidth, borderColor: tones.day.line }]} />}{children}</View>;
 }
 
 export function Pill({ text, color }: { text: string; color?: string }) {
@@ -214,12 +220,13 @@ const styles = StyleSheet.create({
     borderRadius: radius.md,
     borderWidth: 1,
   },
+  optionBadge: { width: 24, height: 24, borderRadius: 12, alignItems: 'center', justifyContent: 'center' },
   optionEmoji: { fontSize: 22 },
   optionLabel: type.bodyMedium,
   optionDetail: { ...type.small, fontSize: 13, lineHeight: 18, marginTop: 2 },
   card: { borderRadius: radius.lg, padding: space.lg, gap: space.md },
   cardDay: { backgroundColor: tones.day.surface, ...shadow.soft },
-  cardNight: { backgroundColor: tones.night.surface, borderWidth: 1, borderColor: tones.night.line },
+  cardNight: { overflow: 'hidden', backgroundColor: tones.night.surface, borderWidth: 1, borderColor: tones.night.line },
   pill: { alignSelf: 'flex-start', borderWidth: 1, borderRadius: radius.pill, paddingHorizontal: 10, paddingVertical: 3 },
   pillText: { fontFamily: type.label.fontFamily, fontSize: 12 },
 });

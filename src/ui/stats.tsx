@@ -1,3 +1,4 @@
+import { LinearGradient } from 'expo-linear-gradient';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { ATTRIBUTE_IDS, ATTRIBUTE_LABELS, FAMILIES, type AttributeId, type Stats } from '@/content/attributes';
@@ -42,7 +43,7 @@ export function StatBar({
       </View>
       <View>
         <View style={[styles.track, { backgroundColor: t.track }]}>
-          <View style={[styles.fill, { width: `${value}%`, backgroundColor: bandColor(band, element) }]} />
+          <View style={[styles.fill, { width: `${value}%`, backgroundColor: bandColor(band, element) }]}><LinearGradient colors={[palette.peachSoft, palette.peach]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={[StyleSheet.absoluteFill, { borderRadius: 99 }]} /></View>
         </View>
         {ghost !== undefined ? <View style={[styles.tick, { left: `${ghost}%`, backgroundColor: t.highlight }]} /> : null}
       </View>
@@ -129,7 +130,7 @@ export function DifficultyPill({ difficulty }: { difficulty: Difficulty }) {
     </View>
   );
   const close = difficulty.level === 1 && difficulty.closeGaps.length > 0
-    ? `Almost there on ${difficulty.closeGaps.map((g) => ATTRIBUTE_LABELS[g.attribute]).join(' and ')}`
+    ? `Traits to explore: ${difficulty.closeGaps.map((g) => ATTRIBUTE_LABELS[g.attribute]).join(' and ')}`
     : null;
   const note = difficulty.ageNote ?? close;
   if (!note) return pill;

@@ -7,7 +7,6 @@ import { StyleSheet, Text, View } from 'react-native';
 import { CAREERS } from '@/content/careers';
 import { lifeFor } from '@/content/life';
 import type { IntentId } from '@/content/preferences';
-import { SIGNS } from '@/content/signs';
 import { ageOf, rankingFor } from '@/logic/character';
 import { lifeStart, START_METERS } from '@/logic/life';
 import { freeLifeCareer } from '@/logic/lifeAccess';
@@ -15,6 +14,7 @@ import { useGame } from '@/state/game';
 import { useOnboarding } from '@/state/onboarding';
 import { Body, Button, Card, Label, Screen, Step, Title } from '@/ui/components';
 import { LifeSky } from '@/ui/LifeSky';
+import { SIGNS } from '@/content/signs';
 import { PathCard } from '@/ui/PathCard';
 import { day, S, type } from '@/ui/theme';
 
@@ -63,7 +63,7 @@ export default function Matches() {
     >
       {game ? null : <Step index={8} total={9} />}
       <Title>{TITLES[character.intent ?? 'career']}</Title>
-      <Body muted>Ranked for the worlds and jobs you picked and the stats you confirmed. Every path stays open.</Body>
+      <Body muted>Starting points based on your interests and questionnaire traits. Picking a career shows curiosity, not proven ability. Open a path to explore its work and training.</Body>
 
       {freeCareer && life ? (
         <Card>
@@ -72,8 +72,8 @@ export default function Matches() {
           <Text style={styles.lifeTitle}>{life.lifeName} life</Text>
           <Text style={styles.body}>
             {topHasLife
-              ? `Before you decide anything, live your top match ${span}${track === 'change' ? ' as a career change' : ''}. About 5 minutes, and your real stats set the odds.`
-              : `Lives are coming to more careers. Start with ${CAREERS[freeCareer].name}: about 5 minutes ${span}, and your real stats set the odds.`}
+              ? `Before you decide anything, live your top match ${span}${track === 'change' ? ' as a career change' : ''}. About 5 minutes, and your character stats set the game odds.`
+              : `Lives are coming to more careers. Start with ${CAREERS[freeCareer].name}: about 5 minutes ${span}, and your character stats set the game odds.`}
           </Text>
         </Card>
       ) : null}
@@ -81,7 +81,10 @@ export default function Matches() {
       <Label>Your top matches</Label>
       <View style={{ gap: S.md }}>
         {ranked.slice(0, SHOWN).map((m, i) => (
-          <PathCard key={m.careerId} match={m} rank={i + 1} />
+          <PathCard key={m.careerId} match={m} character={character} rank={i + 1} onPress={() => {
+            ensureGame();
+            router.push({ pathname: '/path/[id]', params: { id: m.careerId } });
+          }} />
         ))}
       </View>
     </Screen>

@@ -10,9 +10,10 @@ import { ZODIAC_CONSTELLATIONS } from '@/content/zodiacConstellations';
 import { signatureTraits, topAttributes } from '@/logic/poll';
 import { useOnboarding } from '@/state/onboarding';
 import { Body, Button, Card, Label, Pill, Screen, Step, Title } from '@/ui/components';
+import { ZodiacMark } from '@/ui/ZodiacMark';
 import { Constellation } from '@/ui/Constellation';
 import { StatList } from '@/ui/stats';
-import { fonts, glyph, night, S, type } from '@/ui/theme';
+import { fonts, night, S, type } from '@/ui/theme';
 
 export default function Reveal() {
   const { state } = useOnboarding();
@@ -51,7 +52,7 @@ export default function Reveal() {
       >
         <Card style={styles.characterCard}>
           <View style={styles.cardTop}>
-            <Text style={styles.glyph}>{glyph(state.sign)}</Text>
+            <View style={{ height: 53, justifyContent: 'center' }}><ZodiacMark sign={state.sign} size={44} color={night.gold} /></View>
             <View>
               <Pill text={sign.element.toUpperCase()} />
             </View>

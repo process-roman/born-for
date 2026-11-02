@@ -131,8 +131,9 @@ export default function PathDetail() {
       {life ? <EndingsCard found={endingsFound(life, runs)} /> : null}
 
       <Card>
-        <Label>Difficulty for you</Label>
+        <Label>Your character’s trait fit</Label>
         <DifficultyPill difficulty={match.difficulty} />
+        <Text style={styles.item}>Based on questionnaire traits and character growth, not a skills assessment or proof you qualify for this job.</Text>
         {career.requirements.map((r) => {
           const value = stats[r.attribute];
           return (

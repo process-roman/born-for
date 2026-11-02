@@ -23,12 +23,12 @@ describe('age-aware difficulty', () => {
 
   it('Natural fit splits into Ready now (every requirement met) and almost-there gaps', () => {
     const ready = difficultyFor(CAREERS.accountant, strong);
-    expect(ready.label).toBe('Ready now');
+    expect(ready.label).toBe('Promising fit to explore');
     expect(ready.closeGaps).toEqual([]);
     const req = CAREERS.accountant.requirements[0]!;
     const close = difficultyFor(CAREERS.accountant, { ...strong, [req.attribute]: req.required - 5 });
     expect(close.level).toBe(1);
-    expect(close.label).toBe('Natural fit');
+    expect(close.label).toBe('Worth exploring');
     expect(close.closeGaps).toEqual([{ attribute: req.attribute, gap: 5 }]);
   });
 

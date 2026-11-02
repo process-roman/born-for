@@ -1,3 +1,4 @@
+import { LinearGradient } from 'expo-linear-gradient';
 // Pieces of the life sim screens (Life Sim Spec §4, §5, §10, §12). Meters describe how the life is
 // going; attributes set the odds. They're shown differently and never mixed.
 
@@ -29,7 +30,7 @@ function MeterBar({ meter, value, tone }: { meter: Meter; value: number; tone: '
         <Text style={[styles.meterValue, { color: tone === 'day' ? day.text : night.text }]}>{value}</Text>
       </View>
       <View style={[styles.track, { backgroundColor: tone === 'day' ? day.track : night.track }]}>
-        <Animated.View style={[styles.fill, { width: width.interpolate({ inputRange: [0, 100], outputRange: ['0%', '100%'], extrapolate: 'clamp' }) }]} />
+        <Animated.View style={[styles.fill, { width: width.interpolate({ inputRange: [0, 100], outputRange: ['0%', '100%'], extrapolate: 'clamp' }) }]}><LinearGradient colors={[palette.peachSoft, palette.peach]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={[StyleSheet.absoluteFill, { borderRadius: 99 }]} /></Animated.View>
       </View>
     </View>
   );
@@ -74,7 +75,7 @@ export function ChoiceButton({ choice, run, onPress, disabled }: { choice: Choic
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityHint={odds !== null ? `${ATTRIBUTE_LABELS[choice.check!.attribute]} check, ${odds}% chance` : undefined}
+      accessibilityHint={odds !== null ? `${ATTRIBUTE_LABELS[choice.check!.attribute]} check, ${odds}% game chance` : undefined}
       disabled={disabled}
       onPress={onPress}
       style={({ pressed }) => [styles.choice, pressed && { opacity: 0.85 }]}
@@ -85,7 +86,7 @@ export function ChoiceButton({ choice, run, onPress, disabled }: { choice: Choic
         <View style={styles.oddsRow}>
           <View style={styles.oddsPill}>
             <Text style={styles.oddsText}>
-              {ATTRIBUTE_LABELS[choice.check!.attribute]} · {odds}%
+              {ATTRIBUTE_LABELS[choice.check!.attribute]} · {odds}% game odds
             </Text>
           </View>
           {bonuses.map((b) => (

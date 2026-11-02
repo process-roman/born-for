@@ -5,6 +5,8 @@ import { router } from 'expo-router';
 import { useRef, useState, type ComponentRef } from 'react';
 import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { useGame } from '@/state/game';
+import { lifeNextStep, type LifeConcern } from '@/logic/lifeReflection';
 import { ATTRIBUTE_LABELS } from '@/content/attributes';
 import type { CareerLife } from '@/content/life';
 import { AGE_AT_END, endAge, fillTokens, highlightsFor, lifeAsks, noHighlightsLine, type LifeRun, type LifeTokens } from '@/logic/life';
@@ -94,6 +96,7 @@ export function LifeAt30({
   tokens,
   onAnswer,
   onPowerUp,
+  onConcern,
   free,
   xp,
   preview,
@@ -103,8 +106,9 @@ export function LifeAt30({
   tokens: LifeTokens;
   /** Saves the "Would you want this life?" answer on the run. */
   onAnswer: (answer: WouldWant) => void;
-  /** Opens a real quest that trains the power-up attribute. */
+  /** Opens the available quest described in the next-step card. */
   onPowerUp: () => void;
+  onConcern: (concern: LifeConcern) => void;
   /** A free user's one free life: the card leads to the paywall. */
   free?: boolean;
   /** Quest XP from this life (first completion only). */
@@ -112,6 +116,8 @@ export function LifeAt30({
   /** Dev preview of a forced ending: nothing is saved. */
   preview?: boolean;
 }) {
+  const { game } = useGame();
+  const nextStep = game ? lifeNextStep(game, run) : null;
   const [skipped, setSkipped] = useState(false);
   const [sharing, setSharing] = useState(false);
   const [shareNote, setShareNote] = useState<string | null>(null);
@@ -141,10 +147,7 @@ export function LifeAt30({
           </>
         ) : (
           <>
-            <View style={styles.row}>
-              <Button title="Share" variant="secondary" style={styles.half} onPress={() => setSharing(true)} />
-              <Button title="Power up" variant="secondary" style={styles.half} onPress={onPowerUp} />
-            </View>
+            <Button title="Share" variant="secondary" onPress={() => setSharing(true)} />
             <Button title="Live another life" onPress={() => router.replace('/lives')} />
             <Button title="Replay" variant="ghost" onPress={() => router.replace({ pathname: '/life/[career]', params: { career: run.career } })} />
           </>
@@ -167,10 +170,10 @@ export function LifeAt30({
           <Label>What this life asked of you</Label>
           {asks.map((a) => (
             <Text key={a.attribute} style={styles.ask}>
-              <Text style={styles.askName}>{ATTRIBUTE_LABELS[a.attribute]}</Text> · checked {a.count} {a.count === 1 ? 'time' : 'times'} · your odds {a.odds}%
+              <Text style={styles.askName}>{ATTRIBUTE_LABELS[a.attribute]}</Text> · checked {a.count} {a.count === 1 ? 'time' : 'times'} · game odds {a.odds}%
             </Text>
           ))}
-          {powerUp ? <Text style={styles.powerUp}>This life leaned on {ATTRIBUTE_LABELS[powerUp]}. Raise it for real.</Text> : null}
+          {powerUp ? <Text style={styles.powerUp}>This story used {ATTRIBUTE_LABELS[powerUp]}. A game roll does not measure your real ability.</Text> : null}
         </Card>
       ) : null}
 
@@ -191,6 +194,28 @@ export function LifeAt30({
         </View>
         {!answered ? <Button title="Skip" variant="ghost" onPress={() => setSkipped(true)} /> : null}
       </Card>
+
+      {answer === 'maybe' || answer === 'no' ? (
+        <Card>
+          <Label>What gave you pause? (optional)</Label>
+          {([{ id: 'work', label: 'The everyday work' }, { id: 'pace', label: 'The pace and energy' }, { id: 'uncertainty', label: 'The uncertainty' }] as const).map((o) => (
+            <Pressable key={o.id} accessibilityRole="button" accessibilityState={{ selected: run.completed?.concern === o.id }} onPress={() => onConcern(run.completed?.concern === o.id ? undefined : o.id)} style={[styles.answer, run.completed?.concern === o.id && styles.answerOn]}>
+              <Text style={[styles.answerText, run.completed?.concern === o.id && { color: palette.plumDeep }]}>{o.label}</Text>
+            </Pressable>
+          ))}
+        </Card>
+      ) : null}
+
+      {answered && nextStep ? (
+        <Card>
+          <Label>Your next step</Label>
+          <Text style={styles.highlightText}>{nextStep.prompt}</Text>
+          <Text style={styles.ask}>{nextStep.connection}</Text>
+          {nextStep.quest ? <Button title={`Try: ${nextStep.quest.name}`} variant="secondary" onPress={onPowerUp} /> : null}
+          <Button title="Explore this career’s everyday work" variant="secondary" onPress={() => router.push({ pathname: '/path/[id]', params: { id: run.career } })} />
+          <Button title="Compare other careers" variant="secondary" onPress={() => router.push('/explore')} />
+        </Card>
+      ) : null}
 
       <Modal visible={sharing} transparent animationType="fade" onRequestClose={() => setSharing(false)}>
         <View style={styles.modal}>

@@ -7,6 +7,7 @@ import { INTENTS } from '@/content/preferences';
 import { useGame } from '@/state/game';
 import { useOnboarding } from '@/state/onboarding';
 import { Body, Label, OptionCard, Screen, Title } from '@/ui/components';
+import { LifeIcon } from '@/ui/lifeIcons';
 import { ArchWindow } from '@/ui/kit';
 import { day, fonts, S, type } from '@/ui/theme';
 
@@ -29,7 +30,7 @@ export default function Welcome() {
         {INTENTS.map((o) => (
           <OptionCard
             key={o.id}
-            emoji={o.emoji}
+            icon={<LifeIcon name={{ discover: 'sparkle', career: 'compass', change: 'path', curious: 'star' }[o.id]} size={22} color={day.primary} />}
             label={o.label}
             selected={state.intent === o.id}
             onPress={() => {

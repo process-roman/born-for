@@ -1,3 +1,4 @@
+import { WorldIcon } from '@/ui/WorldIcon';
 // Q2: "Which worlds pull you?" (pick up to 3). Direction first (Signs & Onboarding Spec §3).
 
 import { Redirect, router } from 'expo-router';
@@ -33,7 +34,7 @@ export default function Worlds() {
               onPress={() => dispatch({ type: 'toggleWorld', world: id })}
               style={({ pressed }) => [styles.tile, on && styles.tileOn, !on && full && { opacity: 0.4 }, pressed && { opacity: 0.85 }]}
             >
-              <Text style={styles.emoji}>{w.emoji}</Text>
+              <WorldIcon world={id} />
               <Text style={[styles.name, on && { color: C.gold }]}>{w.name}</Text>
               <Text style={styles.blurb}>{w.blurb}</Text>
             </Pressable>

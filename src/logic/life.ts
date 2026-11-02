@@ -72,6 +72,7 @@ export interface LifeRun {
     role: string;
     finishedAt: string;
     wouldWant?: 'yes' | 'maybe' | 'no';
+    concern?: 'work' | 'pace' | 'uncertainty';
   };
 }
 

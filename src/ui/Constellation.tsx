@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Animated, Easing, Platform, View } from 'react-native';
 
 import type { ZodiacShape } from '@/content/zodiacConstellations';
+import { CelestialStar } from './CelestialArt';
 import { night } from './theme';
 
 const useNativeDriver = Platform.OS !== 'web';
@@ -70,7 +71,7 @@ export function Constellation({
               width: 10,
               height: 10,
               borderRadius: 5,
-              backgroundColor: night.text,
+              backgroundColor: 'transparent',
               shadowColor: color,
               shadowOpacity: 0.9,
               shadowRadius: 8,
@@ -78,7 +79,7 @@ export function Constellation({
               opacity: stars[i],
               transform: [{ scale: stars[i]!.interpolate({ inputRange: [0, 1], outputRange: [0.2, 1] }) }],
             }}
-          />
+          ><CelestialStar size={10} color={color} /></Animated.View>
         );
       })}
     </View>

@@ -3,6 +3,7 @@ import { Animated, Platform, View } from 'react-native';
 
 import type { Career, StarNumber } from '@/content/careers';
 import { litLines } from '@/logic/constellation';
+import { CelestialStar } from './CelestialArt';
 import { night } from './theme';
 
 /**
@@ -70,7 +71,7 @@ export function PathConstellation({
           width: d,
           height: d,
           borderRadius: d / 2,
-          backgroundColor: isLit ? night.gold : 'transparent',
+          backgroundColor: 'transparent',
           borderWidth: isLit ? 0 : 1,
           borderColor: 'rgba(248, 241, 231, 0.45)',
           shadowColor: night.gold,
@@ -83,10 +84,10 @@ export function PathConstellation({
             <Animated.View
               key={star}
               style={[style, { opacity: pulse, transform: [{ scale: pulse.interpolate({ inputRange: [0, 1], outputRange: [3, 1] }) }] }]}
-            />
+            >{isLit ? <CelestialStar size={d} color={night.gold} /> : null}</Animated.View>
           );
         }
-        return <View key={star} style={style} />;
+        return <View key={star} style={style}>{isLit ? <CelestialStar size={d} color={night.gold} /> : null}</View>;
       })}
     </View>
   );

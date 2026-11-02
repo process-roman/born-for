@@ -1566,6 +1566,7 @@
         {
           "id": "leap",
           "label": "Take the leap",
+          "hint": "Game check: setting your own priorities in a role with little guidance",
           "check": {
             "attribute": "independence",
             "difficulty": 60
@@ -1583,7 +1584,7 @@
             }
           },
           "fail": {
-            "text": "The startup runs out of money after ten months. You land on your feet, with great stories.",
+            "text": "You take on every decision alone and get stretched too thin. You ask for clearer priorities and a smaller scope. The company’s funding is outside your control; this setback is about finding support in the role.",
             "effects": {
               "mastery": 10,
               "money": -5,

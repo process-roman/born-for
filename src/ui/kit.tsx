@@ -6,7 +6,8 @@ import type { ReactNode } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View, type StyleProp, type TextStyle, type ViewStyle } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { archGradient, day, MAX_WIDTH, night, palette, radius, shadow, space, type } from './theme';
+import { CelestialBackdrop, CelestialScene } from './CelestialArt';
+import { day, MAX_WIDTH, night, palette, radius, shadow, space, type } from './theme';
 
 /** Cream daytime screen with a dark status bar. */
 export function DayScreen({ children }: { children: ReactNode }) {
@@ -33,14 +34,15 @@ export function Tag({ parts, tone = 'day' }: { parts: string[]; tone?: 'day' | '
 
 /** White card with a soft shadow. */
 export function SurfaceCard({ children, style }: { children: ReactNode; style?: StyleProp<ViewStyle> }) {
-  return <View style={[styles.surface, style]}>{children}</View>;
+  return <View style={[styles.surface, style]}><View pointerEvents="none" style={[StyleSheet.absoluteFill, { borderRadius: radius.lg, borderWidth: StyleSheet.hairlineWidth, borderColor: day.line }]} />{children}</View>;
 }
 
 /** Deep plum card with a faint dusk gradient, for archetype, constellations and other magic. */
 export function PlumCard({ children, style }: { children: ReactNode; style?: StyleProp<ViewStyle> }) {
   return (
     <View style={[styles.plumCard, style]}>
-      <LinearGradient colors={[palette.plum, palette.plumMid]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={StyleSheet.absoluteFill} />
+      <LinearGradient colors={[palette.plumDeep, palette.plum, palette.plumMid]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={StyleSheet.absoluteFill} />
+      <CelestialBackdrop />
       {children}
     </View>
   );
@@ -74,6 +76,7 @@ export function PillButton({
         style,
       ]}
     >
+      {variant === 'primary' ? <LinearGradient pointerEvents="none" colors={[palette.plumMid, palette.plumDeep]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={[StyleSheet.absoluteFill, { borderRadius: radius.pill }]} /> : null}
       <Text style={[variant === 'text' ? styles.textButton : type.button, { color }]}>
         {title}
         {arrow ? '   →' : ''}
@@ -87,7 +90,7 @@ export function SlimBar({ progress, tone = 'day' }: { progress: number; tone?: '
   const pct = `${Math.round(Math.max(0, Math.min(1, progress)) * 100)}%` as const;
   return (
     <View style={[styles.track, { backgroundColor: tone === 'day' ? day.track : night.track }]}>
-      <View style={[styles.fill, { width: pct }]} />
+      <View style={[styles.fill, { width: pct }]}><LinearGradient colors={[palette.peachSoft, palette.peach]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={[StyleSheet.absoluteFill, { borderRadius: 99 }]} /></View>
     </View>
   );
 }
@@ -102,19 +105,7 @@ export function IconBadge({ symbol, tint }: { symbol: string; tint: 'lavender' |
   );
 }
 
-const STARS: readonly [number, number, number][] = [
-  [0.22, 0.14, 2],
-  [0.7, 0.1, 1.5],
-  [0.48, 0.24, 2.5],
-  [0.82, 0.3, 1.5],
-  [0.3, 0.36, 1.5],
-  [0.62, 0.44, 2],
-];
-
-/**
- * The recurring arch window motif: a dusk-gradient placeholder with a few stars, a moon and a thin
- * gold orbit. Children render inside the arch (e.g. the character).
- */
+/** Illustrated arch used for decorative brand moments. */
 export function ArchWindow({ width, height, children }: { width: number; height: number; children?: ReactNode }) {
   return (
     <View style={{ width: width + 32, height: height + 24, alignItems: 'center', justifyContent: 'flex-end' }}>
@@ -123,11 +114,7 @@ export function ArchWindow({ width, height, children }: { width: number; height:
         style={[styles.orbit, { width: width * 1.25, height: width * 0.5, top: height * 0.18, transform: [{ rotate: '-18deg' }] }]}
       />
       <View style={[styles.arch, { width, height, borderTopLeftRadius: width / 2, borderTopRightRadius: width / 2 }]}>
-        <LinearGradient colors={archGradient} style={StyleSheet.absoluteFill} />
-        {STARS.map(([x, y, d], i) => (
-          <View key={i} style={{ position: 'absolute', left: x * width, top: y * height, width: d, height: d, borderRadius: d, backgroundColor: palette.starlight }} />
-        ))}
-        <View style={[styles.moon, { right: width * 0.16, top: height * 0.16, width: width * 0.16, height: width * 0.16, borderRadius: width * 0.08 }]} />
+        <CelestialScene />
         <View style={styles.archContent}>{children}</View>
       </View>
       <Text style={[styles.sparkle, { top: 0, right: 8 }]}>✦</Text>
