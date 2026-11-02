@@ -52,7 +52,7 @@ export default function CharacterScreen() {
           {layers.item ? ` · carrying a ${layers.item.name}` : ''}
         </Text>
         <Text style={styles.legendText}>
-          {nextLayer ? `Next: ${nextLayer.toLowerCase()} at level ${layers.level + 1}.` : 'Full celestial form reached.'} Placeholder art; illustrations come later.
+          {nextLayer ? `Next: ${nextLayer.toLowerCase()} at level ${layers.level + 1}.` : 'Full celestial form reached.'}
         </Text>
       </View>
 

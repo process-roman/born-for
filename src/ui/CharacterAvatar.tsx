@@ -9,7 +9,7 @@ import { SIGNS } from '@/content/signs';
 import { avatarLayers } from '@/logic/avatar';
 import type { Character } from '@/logic/character';
 import { elementGlow, fonts, night, palette } from './theme';
-import { ZodiacMark } from './ZodiacMark';
+import { ArchetypePortrait } from './ArchetypePortrait';
 import { WorldIcon } from './WorldIcon';
 import { CelestialStar } from './CelestialArt';
 
@@ -66,7 +66,7 @@ export function CharacterAvatar({ character, size }: { character: Character; siz
             {Array.from({ length: 12 }, (_, i) => <Path key={i} d="M50 7V11" transform={`rotate(${i * 30} 50 50)`} />)}
           </G>
         </Svg>
-        <View><ZodiacMark sign={character.sign} size={core * .6} color={night.gold} /></View>
+        <View><ArchetypePortrait key={character.sign} sign={character.sign} size={core * .86} /></View>
       </View>
 
       {layers.frame
