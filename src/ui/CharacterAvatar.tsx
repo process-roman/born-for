@@ -59,9 +59,9 @@ export function CharacterAvatar({ character, size }: { character: Character; siz
       >
         <LinearGradient colors={['#695373', '#342541', '#241B33']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={[StyleSheet.absoluteFill, { borderRadius: core / 2 }]} />
         <Svg width={core} height={core} viewBox="0 0 100 100" style={StyleSheet.absoluteFill} aria-hidden>
-          <Circle cx="50" cy="50" r="44" fill="none" stroke={night.gold} strokeWidth=".45" opacity=".65" />
-          <Circle cx="50" cy="50" r="39" fill="none" stroke={night.gold} strokeWidth=".25" opacity=".3" />
-          <G stroke={night.gold} strokeWidth=".6" opacity=".5">
+          <Circle cx="50" cy="50" r="44" fill="none" stroke={night.gold} strokeWidth="0.45" opacity="0.65" />
+          <Circle cx="50" cy="50" r="39" fill="none" stroke={night.gold} strokeWidth="0.25" opacity="0.3" />
+          <G stroke={night.gold} strokeWidth="0.6" opacity="0.5">
             {Array.from({ length: 12 }, (_, i) => <Path key={i} d="M50 7V11" transform={`rotate(${i * 30} 50 50)`} />)}
           </G>
         </Svg>

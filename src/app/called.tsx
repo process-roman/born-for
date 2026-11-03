@@ -5,6 +5,7 @@ import { Share, StyleSheet, Text, View } from 'react-native';
 
 import { SIGNS } from '@/content/signs';
 import { backgroundTraits, signCalled, signatureTraits, topAttributes } from '@/logic/poll';
+import { useMusic } from '@/state/feel';
 import { useOnboarding } from '@/state/onboarding';
 import { Body, Button, Card, Label, Screen, Step, Title } from '@/ui/components';
 import { StatList, TickLegend } from '@/ui/stats';
@@ -12,6 +13,7 @@ import { C, F, glyph, S } from '@/ui/theme';
 
 export default function Called() {
   const { state, confirmed } = useOnboarding();
+  useMusic('reveal');
   if (!state.sign || !confirmed) return <Redirect href="/" />;
   const sign = SIGNS[state.sign];
   const result = signCalled(state.sign, confirmed);

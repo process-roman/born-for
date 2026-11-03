@@ -6,6 +6,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useCallback, useEffect } from 'react';
 
+import { FeelProvider } from '@/state/feel';
 import { GameProvider, useGame } from '@/state/game';
 import { LivesProvider } from '@/state/lives';
 import { OnboardingProvider } from '@/state/onboarding';
@@ -41,14 +42,16 @@ export default function RootLayout() {
   if (!loaded && !error) return null;
 
   return (
-    <GameProvider>
-      <LivesProvider>
-        <OnboardingProvider>
-          <CheckInTapHandler />
-          <StatusBar style="dark" />
-          <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: day.bg }, animation: 'fade' }} />
-        </OnboardingProvider>
-      </LivesProvider>
-    </GameProvider>
+    <FeelProvider>
+      <GameProvider>
+        <LivesProvider>
+          <OnboardingProvider>
+            <CheckInTapHandler />
+            <StatusBar style="dark" />
+            <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: day.bg }, animation: 'fade' }} />
+          </OnboardingProvider>
+        </LivesProvider>
+      </GameProvider>
+    </FeelProvider>
   );
 }

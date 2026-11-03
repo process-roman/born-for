@@ -16,7 +16,7 @@ export function CareerAccessory({ careerId, size }: { careerId: CareerId; size: 
     <Svg width={size} height={size} viewBox="0 0 64 64" aria-hidden>
       <Defs>
         <LinearGradient id={id} x1="0" y1="0" x2="1" y2="1">
-          <Stop stopColor="#FFF0CF" /><Stop offset=".5" stopColor="#E9C28C" /><Stop offset="1" stopColor="#BF9568" />
+          <Stop stopColor="#FFF0CF" /><Stop offset="0.5" stopColor="#E9C28C" /><Stop offset="1" stopColor="#BF9568" />
         </LinearGradient>
       </Defs>
       <Path d={art.body} fill={`url(#${id})`} stroke="#D7B583" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />

@@ -1,6 +1,7 @@
 // Rewards, a night scene: the star lights up, XP, attribute XP, level and title moments, then what's next (Blueprint §3 steps 15–16).
 
 import { Redirect, router } from 'expo-router';
+import { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { ATTRIBUTE_IDS, ATTRIBUTE_LABELS } from '@/content/attributes';
@@ -11,6 +12,7 @@ import { SIGNS } from '@/content/signs';
 import { litStarNumbers } from '@/logic/character';
 import { LAYER_NAMES } from '@/logic/avatar';
 import { confirmedLine, thatsYouLine } from '@/logic/confirmed';
+import { useFeel } from '@/state/feel';
 import { useGame } from '@/state/game';
 import { CharacterAvatar } from '@/ui/CharacterAvatar';
 import { Body, Button, Card, Label, Screen, Title } from '@/ui/components';
@@ -20,6 +22,15 @@ import { night, S, type } from '@/ui/theme';
 
 export default function Rewards() {
   const { game, lastResult } = useGame();
+  const { cue } = useFeel();
+  const badge = (lastResult?.newBadges.length ?? 0) > 0;
+  useEffect(() => {
+    if (!lastResult) return;
+    cue('star');
+    if (!badge) return;
+    const later = setTimeout(() => cue('badge'), 900);
+    return () => clearTimeout(later);
+  }, [lastResult, badge, cue]);
   if (!game || !lastResult) return <Redirect href="/home" />;
   const { careerId, star, rewards, next, newBadges, newlyConfirmed, thatsYou } = lastResult;
   const career = CAREERS[careerId];

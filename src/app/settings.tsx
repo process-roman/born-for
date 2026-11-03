@@ -1,4 +1,4 @@
-// Settings: sign, birth year, reminders, recalibrate, delete data (Blueprint §12 screen 15).
+// Settings: sign, birth year, reminders, music and sounds, recalibrate, delete data (Blueprint §12 screen 15).
 
 import { Redirect, router } from 'expo-router';
 import { useState } from 'react';
@@ -7,6 +7,8 @@ import { StyleSheet, Switch, Text, TextInput, View } from 'react-native';
 import { SIGNS } from '@/content/signs';
 import { ageOf } from '@/logic/character';
 import { remindersOn } from '@/logic/game';
+import type { FeelPrefs } from '@/logic/feel';
+import { useFeel } from '@/state/feel';
 import { useGame } from '@/state/game';
 import { useLives } from '@/state/lives';
 import { remindersSupported } from '@/storage/notifications';
@@ -14,6 +16,12 @@ import { Body, Button, Card, Label, Screen, Title } from '@/ui/components';
 import { C, F, glyph, palette, radius, S } from '@/ui/theme';
 
 const OLDEST_YEAR = 1920;
+
+const FEEL_ROWS: { key: keyof FeelPrefs; label: string }[] = [
+  { key: 'music', label: 'Calm music on the reveal and in lives' },
+  { key: 'sounds', label: 'Sounds for stars, rolls and endings' },
+  { key: 'haptics', label: 'Haptics' },
+];
 
 /** Birth year, so paths can show how long a route takes to start at your age. */
 function BirthYearCard({ birthYear, age, onSave }: { birthYear: number | undefined; age: number | null; onSave: (year: number | null) => void }) {
@@ -75,6 +83,7 @@ function BirthYearCard({ birthYear, age, onSave }: { birthYear: number | undefin
 export default function Settings() {
   const { game, switchCuspSign, setReminders, setBirthYear, reset } = useGame();
   const lives = useLives();
+  const feel = useFeel();
   const [confirmDelete, setConfirmDelete] = useState(false);
   if (!game) return <Redirect href="/" />;
   const { character } = game;
@@ -134,6 +143,23 @@ export default function Settings() {
           <Text style={styles.hint}>Reminders work in the phone app.</Text>
         )}
         <Text style={styles.hint}>One nudge per quest. No streaks, no guilt.</Text>
+      </Card>
+
+      <Card>
+        <Label>Music and sounds</Label>
+        {FEEL_ROWS.map((row) => (
+          <View key={row.key} style={styles.toggle}>
+            <Text style={[styles.value, { flex: 1 }]}>{row.label}</Text>
+            <Switch
+              value={feel.prefs[row.key]}
+              onValueChange={(on) => feel.setPref(row.key, on)}
+              trackColor={{ true: C.gold, false: C.track }}
+              thumbColor={palette.white}
+              accessibilityLabel={row.label}
+            />
+          </View>
+        ))}
+        <Text style={styles.hint}>Music and sounds stay off when your phone is on silent.</Text>
       </Card>
 
       <Card>

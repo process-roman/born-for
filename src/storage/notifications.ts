@@ -24,7 +24,9 @@ export function configureNotifications() {
 /** Asked in context when the user starts a quest, never at launch. */
 export async function requestReminderPermission(): Promise<boolean> {
   if (Platform.OS === 'android') {
-    await Notifications.setNotificationChannelAsync(CHANNEL, { name: 'Quest check-ins', importance: AndroidImportance.DEFAULT });
+    // Expo Go on Android can refuse to create channels. Then the reminder may not show, but starting
+    // the quest must not fail because of it.
+    await Notifications.setNotificationChannelAsync(CHANNEL, { name: 'Quest check-ins', importance: AndroidImportance.DEFAULT }).catch(() => null);
   }
   const current = await Notifications.getPermissionsAsync();
   if (current.granted) return true;

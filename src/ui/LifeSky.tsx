@@ -110,7 +110,7 @@ export function LifeSky({
       <Svg width={w} height={h}>
         <Defs>
           <RadialGradient id={`sunHalo${id}`}>
-            <Stop stopColor={sunColor} stopOpacity=".5" /><Stop offset="1" stopColor={sunColor} stopOpacity="0" />
+            <Stop stopColor={sunColor} stopOpacity="0.5" /><Stop offset="1" stopColor={sunColor} stopOpacity="0" />
           </RadialGradient>
           <LinearGradient id={`groundShade${id}`} x2="0" y2="1">
             <Stop stopColor={lifeSky.nearMountains} stopOpacity="0" />
@@ -130,7 +130,7 @@ export function LifeSky({
           </LinearGradient>
           <LinearGradient id={`tint${id}`} x1="0" y1="0" x2="0" y2="1">
             <Stop offset="0" stopColor={elementGlow[element]} stopOpacity={0} />
-            <Stop offset=".55" stopColor={elementGlow[element]} stopOpacity={0.22} />
+            <Stop offset="0.55" stopColor={elementGlow[element]} stopOpacity={0.22} />
             <Stop offset="1" stopColor={elementGlow[element]} stopOpacity={0} />
           </LinearGradient>
           <LinearGradient id={`mist${id}`} x1="0" y1="0" x2="0" y2="1">

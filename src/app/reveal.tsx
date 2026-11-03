@@ -8,10 +8,12 @@ import { ATTRIBUTE_LABELS } from '@/content/attributes';
 import { SIGNS } from '@/content/signs';
 import { ZODIAC_CONSTELLATIONS } from '@/content/zodiacConstellations';
 import { signatureTraits, topAttributes } from '@/logic/poll';
+import { useFeel, useMusic } from '@/state/feel';
 import { useOnboarding } from '@/state/onboarding';
 import { Body, Button, Card, Label, Pill, Screen, Step, Title } from '@/ui/components';
 import { ZodiacMark } from '@/ui/ZodiacMark';
 import { Constellation } from '@/ui/Constellation';
+import { MusicToggle } from '@/ui/MusicToggle';
 import { StatList } from '@/ui/stats';
 import { fonts, night, S, type } from '@/ui/theme';
 
@@ -20,12 +22,15 @@ export default function Reveal() {
   const [phase, setPhase] = useState<'stars' | 'card'>('stars');
   const [flip] = useState(() => new Animated.Value(0));
   const showCard = useCallback(() => setPhase('card'), []);
+  const { cue } = useFeel();
+  useMusic('reveal');
 
   useEffect(() => {
     if (phase === 'card') {
+      cue('reveal');
       Animated.timing(flip, { toValue: 1, duration: 650, useNativeDriver: Platform.OS !== 'web' }).start();
     }
-  }, [phase, flip]);
+  }, [phase, flip, cue]);
 
   if (!state.sign) return <Redirect href="/" />;
   const sign = SIGNS[state.sign];
@@ -43,6 +48,9 @@ export default function Reveal() {
 
   return (
     <Screen tone="night" footer={<Button title="Confirm my stats" onPress={() => router.push('/poll')} />}>
+      <View style={styles.music}>
+        <MusicToggle tone="night" />
+      </View>
       <Step index={2} total={9} />
       <Animated.View
         style={{
@@ -75,6 +83,7 @@ export default function Reveal() {
 }
 
 const styles = StyleSheet.create({
+  music: { position: 'absolute', top: 0, right: 0, zIndex: 1 },
   stars: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: S.xl },
   starsCaption: { fontFamily: fonts.serifMedium, fontSize: 18, letterSpacing: 8, color: night.gold },
   // Arch-topped card, the recurring window motif.

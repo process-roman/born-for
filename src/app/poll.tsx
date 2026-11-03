@@ -8,6 +8,7 @@ import { ATTRIBUTE_LABELS } from '@/content/attributes';
 import { SIGNS } from '@/content/signs';
 import { pollCards } from '@/logic/poll';
 import { bandFor, type PollAnswer } from '@/logic/stats';
+import { useFeel, useMusic } from '@/state/feel';
 import { useOnboarding } from '@/state/onboarding';
 import { Body, Button, Label, Screen, Step } from '@/ui/components';
 import { bandColor, C, F, radius, S, shadow, type } from '@/ui/theme';
@@ -21,11 +22,14 @@ export default function Poll() {
   const [index, setIndex] = useState(0);
   const [pan] = useState(() => new Animated.ValueXY());
   const [busy, setBusy] = useState(false);
+  const { cue } = useFeel();
+  useMusic('reveal');
 
   const answer = (value: PollAnswer, direction: -1 | 0 | 1 = 0) => {
     const card = cards[index];
     if (!card || busy) return;
     setBusy(true);
+    cue('select');
     dispatch({ type: 'answer', attribute: card.attribute, answer: value });
     Animated.timing(pan, {
       toValue: { x: direction * 500, y: direction === 0 ? -40 : 0 },

@@ -6,12 +6,14 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { ATTRIBUTE_DESCRIPTIONS, ATTRIBUTE_LABELS } from '@/content/attributes';
 import { SIGNS } from '@/content/signs';
 import { backgroundTraits } from '@/logic/poll';
+import { useMusic } from '@/state/feel';
 import { useOnboarding } from '@/state/onboarding';
 import { Body, Button, Screen, Step, Title } from '@/ui/components';
 import { C, F, radius, S } from '@/ui/theme';
 
 export default function Background() {
   const { state, dispatch } = useOnboarding();
+  useMusic('reveal');
   if (!state.sign) return <Redirect href="/" />;
   const sign = SIGNS[state.sign];
   const traits = backgroundTraits(state.sign);

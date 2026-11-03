@@ -3,7 +3,7 @@
 // exactly where the user left off.
 
 import { Redirect, router, useLocalSearchParams } from 'expo-router';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { ATTRIBUTE_LABELS } from '@/content/attributes';
@@ -29,6 +29,7 @@ import {
 import { lifeWithEnding } from '@/logic/lifeDev';
 import { ageOf, statsOf } from '@/logic/character';
 import { hybridTitle } from '@/logic/titles';
+import { useFeel, useMusic } from '@/state/feel';
 import { useGame } from '@/state/game';
 import { activeRun, latestCompleted, useLives } from '@/state/lives';
 import { Button, Card, Label, Screen } from '@/ui/components';
@@ -36,6 +37,7 @@ import { LifeAt30 } from '@/ui/LifeAt30';
 import { LifeIcon } from '@/ui/lifeIcons';
 import { ChoiceButton, MeterDeltas, MetersBar, RealityNote, RollStar } from '@/ui/lifeParts';
 import { LifeSky } from '@/ui/LifeSky';
+import { MusicToggle } from '@/ui/MusicToggle';
 import { day, fonts, night, palette, radius, S, type } from '@/ui/theme';
 
 type Phase =
@@ -59,9 +61,12 @@ function TopBar({ label, onMenu }: { label: string; onMenu: () => void }) {
         <Text style={styles.iconText}>‹</Text>
       </Pressable>
       <Label>{label}</Label>
-      <Pressable accessibilityRole="button" accessibilityLabel="Life menu" onPress={onMenu} style={styles.iconButton}>
-        <Text style={styles.iconText}>⋯</Text>
-      </Pressable>
+      <View style={styles.topRight}>
+        <MusicToggle />
+        <Pressable accessibilityRole="button" accessibilityLabel="Life menu" onPress={onMenu} style={styles.iconButton}>
+          <Text style={styles.iconText}>⋯</Text>
+        </Pressable>
+      </View>
     </View>
   );
 }
@@ -121,6 +126,16 @@ export default function LifePlay() {
     const { sign } = game.character;
     return lifeWithEnding(life, SHARED_EVENTS, { id: 'preview', career: careerId, startedAt: new Date().toISOString(), stats: statsOf(game.character), element: SIGNS[sign].element, age: ageOf(game.character) }, devEnding);
   });
+
+  const { cue } = useFeel();
+  useMusic('life');
+  const lastPhase = useRef(phase.kind);
+  useEffect(() => {
+    const was = lastPhase.current;
+    lastPhase.current = phase.kind;
+    if (phase.kind === 'outcome' && was === 'rolling' && phase.res.check) cue(phase.res.check.success ? 'success' : 'setback');
+    if (phase.kind === 'done' && was !== 'done') cue('ending');
+  }, [phase, cue]);
 
   if (!game || !life) return <Redirect href="/" />;
   const sign = SIGNS[game.character.sign];
@@ -222,6 +237,7 @@ export default function LifePlay() {
   const eventTokens = { ...tokens, age: realAge(active, age) };
 
   const pick = (choiceId: string) => {
+    cue('select');
     const res = choose(life, SHARED_EVENTS, active, choiceId);
     save(res.run);
     if (res.run.completed) setLifeXp(finishLife(careerId));
@@ -261,6 +277,7 @@ export default function LifePlay() {
 
 const styles = StyleSheet.create({
   topBar: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  topRight: { flexDirection: 'row', alignItems: 'center', gap: S.xs },
   iconButton: { width: 40, height: 40, borderRadius: 20, backgroundColor: day.surfaceMuted, alignItems: 'center', justifyContent: 'center' },
   iconText: { fontSize: 20, lineHeight: 22, color: day.primary },
   eventHead: { flexDirection: 'row', alignItems: 'center', gap: S.md },
