@@ -1,8 +1,8 @@
 // Home (cream "daytime"): what to do next first. Compact welcome, the active or next quest,
 // one character card with your top superpowers, then your constellations (Blueprint §4.3, §4.5).
 
-import { MoonStarsIcon } from 'phosphor-react-native/src/icons/MoonStars';
 import { GearIcon } from 'phosphor-react-native/src/icons/Gear';
+import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
@@ -27,7 +27,9 @@ import { equippedTitleText } from '@/ui/CharacterHeader';
 import { ArchWindow, DayScreen, PillButton, PlumCard, SectionLabel, SlimBar, SurfaceCard, Tag } from '@/ui/kit';
 import { PathConstellation } from '@/ui/PathConstellation';
 import { TIER_LABELS } from '@/ui/quest';
-import { day, fonts, night, palette, radius, space, type } from '@/ui/theme';
+import { day, fonts, night, space, type } from '@/ui/theme';
+
+const LOGO = require('../../../assets/images/logo.png');
 
 const SUPERPOWERS_ON_HOME = 3;
 
@@ -148,9 +150,7 @@ export default function Home() {
   return (
     <DayScreen>
       <View style={styles.brandRow}>
-        <View style={styles.mark}>
-          <MoonStarsIcon size={22} color={palette.peach} weight="duotone" />
-        </View>
+        <Image source={LOGO} style={styles.mark} accessible={false} />
         <Text style={[styles.brand, { flex: 1 }]}>Born For</Text>
         <Pressable accessibilityRole="button" accessibilityLabel="Settings" onPress={() => router.push('/settings')} style={styles.settings}>
           <GearIcon size={21} color={day.primary} weight="light" />
@@ -245,8 +245,7 @@ export default function Home() {
 const styles = StyleSheet.create({
   welcome: { flexDirection: 'row', alignItems: 'flex-end', gap: space.md },
   brandRow: { flexDirection: 'row', alignItems: 'center', gap: space.sm, marginBottom: -space.md },
-  mark: { width: 36, height: 36, borderRadius: radius.sm, backgroundColor: day.primary, alignItems: 'center', justifyContent: 'center' },
-  markGlyph: { fontSize: 18, color: palette.peach },
+  mark: { width: 36, height: 36 },
   brand: { fontFamily: fonts.serifMedium, fontSize: 22, lineHeight: 26, color: day.text },
   greeting: { fontFamily: fonts.serifMedium, fontSize: 32, lineHeight: 36, color: day.text },
   greetingItalic: { fontFamily: fonts.serifItalic, color: day.accent },

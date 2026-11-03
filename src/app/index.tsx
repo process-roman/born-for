@@ -1,5 +1,6 @@
 // Q1: Welcome + intent, under the arch window.
 
+import { Image } from 'expo-image';
 import { Redirect, router } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
 
@@ -11,6 +12,8 @@ import { LifeIcon } from '@/ui/lifeIcons';
 import { ArchWindow } from '@/ui/kit';
 import { day, fonts, S, type } from '@/ui/theme';
 
+const LOGO = require('../../assets/images/logo.png');
+
 export default function Welcome() {
   const { state, dispatch } = useOnboarding();
   const { game } = useGame();
@@ -19,7 +22,10 @@ export default function Welcome() {
     <Screen>
       <View style={styles.hero}>
         <ArchWindow width={150} height={200} />
-        <Text style={styles.brand}>BORN FOR</Text>
+        <View style={styles.brandRow}>
+          <Image source={LOGO} style={styles.logo} accessible={false} />
+          <Text style={styles.brand}>BORN FOR</Text>
+        </View>
         <Title style={type.hero}>
           Your sign is just the <Text style={styles.accent}>beginning.</Text>
         </Title>
@@ -46,6 +52,8 @@ export default function Welcome() {
 
 const styles = StyleSheet.create({
   hero: { alignItems: 'center', gap: S.md, marginTop: S.lg, marginBottom: S.md },
-  brand: { ...type.label, fontSize: 12, letterSpacing: 6, color: day.primary, marginTop: S.sm },
+  brandRow: { flexDirection: 'row', alignItems: 'center', gap: S.sm, marginTop: S.sm },
+  logo: { width: 28, height: 28 },
+  brand: { ...type.label, fontSize: 12, letterSpacing: 6, color: day.primary },
   accent: { fontFamily: fonts.serifItalic, color: day.accent },
 });
