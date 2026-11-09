@@ -116,6 +116,13 @@ export function LifeSky({
             <Stop stopColor={lifeSky.nearMountains} stopOpacity="0" />
             <Stop offset="1" stopColor={lifeSky.nearMountains} stopOpacity={Math.max(0, (s.age - 25) / 5) * .3} />
           </LinearGradient>
+          {/* Distance haze: the far ranges take on the sky's horizon colour, so they change with it. */}
+          <LinearGradient id={`haze${id}`} x1="0" y1="0" x2="0" y2="1">
+            <Stop offset="0" stopColor={sky.bottom} stopOpacity={0} />
+            <Stop offset="0.27" stopColor={sky.bottom} stopOpacity={0.7} />
+            <Stop offset="0.55" stopColor={sky.bottom} stopOpacity={0.4} />
+            <Stop offset="1" stopColor={sky.bottom} stopOpacity={0} />
+          </LinearGradient>
           <ClipPath id={`arch${id}`}>
             <Path d={arch} />
           </ClipPath>
@@ -148,6 +155,8 @@ export function LifeSky({
           <Circle cx={sunX} cy={sunY} r={sunR * 4} fill={`url(#sunHalo${id})`} />
           <Circle cx={sunX} cy={sunY} r={sunR} fill={sunColor} />
           <SvgImage href={MOUNTAINS} x={0} y={h * .28} width={w} height={h * .72} preserveAspectRatio="xMidYMax slice" />
+          {/* Fades in above the highest ridge (about 42% down the artwork) and out by the near hills (75%). */}
+          <Rect x={0} y={h * (0.28 + 0.72 * 0.3)} width={w} height={h * 0.72 * 0.45} fill={`url(#haze${id})`} />
           <Rect x={0} y={h * .28} width={w} height={h * .72} fill={`url(#groundShade${id})`} />
           <Rect x={0} y={horizon - h * .3} width={w} height={h * .4} fill={`url(#glow${id})`} opacity={.45} />
           <Rect x={0} y={horizon - h * .14} width={w} height={h * .3} fill={`url(#tint${id})`} />
