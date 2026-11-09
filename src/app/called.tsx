@@ -17,13 +17,13 @@ export default function Called() {
   if (!state.sign || !confirmed) return <Redirect href="/" />;
   const sign = SIGNS[state.sign];
   const result = signCalled(state.sign, confirmed);
-  const notes = Object.fromEntries(result.unique.map((a) => [a, 'Unique to you']));
+  const notes = Object.fromEntries(result.unique.map((a) => [a, 'Tuned by you']));
   const added = backgroundTraits(state.sign).filter((a) => state.answers[a] === 'yes');
 
   const share = async () => {
     try {
       await Share.share({
-        message: `I'm ${sign.name}, ${sign.archetype}. My sign called ${result.count} of ${result.total} of my stats. #BornFor`,
+        message: `My Born For character: ${sign.archetype} (${sign.name}). Exploring career lives before choosing my path. #BornFor`,
       });
     } catch {
       // Sharing isn't available everywhere (e.g. some desktop browsers); nothing to do.
@@ -43,18 +43,16 @@ export default function Called() {
       <View style={{ alignItems: 'center', gap: S.xs }}>
         <Text style={styles.glyph}>{glyph(state.sign)}</Text>
         <Title>
-          Your sign called {result.count} of {result.total}.
+          Your character is ready.
         </Title>
         <Body muted>
           {result.count === result.total
-            ? `You’re ${sign.archetype} through and through.`
-            : result.count >= 5
-              ? `Mostly ${sign.archetype}, with a few twists of your own.`
-              : 'Your sign set the stage, but you’ve written your own character.'}
+            ? `You kept all ${result.total} starting stats from ${sign.archetype}.`
+            : `You kept ${result.count} of ${result.total} starting stats from ${sign.archetype} and tuned the rest.`}
         </Body>
       </View>
       <Card>
-        <Label>Your confirmed stats</Label>
+        <Label>Your character’s stats</Label>
         <StatList
           stats={confirmed}
           ghost={sign.stats}
@@ -63,13 +61,13 @@ export default function Called() {
           highlights={topAttributes(state.sign)}
           notes={notes}
         />
-        <TickLegend>Tick: what your sign predicted</TickLegend>
+        <TickLegend>Tick: the starting value from your birthday</TickLegend>
       </Card>
       {added.length > 0 ? (
         <Card>
-          <Label>Also you</Label>
+          <Label>Added by you</Label>
           <StatList stats={confirmed} ghost={sign.stats} element={sign.element} attributes={added} />
-          <Text style={styles.legendText}>Background traits you added. Your sign didn’t predict them, but you know yourself.</Text>
+          <Text style={styles.legendText}>Traits you added to your character on top of its starting stats.</Text>
         </Card>
       ) : null}
     </Screen>

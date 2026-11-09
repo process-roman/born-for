@@ -104,7 +104,7 @@ export default function Explore() {
       <Card>
         <Label>Live it first</Label>
         <Body muted style={{ textAlign: 'left' }}>
-          Play twelve years of a career, starting at your age, in about 5 minutes. Your real stats set the odds.
+          Play twelve years of a career, starting at your age, in about 5 minutes. Your character’s stats set the odds.
         </Body>
         {untried.map((id) => {
           const life = LIVES[id]!;

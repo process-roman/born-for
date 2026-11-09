@@ -170,7 +170,7 @@ export function LifeAt30({
               <Text style={styles.askName}>{ATTRIBUTE_LABELS[a.attribute]}</Text> · checked {a.count} {a.count === 1 ? 'time' : 'times'} · your odds {a.odds}%
             </Text>
           ))}
-          {powerUp ? <Text style={styles.powerUp}>This life leaned on {ATTRIBUTE_LABELS[powerUp]}. Raise it for real.</Text> : null}
+          {powerUp ? <Text style={styles.powerUp}>This life leaned on {ATTRIBUTE_LABELS[powerUp]}. Try a real-world quest that practices it.</Text> : null}
         </Card>
       ) : null}
 

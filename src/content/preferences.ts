@@ -13,10 +13,10 @@ export const INTENT_IDS = ['discover', 'career', 'change', 'curious'] as const;
 export type IntentId = (typeof INTENT_IDS)[number];
 
 export const INTENTS: readonly Option<IntentId>[] = [
-  { id: 'discover', emoji: '🔮', label: 'Discover who I am' },
+  { id: 'discover', emoji: '🔮', label: 'Try different career lives' },
   { id: 'career', emoji: '🧭', label: 'Find a career direction' },
   { id: 'change', emoji: '🔄', label: "I'm thinking about changing careers" },
-  { id: 'curious', emoji: '✨', label: 'Just curious about my sign' },
+  { id: 'curious', emoji: '✨', label: 'Just curious about my character' },
 ];
 
 // Q3: "How do you like to work?" (single choice)

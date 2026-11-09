@@ -51,7 +51,7 @@ export default function Birthday() {
         <Step index={1} total={9} />
         <Title>You were born on the cusp</Title>
         <Body muted>
-          The Sun moved from {SIGNS[a].name} into {SIGNS[b].name} around your birthday. Which one feels like you? You can change this later in
+          The Sun moved from {SIGNS[a].name} into {SIGNS[b].name} around your birthday. Which one do you want to start as? You can change this later in
           settings.
         </Body>
         <View style={{ gap: S.sm }}>
@@ -90,14 +90,14 @@ export default function Birthday() {
     <Screen
       footer={
         <>
-          <Button title="Reveal my character" onPress={submit} disabled={!day || !month || year.length < 4} />
+          <Button title="Create my character" onPress={submit} disabled={!day || !month || year.length < 4} />
           <Button title="Choose my sign instead" variant="ghost" onPress={() => setMode({ kind: 'manual' })} />
         </>
       }
     >
       <Step index={1} total={9} />
       <Title>When were you born?</Title>
-      <Body muted>We use it to find your sign. We keep only the year, so your paths can account for your age, never the full date.</Body>
+      <Body muted>Your birthday selects your starting character and attributes. These are fictional, zodiac-inspired gameplay stats, not a scientific assessment of your abilities or career suitability. We keep only the year, so lives start at your age.</Body>
       <View style={{ gap: S.sm, marginTop: S.lg }}>
         <View style={styles.inputLabels}>
           <Label style={{ flex: 2 }}>Day</Label>

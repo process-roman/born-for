@@ -30,7 +30,7 @@ export default function Recalibrate() {
     return (
       <Screen footer={<Button title="See my character" onPress={() => router.replace('/character')} />}>
         <Title>Stats updated</Title>
-        <Body muted>Your starting stats now match who you are today. Everything you’ve earned is still there, and “Then vs now” shows the change.</Body>
+        <Body muted>Your character’s starting stats are retuned. Everything you’ve earned is still there, and “Then vs now” shows the change.</Body>
         {earned.map((id) => (
           <Card key={id} style={{ alignItems: 'center' }}>
             <Label>Badge unlocked</Label>
@@ -52,8 +52,8 @@ export default function Recalibrate() {
         </>
       }
     >
-      <Title>Recalibrate</Title>
-      <Body muted>Answer for who you are now. Leave one unselected to keep your sign’s value.</Body>
+      <Title>Retune your character</Title>
+      <Body muted>Answer for who you are now. Leave one unselected to keep its starting value.</Body>
 
       <Label>Signature traits</Label>
       {signatureTraits(sign).map((a) => (

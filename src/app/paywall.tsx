@@ -15,15 +15,15 @@ import { DifficultyPill } from '@/ui/stats';
 import { C, F } from '@/ui/theme';
 
 const HEADLINES: Record<IntentId, { title: string; body: string }> = {
-  career: { title: 'Your career paths are ready.', body: 'Ranked for the worlds and jobs you picked, and the stats you confirmed.' },
+  career: { title: 'Your career paths are ready.', body: 'Ordered by the worlds and jobs you picked, then your character’s stats.' },
   change: { title: 'Your career paths are ready.', body: 'Ranked for the worlds and jobs you picked, so you can test a switch before you make it.' },
   discover: { title: 'Paths that match your character are ready.', body: 'See where your character could grow, one real-world quest at a time.' },
-  curious: { title: 'Your character has somewhere to go.', body: 'Your sign is just the beginning. See the paths your character is built for.' },
+  curious: { title: 'Your character has somewhere to go.', body: 'See the career lives your character could step into.' },
 };
 
 const UNLOCKS = [
   'Every life, unlimited replays, and compare lives side by side',
-  'All your career paths, with why each one fits',
+  'Every career path, with why it’s on your list',
   'Every constellation and its five quests',
   'Hybrid titles and an evolving character',
   'Real next steps: courses, communities and entry roles',
@@ -32,7 +32,7 @@ const UNLOCKS = [
 const SECOND_MOMENT = { title: 'Your first star is lit.', body: 'Unlock the full constellation, and every other path waiting in your sky.' };
 const AFTER_LIFE = {
   title: 'You’ve lived one life. More are waiting.',
-  body: 'Replay it with better odds, live other careers, and start real quests that raise your stats for real.',
+  body: 'Replay it, live other careers, and try real-world quests that grow your character.',
 };
 
 export default function Paywall() {

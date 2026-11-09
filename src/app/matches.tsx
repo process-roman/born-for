@@ -21,9 +21,9 @@ import { day, S, type } from '@/ui/theme';
 const SHOWN = 3;
 
 const TITLES: Record<IntentId, string> = {
-  career: 'Paths where your superpowers shine',
-  change: 'Paths worth testing with your superpowers',
-  discover: 'Where your superpowers could take you',
+  career: 'Careers to try first',
+  change: 'Careers worth a test drive',
+  discover: 'Career lives to explore',
   curious: 'Where your character could go',
 };
 
@@ -63,7 +63,7 @@ export default function Matches() {
     >
       {game ? null : <Step index={8} total={9} />}
       <Title>{TITLES[character.intent ?? 'career']}</Title>
-      <Body muted>Ranked for the worlds and jobs you picked and the stats you confirmed. Every path stays open.</Body>
+      <Body muted>Ordered by the worlds and jobs you picked, then your character’s stats. Every path stays open.</Body>
 
       {freeCareer && life ? (
         <Card>
@@ -72,8 +72,8 @@ export default function Matches() {
           <Text style={styles.lifeTitle}>{life.lifeName} life</Text>
           <Text style={styles.body}>
             {topHasLife
-              ? `Before you decide anything, live your top match ${span}${track === 'change' ? ' as a career change' : ''}. About 5 minutes, and your real stats set the odds.`
-              : `Lives are coming to more careers. Start with ${CAREERS[freeCareer].name}: about 5 minutes ${span}, and your real stats set the odds.`}
+              ? `Before you decide anything, live your top match ${span}${track === 'change' ? ' as a career change' : ''}. About 5 minutes, and your character’s stats set the odds.`
+              : `Lives are coming to more careers. Start with ${CAREERS[freeCareer].name}: about 5 minutes ${span}, and your character’s stats set the odds.`}
           </Text>
         </Card>
       ) : null}

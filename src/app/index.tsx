@@ -27,9 +27,9 @@ export default function Welcome() {
           <Text style={styles.brand}>BORN FOR</Text>
         </View>
         <Title style={type.hero}>
-          Your sign is just the <Text style={styles.accent}>beginning.</Text>
+          Explore a career <Text style={styles.accent}>before choosing your path.</Text>
         </Title>
-        <Body muted>Meet your character, confirm your strengths and find paths you can grow into.</Body>
+        <Body muted>Step into different career lives. Make decisions, experience the trade-offs, and discover which paths you want to pursue in real life.</Body>
       </View>
       <Label style={{ textAlign: 'center' }}>What brings you here?</Label>
       <View style={{ gap: S.sm }}>

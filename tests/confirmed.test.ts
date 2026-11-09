@@ -30,11 +30,11 @@ describe('confirmed by you', () => {
     expect(confirmedTraits(light(createCharacter(MAYA), 'teaching', [1], null))).toEqual([]);
   });
 
-  it('the line depends on what the sign predicted', () => {
+  it('the line depends on the starting stats from the birthday', () => {
     const c = createCharacter(MAYA); // Cancer: superpowers Empathy, Persistence, Organization
-    expect(confirmedLine(c, 'empathy')).toBe('Your sign called Empathy. You just proved it.');
-    expect(confirmedLine(c, 'teamwork')).toBe('Your sign suggested Teamwork. Now you know it’s real.');
-    expect(confirmedLine(c, 'leadership')).toBe('Your sign didn’t predict Leadership. You found it yourself.');
+    expect(confirmedLine(c, 'empathy')).toBe('Empathy was one of your top starting stats. This quest backed it up.');
+    expect(confirmedLine(c, 'teamwork')).toBe('Teamwork was in your starting stats. Now you’ve tried it for real.');
+    expect(confirmedLine(c, 'leadership')).toBe('Leadership wasn’t in your starting stats. You found it yourself.');
   });
 
   it('a trait the user said "Not really" to gets its own line, whatever the sign said', () => {

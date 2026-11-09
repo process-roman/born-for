@@ -47,7 +47,7 @@ export default function Reveal() {
   }
 
   return (
-    <Screen tone="night" footer={<Button title="Confirm my stats" onPress={() => router.push('/poll')} />}>
+    <Screen tone="night" footer={<Button title="Tune my character" onPress={() => router.push('/poll')} />}>
       <View style={styles.music}>
         <MusicToggle tone="night" />
       </View>
@@ -69,12 +69,12 @@ export default function Reveal() {
           <Title>{sign.archetype}</Title>
           <Body muted>{sign.revealLine}</Body>
           <View style={styles.divider} />
-          <Label>Your superpowers</Label>
+          <Label>Top starting stats</Label>
           <Text style={styles.superpowers}>{topAttributes(state.sign).map((a) => ATTRIBUTE_LABELS[a]).join(' · ')}</Text>
-          <Label>Your sign’s strengths</Label>
+          <Label>Starting character stats</Label>
           <StatList stats={sign.stats} element={sign.element} attributes={signatureTraits(state.sign)} highlights={topAttributes(state.sign)} />
           <Text style={styles.footnote}>
-            ★ Your superpowers. Plus 8 background traits you can unlock. Next, tell us if your sign got you right; quests will let you prove it.
+            ★ Top starting stats. Fictional, zodiac-inspired gameplay stats that set up your character’s story, not a measure of your real abilities. Next, you can tune them to play a character closer to you.
           </Text>
         </Card>
       </Animated.View>

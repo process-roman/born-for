@@ -102,7 +102,7 @@ export default function Settings() {
             <Text style={styles.value}>
               {sign.name}, {sign.archetype}
             </Text>
-            <Text style={styles.hint}>We keep your sign and birth year, never your full birth date.</Text>
+            <Text style={styles.hint}>Your sign sets your starting character. Its stats are fictional and only shape the game. We keep your sign and birth year, never your full birth date.</Text>
           </View>
         </View>
         {otherCuspSign ? (
@@ -123,7 +123,7 @@ export default function Settings() {
         <Body muted style={{ textAlign: 'left' }}>
           Changed since day one? Rerun the poll. Only your starting stats change; everything you’ve earned stays.
         </Body>
-        <Button title="Recalibrate my stats" variant="secondary" onPress={() => router.push('/recalibrate')} />
+        <Button title="Retune my character" variant="secondary" onPress={() => router.push('/recalibrate')} />
       </Card>
 
       <Card>

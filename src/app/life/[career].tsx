@@ -81,7 +81,7 @@ export default function LifeIntro() {
         <Label>{track === 'change' ? `A career change at ${startAge}` : 'Live it first'}</Label>
         <Title>{life.lifeName} life</Title>
         <Body muted>
-          {CAREERS[careerId].name}, from {startAge} to {startAge + 12}. About 5 minutes · your real stats set the odds.
+          {CAREERS[careerId].name}, from {startAge} to {startAge + 12}. About 5 minutes · your character’s stats set the odds.
         </Body>
         {payShort(careerId) ? <Text style={styles.small}>{payShort(careerId)}</Text> : null}
         {age === null ? <Text style={styles.small}>Add your birth year in Settings to start this life at your own age.</Text> : null}
@@ -91,7 +91,7 @@ export default function LifeIntro() {
         <Card>
           <Label>Locked</Label>
           <Text style={styles.body}>
-            {previous ? 'You’ve lived your free life. Unlock to replay it with better odds and live other careers.' : 'Your free life is the one on your top match. Unlock to live every career.'}
+            {previous ? 'You’ve lived your free life. Unlock to replay it and live other careers.' : 'Your free life is the one on your top match. Unlock to live every career.'}
           </Text>
         </Card>
       ) : null}
@@ -117,7 +117,7 @@ export default function LifeIntro() {
             </View>
           );
         })}
-        <Text style={styles.small}>Real quests raise your stats, and better stats mean better odds next time.</Text>
+        <Text style={styles.small}>Real-world quests and reflections grow your character’s stats, and higher stats mean better odds next time.</Text>
       </Card>
 
       {__DEV__ ? (

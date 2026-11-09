@@ -36,13 +36,13 @@ export function ResultGroups({ ranking, character }: { ranking: Ranking; charact
   const groups = groupMatches(ranking, statsOf(character));
   return (
     <View style={{ gap: S.xl }}>
-      <Group title="Your picks" blurb="The jobs you chose, ranked by how naturally they fit you right now." matches={groups.picks} />
+      <Group title="Your picks" blurb="The jobs you chose, ordered by your character’s stats right now." matches={groups.picks} />
       <Group
         title={character.picks.length ? 'More in your worlds' : 'Top paths in your worlds'}
         matches={groups.inWorlds}
         limit={WORLD_PREVIEW}
       />
-      <Group title="Wildcards" blurb="Outside your worlds, but built on your superpowers." matches={groups.wildcards} />
+      <Group title="Wildcards" blurb="Outside your worlds, but built on your character’s top stats." matches={groups.wildcards} />
     </View>
   );
 }

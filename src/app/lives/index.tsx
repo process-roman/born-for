@@ -33,7 +33,7 @@ export default function LivesHub() {
   return (
     <Screen footer={<Button title="Back" variant="ghost" onPress={() => (router.canGoBack() ? router.back() : router.replace('/explore'))} />}>
       <Title>Lives</Title>
-      <Body muted>Live twelve years of a career, starting at your age, before you try it for real. Your real stats set the odds.</Body>
+      <Body muted>Live twelve years of a career, starting at your age, before you choose your path. Your character’s stats set the odds.</Body>
 
       {shown.map((id) => {
         const life = LIVES[id]!;

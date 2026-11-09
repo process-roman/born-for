@@ -75,7 +75,7 @@ export default function Poll() {
             <Button title="Sometimes" variant="secondary" onPress={() => answer('sometimes')} style={styles.answer} />
             <Button title="That’s me" onPress={() => answer('yes', 1)} style={styles.answer} />
           </View>
-          <Button title="Skip, keep my sign’s value" variant="ghost" onPress={() => answer('skip')} />
+          <Button title="Skip, keep the starting value" variant="ghost" onPress={() => answer('skip')} />
         </>
       }
     >
@@ -94,14 +94,14 @@ export default function Poll() {
           <Animated.Text aria-hidden style={[styles.stamp, styles.stampNo, { opacity: noOpacity }]}>NOT REALLY</Animated.Text>
           <Text style={styles.attribute}>{ATTRIBUTE_LABELS[card.attribute]}</Text>
           <Text style={styles.prediction}>
-            Your sign says: <Text style={{ color: C.gold, fontFamily: F.bodyBold }}>{card.signBand}</Text>
+            Starting stat: <Text style={{ color: C.gold, fontFamily: F.bodyBold }}>{card.signBand}</Text>
           </Text>
           <Text style={styles.statement}>“{card.statement}”</Text>
         </Animated.View>
       </View>
 
       <Body muted style={{ fontSize: 13 }}>
-        Swipe right for That’s me, left for Not really.
+        Your answers tune your character’s stats. Swipe right for That’s me, left for Not really.
       </Body>
 
       <View style={styles.bars} accessibilityLabel="Your stats so far">

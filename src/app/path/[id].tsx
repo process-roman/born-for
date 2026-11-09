@@ -133,7 +133,7 @@ export default function PathDetail() {
       {life ? <EndingsCard found={endingsFound(life, runs)} /> : null}
 
       <Card>
-        <Label>Difficulty for you</Label>
+        <Label>Difficulty for your character</Label>
         <DifficultyPill difficulty={match.difficulty} />
         {career.requirements.map((r) => {
           const value = stats[r.attribute];

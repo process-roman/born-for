@@ -95,7 +95,7 @@ function CharacterCard({ game }: { game: Game }) {
         </Text>
 
         <View style={styles.divider} />
-        <SectionLabel tone="night">Your superpowers</SectionLabel>
+        <SectionLabel tone="night">Top stats</SectionLabel>
         {topTraits(stats, SUPERPOWERS_ON_HOME).map((a) => (
           <View key={a} style={{ gap: 6 }}>
             <View style={styles.traitRow}>
@@ -128,7 +128,7 @@ function LifeCard({ careerId, run, element }: { careerId: CareerId; run: LifeRun
       <LifeSky age={run ? (LIFE_SLOTS[Math.min(run.slotIndex, LIFE_SLOTS.length - 1)]?.age ?? 18) : 18} meters={run?.meters ?? START_METERS} element={element} variant="card" style={{ aspectRatio: 2.2 }} />
       <SectionLabel>{run ? 'Your life in progress' : 'Live it first'}</SectionLabel>
       <Text style={styles.questName}>{life.lifeName} life</Text>
-      <Tag parts={['12 years', 'About 5 min', 'Your real stats']} />
+      <Tag parts={['12 years', 'About 5 min', 'Your character']} />
       <PillButton title={run ? 'Resume your life' : 'Live it first'} arrow onPress={() => router.push({ pathname: '/life/[career]', params: { career: careerId } })} />
     </SurfaceCard>
   );

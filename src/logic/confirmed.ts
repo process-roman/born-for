@@ -30,10 +30,10 @@ export function confirmedLine(character: Character, attribute: AttributeId): str
   const label = ATTRIBUTE_LABELS[attribute];
   // Their own "Not really" in the poll comes first: the quest proved them wrong, not their sign right.
   if (character.answers[attribute] === 'no') return `You said ${label} wasn’t you. This quest says otherwise.`;
-  if (topAttributes(character.sign).includes(attribute)) return `Your sign called ${label}. You just proved it.`;
-  if (SIGNS[character.sign].signature.includes(attribute)) return `Your sign suggested ${label}. Now you know it’s real.`;
+  if (topAttributes(character.sign).includes(attribute)) return `${label} was one of your top starting stats. This quest backed it up.`;
+  if (SIGNS[character.sign].signature.includes(attribute)) return `${label} was in your starting stats. Now you’ve tried it for real.`;
   if (character.answers[attribute] === 'yes') return `You said ${label} was you. Now you’ve proved it.`;
-  return `Your sign didn’t predict ${label}. You found it yourself.`;
+  return `${label} wasn’t in your starting stats. You found it yourself.`;
 }
 
 /** True when a path has exactly reached the star count with every reflection on it enjoyed (4–5). */
